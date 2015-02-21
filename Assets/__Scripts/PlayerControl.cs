@@ -4,19 +4,19 @@ using InControl;
 
 public class PlayerControl : MonoBehaviour {
 
-	InputDevice theInputDevice; 
+	public InputDevice inDevice; 
 	
-	public GameObject childSphere;
+	public GameObject childSphere; // at the moment, at least a transform is needed here to line up shots with
 	
 	public float rotationAmount;
 	public float moveSpeed;
+	public Vector3 bearing;
 
-	public GameObject projectilePrefab;
-	GameObject projectile;
 
-	public float rateOfFire;
-	bool canShoot;
-	bool triggerDown;
+
+
+
+	public bool triggerDown;
 	
 	void Awake(){
 
@@ -24,48 +24,51 @@ public class PlayerControl : MonoBehaviour {
 	
 	// Use this for initialization
 	void Start () {
-		theInputDevice = InputManager.ActiveDevice;
+		inDevice = Controller_distributor.S.GetController();
+		if (inDevice == null) {
+			Debug.Log ("Couldn't connect to a controller!");
+			this.enabled = false;
+		}
 		triggerDown = false;
-		canShoot = true;
+	
 	}
 	
 	// Update is called once per frame
 	void Update () {
-		Vector3 pos = transform.position;
-		pos.x += Time.deltaTime * theInputDevice.LeftStickX * moveSpeed;
-		pos.z += Time.deltaTime * theInputDevice.LeftStickY * moveSpeed; 
-		transform.position = pos;
+		// handle L stick input
+		bearing.x = inDevice.LeftStick.Vector.x;
+		bearing.z = inDevice.LeftStick.Vector.y;
 		
-		float yIn = theInputDevice.RightStickY;
-		float xIn = theInputDevice.RightStickX;
-		
-		triggerDown = theInputDevice.RightTrigger;
-		if (triggerDown && canShoot)
-			StartCoroutine (ShotTimer ());
-		
-		if (xIn == 0f && yIn == 0f)
-			return;
-		float angle = Mathf.Atan2 (yIn, xIn) * Mathf.Rad2Deg;
-		transform.rotation = Quaternion.Slerp (transform.rotation, Quaternion.AngleAxis (90.0f - angle, Vector3.up), Time.deltaTime * rotationAmount);
 
+
+		// trigger input
+		triggerDown = inDevice.RightTrigger;
+
+
+		// handle R stick rotation
+		float yIn = inDevice.RightStickY;
+		float xIn = inDevice.RightStickX;
+		if (xIn != 0f || yIn != 0f) {
+			float angle = Mathf.Atan2 (yIn, xIn) * Mathf.Rad2Deg;
+			transform.rotation = Quaternion.Slerp (transform.rotation, Quaternion.AngleAxis (90.0f - angle, Vector3.up), Time.deltaTime * rotationAmount);
+		}
 
 	}
 
-	IEnumerator ShotTimer(){
-		float startTime = Time.time;
-		canShoot = false;
-		// make a projectile 
-		projectile = Instantiate (projectilePrefab) as GameObject;
-		Projectile pro = projectile.GetComponent<Projectile> ();
-		pro.transform.position = childSphere.transform.position;
-		pro.transform.rotation = childSphere.transform.rotation;
-		pro.bearing = childSphere.transform.position - transform.position;
-		pro.bearing.Normalize ();
-		// give it a bearing as is appropriate for the way the weapon is facing.
+	void FixedUpdate(){
+		rigidbody.velocity = (bearing /*- transform.position*/).normalized * moveSpeed;
+	}
 
-		while (Time.time - startTime < rateOfFire) {
-			yield return null;
-		}
-		canShoot = true;
+
+
+	void OnTriggerEnter(Collider coll){
+		if (coll.tag == "Wall")
+			StopMoving ();
+	}
+	
+
+
+	void StopMoving(){
+		rigidbody.velocity = Vector3.zero;
 	}
 }

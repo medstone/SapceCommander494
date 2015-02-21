@@ -9,11 +9,9 @@ public class Projectile : MonoBehaviour {
 
 	// Use this for initialization
 	void Start () {
-	
 	}
 
-
-	void FixedUpdate () {
+	void FixedUpdate(){
 		float dt = Time.fixedDeltaTime;
 		Vector3 pos = transform.position;
 		pos.x += dt * speed * bearing.x;
@@ -21,13 +19,19 @@ public class Projectile : MonoBehaviour {
 		transform.position = pos;
 	}
 
-	void OnTriggerEnter(Collider coll){
-		// this could possibly be bad if bullets could ever spawn inside of some collider. 
-	}
 
-	void OnTriggerStay(Collider coll){
-		if (coll.tag == "Player") {
-			//get player component, .TakeHit();
+
+	// needed because players' colliders are not triggers
+	void OnCollisionEnter(Collision coll){
+		if (coll.gameObject.CompareTag("Actor")){ // "Player" tag is being used by InControl I think
+			PlayerStats pStats = coll.gameObject.GetComponent<PlayerStats>();
+			// ignore your own bullets, in case you can move faster than they can.
+			// alternatively, this could ignore a specific team.
+			pStats.TakeHit(2);
+			Destroy (this.gameObject);
+		}
+		else if (coll.gameObject.CompareTag("Wall")){
+			Destroy (this.gameObject);
 		}
 	}
 	
