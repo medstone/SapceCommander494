@@ -20,6 +20,8 @@ public class PlayerStats : MonoBehaviour {
 	public Faction_e team;
 	public PlayerNum_e player;
 
+	public Weapon weapon; 
+
 	public int startingHealth;
 	public int health;
 
@@ -27,26 +29,51 @@ public class PlayerStats : MonoBehaviour {
 	bool invincible;
 	public float invincibleDur; // how long does the player ignore damage after taking a hit
 
-	public float rateOfFire;
-	bool canShoot;
 
-	public GameObject projectilePrefab;
-	GameObject projectile;
+	bool collidingWithWeapon;
 
 	void Awake(){
 		control = GetComponent<PlayerControl> ();
+		weapon = GetComponentInChildren<Weapon> ();
 	}
 	// Use this for initialization
 	void Start () {
 		health = startingHealth;
 		invincible = false;
-		canShoot = true;
+		weapon.owner = transform;
+		weapon.canShoot = true;
+		collidingWithWeapon = false;
 	}
 
-	//*** not sure if this should be update
+
 	void FixedUpdate () {
-		if (control.triggerDown && canShoot)
-			StartCoroutine (ShotTimer ());
+		// maybe this should be handled in PlayerControl
+		if (control.triggerDown) {
+			weapon.Shoot ();
+		}
+	}
+
+	void OnTriggerStay(Collider coll){
+		if (coll.tag == "WeaponPickup" && control.xButtonDown) {
+			collidingWithWeapon = true;
+			//StartCoroutine(PickUpWeapon(coll.GetComponent<ItemPickup>()));
+		}
+	}
+
+	void OnTriggerExit(Collider coll){
+		collidingWithWeapon = false;
+	}
+
+	IEnumerator PickUpWeapon(GameObject wep){
+		float startTime = Time.time;
+		while (Time.time - startTime > 0.75f && collidingWithWeapon && control.xButtonDown) {
+			yield return null;
+		}
+		if (wep != null) {
+			wep.collider.enabled = false;
+			weapon = wep;
+		}
+		collidingWithWeapon = false;
 	}
 
 	void LateUpdate(){
@@ -87,7 +114,7 @@ public class PlayerStats : MonoBehaviour {
 		control.enabled = false;
 		collider.enabled = false;
 		renderer.enabled = false;
-		control.childSphere.renderer.enabled = false;
+		weapon.renderer.enabled = false;
 		yield return new WaitForSeconds(3);
 		Reset ();
 	}
@@ -100,28 +127,9 @@ public class PlayerStats : MonoBehaviour {
 			control.enabled = true;
 		collider.enabled = true;
 		renderer.enabled = true;
-		control.childSphere.renderer.enabled = true;
+		weapon.renderer.enabled = true;
 		health = startingHealth;
 	}
 
-	IEnumerator ShotTimer(){
-		float startTime = Time.time;
-		canShoot = false;
-		// make a projectile 
-		projectile = Instantiate (projectilePrefab) as GameObject;
-		Projectile pro = projectile.GetComponent<Projectile> ();
-		pro.transform.position = control.childSphere.transform.position;
-		pro.transform.rotation = control.childSphere.transform.rotation;
-		pro.bearing = control.childSphere.transform.position - transform.position;
-		pro.bearing.Normalize ();
-		// this would need to be more intense to eliminate all friendly-fire
-		// doing so via layers might be necessary?
-		Physics.IgnoreCollision (pro.collider, this.collider);
-		// give it a bearing as is appropriate for the way the weapon is facing.
-		
-		while (Time.time - startTime < rateOfFire) {
-			yield return null;
-		}
-		canShoot = true;
-	}
+
 }

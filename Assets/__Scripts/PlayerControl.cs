@@ -6,17 +6,14 @@ public class PlayerControl : MonoBehaviour {
 
 	public InputDevice inDevice; 
 	
-	public GameObject childSphere; // at the moment, at least a transform is needed here to line up shots with
-	
 	public float rotationAmount;
 	public float moveSpeed;
 	public Vector3 bearing;
 
 
 
-
-
 	public bool triggerDown;
+	public bool xButtonDown;
 	
 	void Awake(){
 
@@ -30,7 +27,6 @@ public class PlayerControl : MonoBehaviour {
 			this.enabled = false;
 		}
 		triggerDown = false;
-	
 	}
 	
 	// Update is called once per frame
@@ -44,6 +40,7 @@ public class PlayerControl : MonoBehaviour {
 		// trigger input
 		triggerDown = inDevice.RightTrigger;
 
+		xButtonDown = inDevice.Action3;
 
 		// handle R stick rotation
 		float yIn = inDevice.RightStickY;
@@ -60,6 +57,8 @@ public class PlayerControl : MonoBehaviour {
 	}
 
 
+
+	
 
 	void OnTriggerEnter(Collider coll){
 		if (coll.tag == "Wall")

@@ -7,6 +7,8 @@ public class Projectile : MonoBehaviour {
 	public float speed;
 	public Vector3 bearing;
 
+
+
 	// Use this for initialization
 	void Start () {
 	}
