@@ -5,15 +5,14 @@ public class ProgressBar : MonoBehaviour {
 
 	
 	public bool isRunning = true;
-	public float speed = 25f;
+	public float matchTime = 25f;
+	float currentTime;
 
 	Transform startPos;
 	Transform endPos;
 	Transform rocket;
 	Vector3 travelVec = Vector3.zero;
 	
-	public float matchTime = 25f;
-	float currentTime;
 	
 	// Use this for initialization
 	void Awake () {
@@ -36,13 +35,19 @@ public class ProgressBar : MonoBehaviour {
 	// Update is called once per frame
 	void Update () {
 		
-		// keep track of time that has passed
 		if(isRunning){
+			// Update the time
 			currentTime += Time.deltaTime;
+		
+			// determine new position for the rocket
+			float completed = currentTime / matchTime;
+			rocket.position = startPos.position + travelVec * completed;
+			
+			if(rocket.position.x >= endPos.position.x) {
+				// alertTimeUp(); - Not implemented yet
+				isRunning = false;
+			}
 		}
-		// determine new position for the rocket
-		float completed = currentTime / matchTime;
-		rocket.position = startPos.position + travelVec * completed;
 	}
 	
 	void FixedUpdate() {
