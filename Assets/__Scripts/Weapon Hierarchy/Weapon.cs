@@ -24,18 +24,7 @@ public class Weapon : MonoBehaviour {
 
 	// default behavior
 	protected virtual void ShotBehavior(){
-		// make a projectile 
-		projectile = Instantiate (projectilePrefab) as GameObject;
-		Projectile pro = projectile.GetComponent<Projectile> ();
-		pro.transform.position = transform.position;
-		pro.transform.rotation = transform.rotation;
-		pro.bearing = transform.position - transform.parent.position;
-		pro.bearing.Normalize ();
-		pro.damage = damage;
-		// this would need to be more intense to eliminate all friendly-fire
-		// doing so via layers might be necessary?
-		Physics.IgnoreCollision (pro.collider, this.collider);
-		// give it a bearing as is appropriate for the way the weapon is facing.
+		ShotHelper (0f); // straight shot
 	}
 
 
@@ -48,6 +37,22 @@ public class Weapon : MonoBehaviour {
 		damage = 2;
 	}
 
+	protected void ShotHelper(float angle){
+		projectile = Instantiate (projectilePrefab) as GameObject;
+		
+		Projectile pro = projectile.GetComponent<Projectile> (); // needed to adjust projectile's bearing
+		pro.transform.position = transform.position;
+		pro.transform.rotation = transform.rotation;
+		
+		Vector3 offset = transform.parent.position;
+		offset = Quaternion.Euler (0, angle, 0) * offset;
+		
+		pro.bearing = transform.position - offset;
+		pro.bearing.Normalize ();
+		pro.damage = damage;
+		
+		Physics.IgnoreCollision (pro.collider, this.collider);
+	}
 
 	IEnumerator ShotTimer(){
 		float startTime = Time.time;
