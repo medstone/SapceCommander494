@@ -1,7 +1,13 @@
 ﻿using UnityEngine;
 using System.Collections;
 
+public enum faction{
+	cop,
+	crim
+}
+
 public class robotAI : MonoBehaviour {
+	public faction fact;
 	public Vector3 direction;
 	public float speed = 5f;
 

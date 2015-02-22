@@ -20,7 +20,8 @@ public class PlayerStats : MonoBehaviour {
 	public Faction_e team;
 	public PlayerNum_e player;
 
-	public Weapon weapon; 
+	public Weapon defaultWeapon;
+	public Weapon secondaryWeapon; 
 
 	public int startingHealth;
 	public int health;
@@ -35,14 +36,14 @@ public class PlayerStats : MonoBehaviour {
 
 	void Awake(){
 		control = GetComponent<PlayerControl> ();
-		weapon = GetComponentInChildren<Weapon> ();
+		defaultWeapon = GetComponentInChildren<Weapon> ();
+		secondaryWeapon = null;
 	}
 	// Use this for initialization
 	void Start () {
 		health = startingHealth;
 		invincible = false;
-		weapon.owner = transform;
-		weapon.canShoot = true;
+		defaultWeapon.canShoot = true;
 		collidingWithWeapon = false;
 	}
 
@@ -50,7 +51,10 @@ public class PlayerStats : MonoBehaviour {
 	void FixedUpdate () {
 		// maybe this should be handled in PlayerControl
 		if (control.triggerDown) {
-			weapon.Shoot ();
+			if (secondaryWeapon != null)
+				secondaryWeapon.Shoot ();
+			else
+				defaultWeapon.Shoot ();
 		}
 	}
 
@@ -72,16 +76,22 @@ public class PlayerStats : MonoBehaviour {
 			yield return null;
 		}
 		if (item != null && collidingWithWeapon && control.xButtonDown) {
+			// picking up the weapon
 			ItemPickup pickup = item.GetComponent<ItemPickup>();
 			pickupRef = WeaponFactory.S.GetWeapon(pickup.itemName);
 			// set to location and rotation of current weapon
-			pickupRef.transform.position = weapon.transform.position;
-			pickupRef.transform.rotation = weapon.transform.rotation;
+			pickupRef.transform.position = defaultWeapon.transform.position;
+			pickupRef.transform.rotation = defaultWeapon.transform.rotation;
 			pickupRef.transform.SetParent(transform);
-			// destroy old weapon
-			Destroy (weapon.gameObject);
-			weapon = pickupRef.GetComponent<Weapon>();
-			weapon.owner = transform;
+			if (secondaryWeapon != null){
+				// already have a secondary weapon
+				Destroy (secondaryWeapon.gameObject);
+			}
+			else {
+				// turn off primary weapon
+				defaultWeapon.enabled = false;
+			}
+			secondaryWeapon = pickupRef.GetComponent<Weapon>();
 			// destroy item pickup
 			Destroy (item.gameObject);
 		}
@@ -126,7 +136,11 @@ public class PlayerStats : MonoBehaviour {
 		control.enabled = false;
 		collider.enabled = false;
 		renderer.enabled = false;
-		weapon.renderer.enabled = false;
+		if (secondaryWeapon != null) {
+			Destroy (secondaryWeapon.gameObject);
+			defaultWeapon.enabled = true;
+		}
+		defaultWeapon.renderer.enabled = false;
 		yield return new WaitForSeconds(3);
 		Reset ();
 	}
@@ -139,7 +153,7 @@ public class PlayerStats : MonoBehaviour {
 			control.enabled = true;
 		collider.enabled = true;
 		renderer.enabled = true;
-		weapon.renderer.enabled = true;
+		defaultWeapon.renderer.enabled = true;
 		health = startingHealth;
 	}
 

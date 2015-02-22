@@ -2,10 +2,14 @@
 using System.Collections;
 
 public class robotRedirect : MonoBehaviour {
-	public int paths;
-	public Vector3 newDirection1;
-	public Vector3 newDirection2;
-	public int last = 1;
+	public int crimPaths;
+	public Vector3 newCrimDirection1;
+	public Vector3 newCrimDirection2;
+	public int lastCrim = 1;
+	public int copPaths;
+	public Vector3 newCopDirection1;
+	public Vector3 newCopDirection2;
+	public int lastCop;
 
 	// Use this for initialization
 	void Start () {
@@ -19,17 +23,36 @@ public class robotRedirect : MonoBehaviour {
 
 	void OnTriggerEnter(Collider coll){
 		if (coll.gameObject.tag == "Robot") {
-			if (paths == 1){
-				coll.gameObject.GetComponent<robotAI>().direction = newDirection1;
-			}
-			else{
-				if(last == 2){
-					coll.gameObject.GetComponent<robotAI>().direction = newDirection1;
-					last = 1;
+			if(coll.gameObject.GetComponent<robotAI>().fact == faction.crim){
+				coll.transform.position = this.transform.position;
+				if (crimPaths == 1){
+					coll.gameObject.GetComponent<robotAI>().direction = newCrimDirection1;
 				}
 				else{
-					coll.gameObject.GetComponent<robotAI>().direction = newDirection2;
-					last = 2;
+					if(lastCrim == 2){
+						coll.gameObject.GetComponent<robotAI>().direction = newCrimDirection1;
+						lastCrim = 1;
+					}
+					else{
+						coll.gameObject.GetComponent<robotAI>().direction = newCrimDirection2;
+						lastCrim = 2;
+					}
+				}
+			}
+			else if(coll.gameObject.GetComponent<robotAI>().fact == faction.cop){
+				coll.transform.position = this.transform.position;
+				if (copPaths == 1){
+					coll.gameObject.GetComponent<robotAI>().direction = newCopDirection1;
+				}
+				else{
+					if(lastCop == 2){
+						coll.gameObject.GetComponent<robotAI>().direction = newCopDirection1;
+						lastCop = 1;
+					}
+					else{
+						coll.gameObject.GetComponent<robotAI>().direction = newCopDirection2;
+						lastCop = 2;
+					}
 				}
 			}
 		}

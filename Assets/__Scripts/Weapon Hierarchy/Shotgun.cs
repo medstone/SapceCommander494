@@ -3,9 +3,26 @@ using System.Collections;
 
 public class Shotgun : Weapon {
 
+	bool delaying = false;
+
 	protected override void Start(){
 		damage = 4;
 		ammunition = startingAmmo;
+	}
+
+	void FixedUpdate(){
+		if (ammunition <= 0 && !delaying) {
+			StartCoroutine(DestroyWeaponDelay());
+		}
+	}
+
+	IEnumerator DestroyWeaponDelay(){
+		delaying = true;
+		yield return new WaitForSeconds (0.25f);
+		PlayerStats playerRef = GetComponentInParent<PlayerStats>();
+		playerRef.defaultWeapon.enabled = true;
+		playerRef.secondaryWeapon = null;
+		Destroy (this.gameObject);
 	}
 
 	protected override void ShotBehavior(){
@@ -21,7 +38,7 @@ public class Shotgun : Weapon {
 		pro.transform.position = transform.position;
 		pro.transform.rotation = transform.rotation;
 
-		Vector3 offset = owner.transform.position;
+		Vector3 offset = transform.parent.position;
 		offset = Quaternion.Euler (0, -1, 0) * offset;
 
 		pro.bearing = transform.position - offset;
@@ -37,7 +54,7 @@ public class Shotgun : Weapon {
 		pro.transform.position = transform.position;
 		pro.transform.rotation = transform.rotation;
 		
-		offset = owner.transform.position;
+		offset = transform.parent.position;
 		offset = Quaternion.Euler (0, 1, 0) * offset;
 		
 		pro.bearing = transform.position - offset;
