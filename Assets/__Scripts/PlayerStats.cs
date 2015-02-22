@@ -155,6 +155,12 @@ public class PlayerStats : MonoBehaviour {
 		renderer.enabled = true;
 		defaultWeapon.renderer.enabled = true;
 		health = startingHealth;
+		//*** this will need an overhaul with more than 2 players
+		if (team == Faction_e.spaceCop) {
+			transform.position = MatchManager.S.CopSpawnPoint.position;
+		} else if (team == Faction_e.spaceCrim) {
+			transform.position = MatchManager.S.CrimSpawnPoint.position;
+		}
 	}
 
 

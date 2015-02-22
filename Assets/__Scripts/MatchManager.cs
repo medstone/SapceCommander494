@@ -3,13 +3,15 @@ using System.Collections;
 
 public class MatchManager : MonoBehaviour {
 	static public MatchManager S;
-	
+
+	public Transform CopSpawnPoint;
+	public Transform CrimSpawnPoint;
 
 	public GameObject[] rooms;
 
 
 	void Awake(){
-		
+		S = this;
 	}
 
 	// Use this for initialization
