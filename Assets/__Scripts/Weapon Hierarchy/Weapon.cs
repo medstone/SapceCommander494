@@ -5,10 +5,12 @@ public class Weapon : MonoBehaviour {
 
 	public bool canShoot;
 	public int startingAmmo = 1;
-	int ammunition;
+	protected int ammunition;
 
 	public GameObject projectilePrefab;
-	GameObject projectile;
+	protected GameObject projectile;
+
+	protected int damage;
 
 	public Transform owner; // holder of the weapon.
 
@@ -20,6 +22,7 @@ public class Weapon : MonoBehaviour {
 			StartCoroutine (ShotTimer ());
 	}
 
+	// default behavior
 	protected virtual void ShotBehavior(){
 		// make a projectile 
 		projectile = Instantiate (projectilePrefab) as GameObject;
@@ -28,6 +31,7 @@ public class Weapon : MonoBehaviour {
 		pro.transform.rotation = transform.rotation;
 		pro.bearing = transform.position - owner.transform.position;
 		pro.bearing.Normalize ();
+		pro.damage = damage;
 		// this would need to be more intense to eliminate all friendly-fire
 		// doing so via layers might be necessary?
 		Physics.IgnoreCollision (pro.collider, this.collider);
@@ -39,8 +43,9 @@ public class Weapon : MonoBehaviour {
 		canShoot = true;
 	}
 
-	void Start(){
+	protected virtual void Start(){
 		ammunition = startingAmmo;
+		damage = 2;
 	}
 
 
