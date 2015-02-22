@@ -31,6 +31,7 @@ public class PlayerStats : MonoBehaviour {
 
 
 	bool collidingWithWeapon;
+	GameObject pickupRef;
 
 	void Awake(){
 		control = GetComponent<PlayerControl> ();
@@ -55,8 +56,8 @@ public class PlayerStats : MonoBehaviour {
 
 	void OnTriggerStay(Collider coll){
 		if (coll.tag == "WeaponPickup" && control.xButtonDown) {
-			collidingWithWeapon = true;
-			//StartCoroutine(PickUpWeapon(coll.GetComponent<ItemPickup>()));
+			if (!collidingWithWeapon) // so we don't start the coroutine a bunch of times
+				StartCoroutine(PickUpWeapon(coll.gameObject));
 		}
 	}
 
@@ -64,14 +65,25 @@ public class PlayerStats : MonoBehaviour {
 		collidingWithWeapon = false;
 	}
 
-	IEnumerator PickUpWeapon(GameObject wep){
+	IEnumerator PickUpWeapon(GameObject item){
+		collidingWithWeapon = true;
 		float startTime = Time.time;
-		while (Time.time - startTime > 0.75f && collidingWithWeapon && control.xButtonDown) {
+		while (Time.time - startTime < 0.25f && collidingWithWeapon && control.xButtonDown) {
 			yield return null;
 		}
-		if (wep != null) {
-			wep.collider.enabled = false;
-			weapon = wep;
+		if (item != null && collidingWithWeapon && control.xButtonDown) {
+			ItemPickup pickup = item.GetComponent<ItemPickup>();
+			pickupRef = WeaponFactory.S.GetWeapon(pickup.itemName);
+			// set to location and rotation of current weapon
+			pickupRef.transform.position = weapon.transform.position;
+			pickupRef.transform.rotation = weapon.transform.rotation;
+			pickupRef.transform.SetParent(transform);
+			// destroy old weapon
+			Destroy (weapon.gameObject);
+			weapon = pickupRef.GetComponent<Weapon>();
+			weapon.owner = transform;
+			// destroy item pickup
+			Destroy (item.gameObject);
 		}
 		collidingWithWeapon = false;
 	}

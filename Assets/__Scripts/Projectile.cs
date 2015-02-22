@@ -6,7 +6,7 @@ public class Projectile : MonoBehaviour {
 
 	public float speed;
 	public Vector3 bearing;
-
+	public int damage;
 
 
 	// Use this for initialization
@@ -29,7 +29,7 @@ public class Projectile : MonoBehaviour {
 			PlayerStats pStats = coll.gameObject.GetComponent<PlayerStats>();
 			// ignore your own bullets, in case you can move faster than they can.
 			// alternatively, this could ignore a specific team.
-			pStats.TakeHit(2);
+			pStats.TakeHit(damage);
 			Destroy (this.gameObject);
 		}
 		else if (coll.gameObject.CompareTag("Wall")){
