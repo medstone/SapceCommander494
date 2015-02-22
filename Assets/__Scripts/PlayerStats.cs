@@ -71,7 +71,7 @@ public class PlayerStats : MonoBehaviour {
 		}
 		if (wep != null) {
 			wep.collider.enabled = false;
-			weapon = wep;
+			weapon = wep.GetComponent<Weapon>();
 		}
 		collidingWithWeapon = false;
 	}
