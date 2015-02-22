@@ -12,7 +12,7 @@ public class Weapon : MonoBehaviour {
 
 	protected int damage;
 
-	public Transform owner; // holder of the weapon.
+	// owner is parent
 
 	
 	public float rateOfFire;
@@ -29,7 +29,7 @@ public class Weapon : MonoBehaviour {
 		Projectile pro = projectile.GetComponent<Projectile> ();
 		pro.transform.position = transform.position;
 		pro.transform.rotation = transform.rotation;
-		pro.bearing = transform.position - owner.transform.position;
+		pro.bearing = transform.position - transform.parent.position;
 		pro.bearing.Normalize ();
 		pro.damage = damage;
 		// this would need to be more intense to eliminate all friendly-fire
