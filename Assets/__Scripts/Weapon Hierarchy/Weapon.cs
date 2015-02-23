@@ -10,6 +10,8 @@ public class Weapon : MonoBehaviour {
 	public GameObject projectilePrefab;
 	protected GameObject projectile;
 
+	public Faction_e allegiance;
+
 	protected int damage;
 
 	// owner is parent

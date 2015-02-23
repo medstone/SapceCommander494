@@ -1,9 +1,12 @@
 ﻿using UnityEngine;
 using System.Collections;
 
+
+// there will probably end up being a secondary weapon base class
 public class Shotgun : Weapon {
 
 	bool delaying = false;
+
 
 	protected override void Start(){
 		damage = 4;

@@ -3,7 +3,8 @@ using System.Collections;
 
 public enum Faction_e {
 	spaceCop,
-	spaceCrim
+	spaceCrim,
+	neutral
 }
 
 public enum PlayerNum_e{
@@ -58,7 +59,7 @@ public class PlayerStats : MonoBehaviour {
 	}
 
 	void OnTriggerStay(Collider coll){
-		if (coll.tag == "WeaponPickup" && control.xButtonDown) {
+		if (coll.tag == "WeaponPickup" && control.xButtonDown && coll.GetComponent<Weapon>().allegiance == team) {
 			if (!collidingWithWeapon) // so we don't start the coroutine a bunch of times
 				StartCoroutine(PickUpWeapon(coll.gameObject));
 		}
@@ -81,6 +82,7 @@ public class PlayerStats : MonoBehaviour {
 			pickup.transform.position = defaultWeapon.transform.position;
 			pickup.transform.rotation = defaultWeapon.transform.rotation;
 			pickup.transform.SetParent(transform);
+			pickup.allegiance = Faction_e.neutral;
 			pickup.tag = "Weapon";
 			if (secondaryWeapon != null){
 				// already have a secondary weapon
