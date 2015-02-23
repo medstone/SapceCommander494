@@ -35,7 +35,20 @@ public class robotAI : MonoBehaviour {
 					}
 					GameObject proj = Instantiate(project) as GameObject;
 					proj.gameObject.transform.position = this.gameObject.transform.position;
-					proj.GetComponent<Projectile>().bearing = new Vector3(coll.transform.position.x-this.transform.position.x,coll.transform.position.y-this.transform.position.y,coll.transform.position.z-this.transform.position.z);
+					proj.GetComponent<Projectile>().bearing = new Vector3((coll.transform.position.x-this.transform.position.x)/3f,(coll.transform.position.y-this.transform.position.y)/3f,(coll.transform.position.z-this.transform.position.z)/3f);
+					shoot = 1f;
+					return;
+				}
+			}
+			else if(coll.gameObject.tag == "Actor" && this.fact != coll.gameObject.GetComponent<PlayerStats>().team){
+				if(Physics.Raycast(this.transform.position,new Vector3(coll.transform.position.x-this.transform.position.x,coll.transform.position.y-this.transform.position.y,coll.transform.position.z-this.transform.position.z),out targ)){
+					this.rigidbody.velocity = Vector3.zero;
+					if(shoot > 0){
+						return;
+					}
+					GameObject proj = Instantiate(project) as GameObject;
+					proj.gameObject.transform.position = this.gameObject.transform.position;
+					proj.GetComponent<Projectile>().bearing = new Vector3((coll.transform.position.x-this.transform.position.x)/3f,(coll.transform.position.y-this.transform.position.y)/3f,(coll.transform.position.z-this.transform.position.z)/3f);
 					shoot = 1f;
 					return;
 				}
