@@ -3,7 +3,8 @@ using System.Collections;
 
 public enum Faction_e {
 	spaceCop,
-	spaceCrim
+	spaceCrim,
+	neutral
 }
 
 public enum PlayerNum_e{
@@ -32,7 +33,6 @@ public class PlayerStats : MonoBehaviour {
 
 
 	bool collidingWithWeapon;
-	GameObject pickupRef;
 
 	void Awake(){
 		control = GetComponent<PlayerControl> ();
@@ -59,9 +59,13 @@ public class PlayerStats : MonoBehaviour {
 	}
 
 	void OnTriggerStay(Collider coll){
-		if (coll.tag == "WeaponPickup" && control.xButtonDown) {
-			if (!collidingWithWeapon) // so we don't start the coroutine a bunch of times
-				StartCoroutine(PickUpWeapon(coll.gameObject));
+		if (coll.tag == "WeaponPickup" && control.xButtonDown){
+			Weapon wepRef = coll.GetComponent<Weapon>();
+			if (!collidingWithWeapon){// so we don't start the coroutine a bunch of times
+				if (wepRef.allegiance == team || wepRef.allegiance == Faction_e.neutral){ 
+					StartCoroutine(PickUpWeapon(coll.gameObject));
+				}
+			}
 		}
 	}
 
@@ -77,23 +81,24 @@ public class PlayerStats : MonoBehaviour {
 		}
 		if (item != null && collidingWithWeapon && control.xButtonDown) {
 			// picking up the weapon
-			ItemPickup pickup = item.GetComponent<ItemPickup>();
-			pickupRef = WeaponFactory.S.GetWeapon(pickup.itemName);
+			Weapon pickup = item.GetComponent<Weapon>();
 			// set to location and rotation of current weapon
-			pickupRef.transform.position = defaultWeapon.transform.position;
-			pickupRef.transform.rotation = defaultWeapon.transform.rotation;
-			pickupRef.transform.SetParent(transform);
+			pickup.transform.position = defaultWeapon.transform.position;
+			pickup.transform.rotation = defaultWeapon.transform.rotation;
+			pickup.transform.SetParent(transform);
+			pickup.allegiance = Faction_e.neutral;
+			pickup.tag = "Weapon";
 			if (secondaryWeapon != null){
 				// already have a secondary weapon
-				Destroy (secondaryWeapon.gameObject);
+				secondaryWeapon.transform.parent = null;
+				secondaryWeapon.tag = "WeaponPickup";
 			}
 			else {
 				// turn off primary weapon
 				defaultWeapon.enabled = false;
 			}
-			secondaryWeapon = pickupRef.GetComponent<Weapon>();
-			// destroy item pickup
-			Destroy (item.gameObject);
+			secondaryWeapon = pickup;
+
 		}
 		collidingWithWeapon = false;
 	}
@@ -137,7 +142,10 @@ public class PlayerStats : MonoBehaviour {
 		collider.enabled = false;
 		renderer.enabled = false;
 		if (secondaryWeapon != null) {
-			Destroy (secondaryWeapon.gameObject);
+			// drop secondary weapon
+			secondaryWeapon.transform.parent = null;
+			secondaryWeapon.tag = "WeaponPickup";
+			secondaryWeapon = null;
 			defaultWeapon.enabled = true;
 		}
 		defaultWeapon.renderer.enabled = false;
@@ -155,6 +163,12 @@ public class PlayerStats : MonoBehaviour {
 		renderer.enabled = true;
 		defaultWeapon.renderer.enabled = true;
 		health = startingHealth;
+		//*** this will need an overhaul with more than 2 players
+		if (team == Faction_e.spaceCop) {
+			transform.position = MatchManager.S.CopSpawnPoint.position;
+		} else if (team == Faction_e.spaceCrim) {
+			transform.position = MatchManager.S.CrimSpawnPoint.position;
+		}
 	}
 
 

@@ -43,7 +43,7 @@ public class robotAI : MonoBehaviour {
 		}
 		Vector3 vel;
 		vel.x = direction.x * speed;
-		vel.y = direction.y * speed;
+		vel.y = rigidbody.velocity.y;
 		vel.z = direction.z * speed;
 		this.rigidbody.velocity = vel;
 	}
