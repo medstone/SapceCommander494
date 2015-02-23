@@ -2,7 +2,7 @@
 using System.Collections;
 
 public class robotSpawn : MonoBehaviour {
-	public faction setFact;
+	public Faction_e setFact;
 	public Vector3 spawnDirection;
 	public GameObject robotPrefab;
 
