@@ -24,7 +24,7 @@ public class SlidingDoor : MonoBehaviour {
 	}
 	
 	void OnTriggerEnter(Collider coll) {
-		if(coll.tag != "Actor") return;
+		if(coll.tag != "Actor" && coll.tag != "Robot") return;
 		
 		StartCoroutine(OpenDoor());
 	}

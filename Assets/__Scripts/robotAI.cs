@@ -29,6 +29,9 @@ public class robotAI : MonoBehaviour {
 		foreach( Collider coll in colls){
 			if(coll.gameObject.tag == "Robot" && this.fact != coll.gameObject.GetComponent<robotAI>().fact){
 				if(Physics.Raycast(this.transform.position,new Vector3(coll.transform.position.x-this.transform.position.x,coll.transform.position.y-this.transform.position.y,coll.transform.position.z-this.transform.position.z),out targ)){
+					if(targ.collider.gameObject.tag != "Robot"){
+						continue;
+					}
 				   	this.rigidbody.velocity = Vector3.zero;
 					if(shoot > 0){
 						return;
@@ -42,6 +45,9 @@ public class robotAI : MonoBehaviour {
 			}
 			else if(coll.gameObject.tag == "Actor" && this.fact != coll.gameObject.GetComponent<PlayerStats>().team){
 				if(Physics.Raycast(this.transform.position,new Vector3(coll.transform.position.x-this.transform.position.x,coll.transform.position.y-this.transform.position.y,coll.transform.position.z-this.transform.position.z),out targ)){
+					if(targ.collider.gameObject.tag != "Actor"){
+						continue;
+					}
 					this.rigidbody.velocity = Vector3.zero;
 					if(shoot > 0){
 						return;
