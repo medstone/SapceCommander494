@@ -71,11 +71,6 @@ public class PlayerStats : MonoBehaviour {
 		while (Time.time - startTime < 0.25f && collidingWithWeapon && control.xButtonDown) {
 			yield return null;
 		}
-<<<<<<< HEAD
-		if (wep != null) {
-			wep.collider.enabled = false;
-			weapon = wep.GetComponent<Weapon>();
-=======
 		if (item != null && collidingWithWeapon && control.xButtonDown) {
 			ItemPickup pickup = item.GetComponent<ItemPickup>();
 			pickupRef = WeaponFactory.S.GetWeapon(pickup.itemName);
@@ -89,7 +84,6 @@ public class PlayerStats : MonoBehaviour {
 			weapon.owner = transform;
 			// destroy item pickup
 			Destroy (item.gameObject);
->>>>>>> origin/master
 		}
 		collidingWithWeapon = false;
 	}

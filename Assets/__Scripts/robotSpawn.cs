@@ -2,6 +2,7 @@
 using System.Collections;
 
 public class robotSpawn : MonoBehaviour {
+	public faction setFact;
 	public Vector3 spawnDirection;
 	public GameObject robotPrefab;
 
@@ -19,5 +20,6 @@ public class robotSpawn : MonoBehaviour {
 		GameObject robot = Instantiate (robotPrefab) as GameObject;
 		robot.transform.position = this.transform.position;
 		robot.GetComponent<robotAI> ().direction = spawnDirection;
+		robot.GetComponent<robotAI> ().fact = setFact;
 	}
 }
