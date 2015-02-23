@@ -1,4 +1,5 @@
 ﻿using UnityEngine;
+using UnityEngine.UI;
 using System.Collections;
 
 public class MatchManager : MonoBehaviour {
@@ -12,6 +13,7 @@ public class MatchManager : MonoBehaviour {
 	Control steeringControl; 	// steering to see if criminals hacked it
 	ProgressBar progress;  		// progress bar to see if time is up, and arrived at prison planet
 	
+	Text winnerText;
 
 	void Awake(){
 		S = this;
@@ -21,6 +23,7 @@ public class MatchManager : MonoBehaviour {
 	void Start () {
 		steeringControl = GameObject.Find("Steering").GetComponent<Control>();
 		progress = GameObject.Find("ProgressBar").GetComponent<ProgressBar>();
+		winnerText = GameObject.Find("WinnerText").GetComponent<Text>();
 	}
 	
 	// Update is called once per frame
@@ -29,10 +32,12 @@ public class MatchManager : MonoBehaviour {
 		// check if criminals hacked the steering
 		if(steeringControl.hacked) {
 			// Criminals WIN!!
+			winnerText.text = "Criminals Win!!";
 		}
 		// check if they arrived at the prison planet
 		else if(progress.ended) {
 			// Cops WIN!!
+			winnerText.text = "Cops Win!!";
 		}
 	}
 }

@@ -45,7 +45,7 @@ public class Control : MonoBehaviour {
 	}
 
 	void OnTriggerEnter(Collider other){
-		GameObject player = GameObject.Find (other.gameObject.name);
+		GameObject player = other.gameObject;
 
 
 		if (player.name == "Player") {
