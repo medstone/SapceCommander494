@@ -59,9 +59,13 @@ public class PlayerStats : MonoBehaviour {
 	}
 
 	void OnTriggerStay(Collider coll){
-		if (coll.tag == "WeaponPickup" && control.xButtonDown && coll.GetComponent<Weapon>().allegiance == team) {
-			if (!collidingWithWeapon) // so we don't start the coroutine a bunch of times
-				StartCoroutine(PickUpWeapon(coll.gameObject));
+		if (coll.tag == "WeaponPickup" && control.xButtonDown){
+			Weapon wepRef = coll.GetComponent<Weapon>();
+			if (!collidingWithWeapon){// so we don't start the coroutine a bunch of times
+				if (wepRef.allegiance == team || wepRef.allegiance == Faction_e.neutral){ 
+					StartCoroutine(PickUpWeapon(coll.gameObject));
+				}
+			}
 		}
 	}
 
