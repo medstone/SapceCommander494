@@ -7,7 +7,7 @@ public class SpawnRobots : MonoBehaviour {
 
 	// Use this for initialization
 	void Start () {
-	
+		Instantiate (robot, this.transform.position, Quaternion.identity);
 	}
 	
 	// Update is called once per frame
