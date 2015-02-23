@@ -32,7 +32,6 @@ public class PlayerStats : MonoBehaviour {
 
 
 	bool collidingWithWeapon;
-	GameObject pickupRef;
 
 	void Awake(){
 		control = GetComponent<PlayerControl> ();
@@ -77,23 +76,23 @@ public class PlayerStats : MonoBehaviour {
 		}
 		if (item != null && collidingWithWeapon && control.xButtonDown) {
 			// picking up the weapon
-			ItemPickup pickup = item.GetComponent<ItemPickup>();
-			pickupRef = WeaponFactory.S.GetWeapon(pickup.itemName);
+			Weapon pickup = item.GetComponent<Weapon>();
 			// set to location and rotation of current weapon
-			pickupRef.transform.position = defaultWeapon.transform.position;
-			pickupRef.transform.rotation = defaultWeapon.transform.rotation;
-			pickupRef.transform.SetParent(transform);
+			pickup.transform.position = defaultWeapon.transform.position;
+			pickup.transform.rotation = defaultWeapon.transform.rotation;
+			pickup.transform.SetParent(transform);
+			pickup.tag = "Weapon";
 			if (secondaryWeapon != null){
 				// already have a secondary weapon
-				Destroy (secondaryWeapon.gameObject);
+				secondaryWeapon.transform.parent = null;
+				secondaryWeapon.tag = "WeaponPickup";
 			}
 			else {
 				// turn off primary weapon
 				defaultWeapon.enabled = false;
 			}
-			secondaryWeapon = pickupRef.GetComponent<Weapon>();
-			// destroy item pickup
-			Destroy (item.gameObject);
+			secondaryWeapon = pickup;
+
 		}
 		collidingWithWeapon = false;
 	}
@@ -137,7 +136,10 @@ public class PlayerStats : MonoBehaviour {
 		collider.enabled = false;
 		renderer.enabled = false;
 		if (secondaryWeapon != null) {
-			Destroy (secondaryWeapon.gameObject);
+			// drop secondary weapon
+			secondaryWeapon.transform.parent = null;
+			secondaryWeapon.tag = "WeaponPickup";
+			secondaryWeapon = null;
 			defaultWeapon.enabled = true;
 		}
 		defaultWeapon.renderer.enabled = false;
