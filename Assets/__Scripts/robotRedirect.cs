@@ -23,7 +23,7 @@ public class robotRedirect : MonoBehaviour {
 
 	void OnTriggerEnter(Collider coll){
 		if (coll.gameObject.tag == "Robot") {
-			if(coll.gameObject.GetComponent<robotAI>().fact == faction.crim){
+			if(coll.gameObject.GetComponent<robotAI>().fact == Faction_e.spaceCrim){
 				coll.transform.position = this.transform.position;
 				if (crimPaths == 1){
 					coll.gameObject.GetComponent<robotAI>().direction = newCrimDirection1;
@@ -39,7 +39,7 @@ public class robotRedirect : MonoBehaviour {
 					}
 				}
 			}
-			else if(coll.gameObject.GetComponent<robotAI>().fact == faction.cop){
+			else if(coll.gameObject.GetComponent<robotAI>().fact == Faction_e.spaceCop){
 				coll.transform.position = this.transform.position;
 				if (copPaths == 1){
 					coll.gameObject.GetComponent<robotAI>().direction = newCopDirection1;

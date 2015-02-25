@@ -7,6 +7,7 @@ public class ProgressBar : MonoBehaviour {
 	public bool isRunning = true;
 	public float matchTime = 25f;
 	float currentTime;
+	public bool ended = false;
 
 	Transform startPos;
 	Transform endPos;
@@ -46,12 +47,8 @@ public class ProgressBar : MonoBehaviour {
 			if(rocket.position.x >= endPos.position.x) {
 				// alertTimeUp(); - Not implemented yet
 				isRunning = false;
+				ended = true;
 			}
 		}
-	}
-	
-	void FixedUpdate() {
-		
-		
 	}
 }
