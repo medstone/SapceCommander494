@@ -9,15 +9,12 @@ public class Weapon : MonoBehaviour {
 
 	public GameObject projectilePrefab;
 	protected GameObject projectile;
-
 	public Faction_e allegiance;
-
-	protected int damage;
-
-	// owner is parent
-
-	
+	protected int damage;	
 	public float rateOfFire;
+	
+	// used for shaking screen on fire
+	FollowObject cam;
 
 	public void Shoot(){
 		if (canShoot && ammunition > 0)
@@ -37,6 +34,8 @@ public class Weapon : MonoBehaviour {
 	protected virtual void Start(){
 		ammunition = startingAmmo;
 		damage = 2;
+		
+		cam = GameObject.Find("Camera1").GetComponent<FollowObject>();
 	}
 
 	protected void ShotHelper(float angle){
@@ -53,7 +52,13 @@ public class Weapon : MonoBehaviour {
 		pro.bearing.Normalize ();
 		pro.damage = damage;
 		
-		Physics.IgnoreCollision (pro.collider, this.collider);
+		// shake screen
+		if(cam) {
+			cam.startShaking();
+		}
+		
+		// Just don't have a collider...
+		// Physics.IgnoreCollision (pro.collider, this.collider);
 	}
 
 	IEnumerator ShotTimer(){
