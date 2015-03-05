@@ -53,7 +53,7 @@ public class PlayerControl : MonoBehaviour {
 	}
 
 	void FixedUpdate(){
-		rigidbody.velocity = (bearing /*- transform.position*/).normalized * moveSpeed;
+		GetComponent<Rigidbody>().velocity = (bearing /*- transform.position*/).normalized * moveSpeed;
 	}
 
 
@@ -68,6 +68,6 @@ public class PlayerControl : MonoBehaviour {
 
 
 	void StopMoving(){
-		rigidbody.velocity = Vector3.zero;
+		GetComponent<Rigidbody>().velocity = Vector3.zero;
 	}
 }

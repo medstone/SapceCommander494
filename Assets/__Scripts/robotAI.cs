@@ -32,7 +32,7 @@ public class robotAI : MonoBehaviour {
 					if(targ.collider.gameObject.tag != "Robot"){
 						continue;
 					}
-				   	this.rigidbody.velocity = Vector3.zero;
+				   	this.GetComponent<Rigidbody>().velocity = Vector3.zero;
 					if(shoot > 0){
 						return;
 					}
@@ -48,7 +48,7 @@ public class robotAI : MonoBehaviour {
 					if(targ.collider.gameObject.tag != "Actor"){
 						continue;
 					}
-					this.rigidbody.velocity = Vector3.zero;
+					this.GetComponent<Rigidbody>().velocity = Vector3.zero;
 					if(shoot > 0){
 						return;
 					}
@@ -62,8 +62,8 @@ public class robotAI : MonoBehaviour {
 		}
 		Vector3 vel;
 		vel.x = direction.x * speed;
-		vel.y = rigidbody.velocity.y;
+		vel.y = GetComponent<Rigidbody>().velocity.y;
 		vel.z = direction.z * speed;
-		this.rigidbody.velocity = vel;
+		this.GetComponent<Rigidbody>().velocity = vel;
 	}
 }
