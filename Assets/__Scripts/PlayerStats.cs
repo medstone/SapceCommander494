@@ -28,9 +28,9 @@ public class PlayerStats : MonoBehaviour {
 	public int health;
 
 	int damageTaken = 0; 
-	bool invincible;
-	public float invincibleDur; // how long does the player ignore damage after taking a hit
 
+	public float damageAnimDur;
+	bool damaged;
 
 	bool collidingWithWeapon;
 
@@ -42,7 +42,7 @@ public class PlayerStats : MonoBehaviour {
 	// Use this for initialization
 	void Start () {
 		health = startingHealth;
-		invincible = false;
+		damaged = false;
 		defaultWeapon.canShoot = true;
 		collidingWithWeapon = false;
 	}
@@ -114,10 +114,10 @@ public class PlayerStats : MonoBehaviour {
 	}
 
 	public void TakeHit(int dmg){
-		if (invincible)
-			return;
+
 		damageTaken += dmg;
-		StartCoroutine (Invincibility ());
+		if (!damaged)
+			StartCoroutine (DamageAnimation ());
 	}
 
 	void Die(){
@@ -125,15 +125,15 @@ public class PlayerStats : MonoBehaviour {
 		StartCoroutine (Death ());
 	}
 
-	IEnumerator Invincibility(){
-		invincible = true;
+	IEnumerator DamageAnimation(){
+		damaged = true;
 		float startTime = Time.time;
-		while (Time.time - startTime < invincibleDur) {
+		while (Time.time - startTime < damageAnimDur) {
 			GetComponent<Renderer>().enabled = !GetComponent<Renderer>().enabled;
 			yield return null;
 		}
 		GetComponent<Renderer>().enabled = true;
-		invincible = false;
+		damaged = false;
 	}
 
 	IEnumerator Death(){
