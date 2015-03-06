@@ -148,6 +148,7 @@ public class PlayerStats : MonoBehaviour {
 			secondaryWeapon = null;
 			defaultWeapon.enabled = true;
 		}
+		defaultWeapon.canShoot = false;
 		defaultWeapon.GetComponent<Renderer>().enabled = false;
 		yield return new WaitForSeconds(3);
 		Reset ();
@@ -162,6 +163,7 @@ public class PlayerStats : MonoBehaviour {
 		GetComponent<Collider>().enabled = true;
 		GetComponent<Renderer>().enabled = true;
 		defaultWeapon.GetComponent<Renderer>().enabled = true;
+		defaultWeapon.canShoot = true;
 		health = startingHealth;
 		//*** this will need an overhaul with more than 2 players
 		if (team == Faction_e.spaceCop) {

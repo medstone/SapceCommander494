@@ -58,7 +58,7 @@ public class Weapon : MonoBehaviour {
 		}
 		
 		// Just don't have a collider...
-		// Physics.IgnoreCollision (pro.collider, this.collider);
+		// Physics.IgnoreCollision (pro.GetComponent<Collider>(), this.GetComponentInParent<Collider>());
 	}
 
 	IEnumerator ShotTimer(){

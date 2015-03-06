@@ -19,24 +19,44 @@ public class Projectile : MonoBehaviour {
 		pos.x += dt * speed * bearing.x;
 		pos.z += dt * speed * bearing.z;
 		transform.position = pos;
+		RaycastHit hit;
+		if (Physics.Raycast (transform.position, bearing, out hit, 0.5f)) {
+			RayHit (hit.collider);
+		}
 	}
 
 
+	void RayHit(Collider coll){
+		if (coll.tag == "Actor") {
+			ActorHit (coll.gameObject);
+		} else if (coll.tag == "Robot") {
+			RobotHit(coll.gameObject);
+		}
+		Destroy (this.gameObject);
+	}
 
 	// needed because players' colliders are not triggers
 	void OnCollisionEnter(Collision coll){
 		if (coll.gameObject.CompareTag ("Actor")) { // "Player" tag is being used by InControl I think
-			PlayerStats pStats = coll.gameObject.GetComponent<PlayerStats> ();
-			// ignore your own bullets, in case you can move faster than they can.
-			// alternatively, this could ignore a specific team.
-			pStats.TakeHit (damage);
+			ActorHit (coll.gameObject);
 			Destroy (this.gameObject);
 		} else if (coll.gameObject.CompareTag ("Wall")) {
 			Destroy (this.gameObject);
 		} else if (coll.gameObject.tag == "Robot") {
-			Destroy(coll.gameObject);
+			RobotHit(coll.gameObject);
 			Destroy(this.gameObject);
 		}
+	}
+
+	void ActorHit(GameObject player){
+		PlayerStats pStats = player.GetComponent<PlayerStats> ();
+		// ignore your own bullets, in case you can move faster than they can.
+		// alternatively, this could ignore a specific team.
+		pStats.TakeHit (damage);
+	}
+
+	void RobotHit(GameObject robot){
+		Destroy (robot.gameObject);
 	}
 	
 }
