@@ -40,7 +40,7 @@ public class RoomConsole : MonoBehaviour {
 		float startTime = Time.time;
 		while (beingRepaired) {
 			if (IsBroken){
-				if (Time.time - startTime >= repairDuration){
+				if (Time.time - startTime >= repairDuration - amountRepaired){
 					Repaired ();
 					startTime = Time.time; // so that damaged counter can start up
 				}
