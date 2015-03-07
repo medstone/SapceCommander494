@@ -20,7 +20,7 @@ public class Projectile : MonoBehaviour {
 		pos.z += dt * speed * bearing.z;
 		transform.position = pos;
 		RaycastHit hit;
-		if (Physics.Raycast (transform.position, bearing, out hit, 0.5f)) {
+		if (Physics.Raycast (transform.position, bearing, out hit, 0.25f)) {
 			RayHit (hit.collider);
 		}
 	}
@@ -28,24 +28,34 @@ public class Projectile : MonoBehaviour {
 
 	void RayHit(Collider coll){
 		if (coll.tag == "Actor") {
-			ActorHit (coll.gameObject);
-		} else if (coll.tag == "Robot") {
-			RobotHit(coll.gameObject);
+						ActorHit (coll.gameObject);
+						Destroy (this.gameObject);
+				} else if (coll.tag == "Robot") {
+						RobotHit (coll.gameObject);
+						Destroy (this.gameObject);
+				} 
+
+	}
+
+	void OnTriggerStay(Collider coll){
+		if (coll.tag == "Console") {
+			ConsoleHit (coll.gameObject);		
+			Destroy (this.gameObject);
 		}
-		Destroy (this.gameObject);
 	}
 
 	// needed because players' colliders are not triggers
 	void OnCollisionEnter(Collision coll){
 		if (coll.gameObject.CompareTag ("Actor")) { // "Player" tag is being used by InControl I think
-			ActorHit (coll.gameObject);
-			Destroy (this.gameObject);
-		} else if (coll.gameObject.CompareTag ("Wall")) {
-			Destroy (this.gameObject);
-		} else if (coll.gameObject.tag == "Robot") {
-			RobotHit(coll.gameObject);
-			Destroy(this.gameObject);
-		}
+						ActorHit (coll.gameObject);
+						Destroy (this.gameObject);
+				} else if (coll.gameObject.tag == "Robot") {
+						RobotHit (coll.gameObject);
+						Destroy (this.gameObject);
+				} 
+				else if (coll.gameObject.CompareTag ("Wall")) {
+				Destroy (this.gameObject);
+			}
 	}
 
 	void ActorHit(GameObject player){
@@ -58,5 +68,9 @@ public class Projectile : MonoBehaviour {
 	void RobotHit(GameObject robot){
 		Destroy (robot.gameObject);
 	}
-	
+
+	void ConsoleHit(GameObject console){
+		RoomConsole roomCon = console.GetComponent<RoomConsole> ();
+		roomCon.TakeHit (damage);
+	}
 }

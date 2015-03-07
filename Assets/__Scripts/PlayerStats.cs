@@ -33,6 +33,7 @@ public class PlayerStats : MonoBehaviour {
 	bool damaged;
 
 	bool collidingWithWeapon;
+	public bool repairing;
 
 	void Awake(){
 		control = GetComponent<PlayerControl> ();
@@ -45,10 +46,14 @@ public class PlayerStats : MonoBehaviour {
 		damaged = false;
 		defaultWeapon.canShoot = true;
 		collidingWithWeapon = false;
+		repairing = false;
 	}
 
 
 	void FixedUpdate () {
+		if (repairing) {
+			return; // don't allow shooting if repairing
+		}
 		// maybe this should be handled in PlayerControl
 		if (control.triggerDown) {
 			if (secondaryWeapon != null)
@@ -67,10 +72,29 @@ public class PlayerStats : MonoBehaviour {
 				}
 			}
 		}
+		else if (coll.tag == "Console" && control.aButtonDown) {
+			RoomConsole console = coll.GetComponent<RoomConsole>();
+			if (!repairing && console.IsDamaged){
+				StartCoroutine(RepairStation(console));
+			}
+		}
 	}
 
 	void OnTriggerExit(Collider coll){
-		collidingWithWeapon = false;
+		if (coll.tag == "WeaponPickup")
+			collidingWithWeapon = false;
+		else if (coll.tag == "Console")
+			repairing = false;
+	}
+
+	IEnumerator RepairStation(RoomConsole console){
+		repairing = true;
+		while (repairing && control.aButtonDown) {
+			repairing = console.Repair();		
+			yield return null;
+		}
+		console.Repair (false); // tell console we're stoppin
+		repairing = false;
 	}
 
 	IEnumerator PickUpWeapon(GameObject item){
