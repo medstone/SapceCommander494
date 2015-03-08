@@ -87,7 +87,9 @@ public class Control : MonoBehaviour {
 		beingHacked = false;
 		// only do the following if the hacking went all the way!
 		if (Time.time - startTime >= hack_time - time_hacked) {
-			MatchManager.S.CapturedSpawnPoint (this);
+			CloneRoom cloneRef = GetComponent<CloneRoom>();
+			if (cloneRef != null)
+				MatchManager.S.CapturedSpawnPoint (cloneRef);
 			if (holds == Faction_e.spaceCop) {
 				holds = Faction_e.spaceCrim;//control to Criminals
 				hackBar.GetComponent<Renderer> ().material = crimColor;

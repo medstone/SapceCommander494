@@ -9,8 +9,8 @@ public class MatchManager : MonoBehaviour {
 	public Transform CopSpawnPoint;
 	public Transform CrimSpawnPoint;
 
-	List<Control> crimSpawnPoints;
-	List<Control> copSpawnPoints;
+	List<CloneRoom> crimSpawnPoints;
+	List<CloneRoom> copSpawnPoints;
 
 
 
@@ -23,8 +23,8 @@ public class MatchManager : MonoBehaviour {
 
 	void Awake(){
 		S = this;
-		copSpawnPoints = new List<Control> ();
-		crimSpawnPoints = new List<Control> ();
+		copSpawnPoints = new List<CloneRoom> ();
+		crimSpawnPoints = new List<CloneRoom> ();
 	}
 
 	// Use this for initialization
@@ -33,9 +33,9 @@ public class MatchManager : MonoBehaviour {
 		progress = GameObject.Find("ProgressBar").GetComponent<ProgressBar>();
 		winnerText = GameObject.Find("WinnerText").GetComponent<Text>();
 
-		Control[] rooms = GameObject.FindObjectsOfType<Control> ();
-		foreach (Control room in rooms) {
-			if (room.holds == Faction_e.spaceCop)
+		CloneRoom[] rooms = GameObject.FindObjectsOfType<CloneRoom> ();
+		foreach (CloneRoom room in rooms) {
+			if (room.control.holds == Faction_e.spaceCop)
 				copSpawnPoints.Add(room);
 			else 
 				crimSpawnPoints.Add (room);
@@ -61,16 +61,16 @@ public class MatchManager : MonoBehaviour {
 	}
 
 	// reorganizes the spawn point lists to reflect room's capture by newAllegiance
-	public void CapturedSpawnPoint(Control room){
+	public void CapturedSpawnPoint(CloneRoom room){
 		print ("trynna rearrange spawn points");
-		if (room.holds == Faction_e.spaceCop) {
-			Control roomRef = copSpawnPoints.Find(room.Equals);
+		if (room.control.holds == Faction_e.spaceCop) {
+			CloneRoom roomRef = copSpawnPoints.Find(room.Equals);
 			copSpawnPoints.Remove (room);
 			crimSpawnPoints.Add(roomRef);
 			SortCrimSpawnPoints();
 			print ("Added a crim spawn point");
 		} else {
-			Control roomRef = crimSpawnPoints.Find (room.Equals);
+			CloneRoom roomRef = crimSpawnPoints.Find (room.Equals);
 			crimSpawnPoints.Remove (room);
 			copSpawnPoints.Add(roomRef);
 			SortCopSpawnPoints();
@@ -80,17 +80,25 @@ public class MatchManager : MonoBehaviour {
 	public Transform GetCopSpawnPoint(){
 		if (copSpawnPoints.Count <= 0)
 			return CopSpawnPoint;
-		return copSpawnPoints [0].transform;
+		foreach (CloneRoom spawnPoint in copSpawnPoints) {
+			if (!spawnPoint.Broken ())
+				return spawnPoint.transform;
+		}
+		return CopSpawnPoint; // if all are broken
 	}
 	
 	public Transform GetCrimSpawnPoint(){
 		if (crimSpawnPoints.Count <= 0)
 			return CrimSpawnPoint; // default point
-		return crimSpawnPoints [crimSpawnPoints.Count - 1].transform;
+		foreach (CloneRoom spawnPoint in crimSpawnPoints) {
+			if (!spawnPoint.Broken ())
+				return spawnPoint.transform;
+		}
+		return CrimSpawnPoint; 
 	}
 
 	void SortCrimSpawnPoints(){
-		crimSpawnPoints.Sort ((a, b) => a.transform.position.x.CompareTo (b.transform.position.x));
+		crimSpawnPoints.Sort ((a, b) => b.transform.position.x.CompareTo (a.transform.position.x));
 	}
 
 	void SortCopSpawnPoints(){
