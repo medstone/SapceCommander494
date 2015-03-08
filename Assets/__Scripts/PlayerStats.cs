@@ -45,6 +45,7 @@ public class PlayerStats : MonoBehaviour {
 		health = startingHealth;
 		damaged = false;
 		defaultWeapon.canShoot = true;
+		defaultWeapon.allegiance = team;
 		collidingWithWeapon = false;
 		repairing = false;
 	}
@@ -110,12 +111,13 @@ public class PlayerStats : MonoBehaviour {
 			pickup.transform.position = defaultWeapon.transform.position;
 			pickup.transform.rotation = defaultWeapon.transform.rotation;
 			pickup.transform.SetParent(transform);
-			pickup.allegiance = Faction_e.neutral;
+			pickup.allegiance = team;
 			pickup.tag = "Weapon";
 			if (secondaryWeapon != null){
 				// already have a secondary weapon
 				secondaryWeapon.transform.parent = null;
 				secondaryWeapon.tag = "WeaponPickup";
+				secondaryWeapon.allegiance = Faction_e.neutral;
 			}
 			else {
 				// turn off primary weapon
@@ -168,6 +170,7 @@ public class PlayerStats : MonoBehaviour {
 			// drop secondary weapon
 			secondaryWeapon.transform.parent = null;
 			secondaryWeapon.tag = "WeaponPickup";
+			secondaryWeapon.allegiance = Faction_e.neutral;
 			secondaryWeapon = null;
 			defaultWeapon.enabled = true;
 		}

@@ -40,6 +40,10 @@ public class Weapon : MonoBehaviour {
 
 	protected void ShotHelper(float angle){
 		projectile = Instantiate (projectilePrefab) as GameObject;
+		if (allegiance == Faction_e.spaceCop)
+			projectile.layer = Utils.CopLayer ();
+		else if (allegiance == Faction_e.spaceCrim)
+			projectile.layer = Utils.CrimLayer ();
 		
 		Projectile pro = projectile.GetComponent<Projectile> (); // needed to adjust projectile's bearing
 		pro.transform.position = transform.position;

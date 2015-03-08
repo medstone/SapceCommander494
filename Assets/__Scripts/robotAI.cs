@@ -16,7 +16,10 @@ public class robotAI : MonoBehaviour {
 
 	// Use this for initialization
 	void Start () {
-	
+		if (fact == Faction_e.spaceCop)
+			gameObject.layer = Utils.CopLayer ();
+		else if (fact == Faction_e.spaceCrim)
+			gameObject.layer = Utils.CrimLayer ();
 	}
 	
 	// Update is called once per frame
@@ -37,6 +40,7 @@ public class robotAI : MonoBehaviour {
 						return;
 					}
 					GameObject proj = Instantiate(project) as GameObject;
+					proj.layer = gameObject.layer;
 					proj.gameObject.transform.position = new Vector3(this.gameObject.transform.position.x,this.gameObject.transform.position.y+(this.transform.lossyScale.y/2f),this.transform.position.z);
 					proj.GetComponent<Projectile>().bearing = new Vector3((coll.transform.position.x-this.transform.position.x)/3f,(coll.transform.position.y-this.transform.position.y)/3f,(coll.transform.position.z-this.transform.position.z)/3f);
 					shoot = 1f;
@@ -53,6 +57,7 @@ public class robotAI : MonoBehaviour {
 						return;
 					}
 					GameObject proj = Instantiate(project) as GameObject;
+					proj.layer = gameObject.layer;
 					proj.gameObject.transform.position = new Vector3(this.gameObject.transform.position.x,this.gameObject.transform.position.y+(this.transform.lossyScale.y/2f),this.transform.position.z);
 					proj.GetComponent<Projectile>().bearing = new Vector3((coll.transform.position.x-this.transform.position.x)/3f,(coll.transform.position.y-this.transform.position.y)/3f,(coll.transform.position.z-this.transform.position.z)/3f);
 					proj.GetComponent<Projectile>().damage = 1;
