@@ -48,16 +48,16 @@ public class MatchManager : MonoBehaviour {
 	// Update is called once per frame
 	void Update () {
 		
-//		// check if criminals hacked the steering
-//		if(steeringControl.hacked) {
-//			// Criminals WIN!!
-//			winnerText.text = "Criminals Win!!";
-//		}
-//		// check if they arrived at the prison planet
-//		else if(progress.ended) {
-//			// Cops WIN!!
-//			winnerText.text = "Cops Win!!";
-//		}
+		// check if criminals hacked the steering
+		if(steeringControl.holds == Faction_e.spaceCrim) {
+			// Criminals WIN!!
+			winnerText.text = "Criminals Win!!";
+		}
+		// check if they arrived at the prison planet
+		else if(progress.ended) {
+			// Cops WIN!!
+			winnerText.text = "Cops Win!!";
+		}
 	}
 
 	// reorganizes the spawn point lists to reflect room's capture by newAllegiance
