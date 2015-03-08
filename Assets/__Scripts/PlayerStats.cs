@@ -163,7 +163,6 @@ public class PlayerStats : MonoBehaviour {
 	IEnumerator Death(){
 		GetComponent<Rigidbody>().velocity = Vector3.zero;
 		control.enabled = false;
-		GetComponent<Collider>().enabled = false;
 		GetComponent<Renderer>().enabled = false;
 		if (secondaryWeapon != null) {
 			// drop secondary weapon
@@ -174,27 +173,28 @@ public class PlayerStats : MonoBehaviour {
 		}
 		defaultWeapon.canShoot = false;
 		defaultWeapon.GetComponent<Renderer>().enabled = false;
+		// rather than turning off the collider, move the dead player to some faraway place
+		Vector3 offScreen = new Vector3 (0f, -500f);
+		transform.position = offScreen;
 		yield return new WaitForSeconds(3);
 		Reset ();
 	}
 
 	void Reset(){
 		// move to spawn point
-
+		if (team == Faction_e.spaceCop) {
+			transform.position = MatchManager.S.GetCopSpawnPoint().position;
+		} else if (team == Faction_e.spaceCrim) {
+			transform.position = MatchManager.S.GetCrimSpawnPoint().position;
+		}
 		// turn everything back on
 		if (control.inDevice != null)
 			control.enabled = true;
-		GetComponent<Collider>().enabled = true;
 		GetComponent<Renderer>().enabled = true;
 		defaultWeapon.GetComponent<Renderer>().enabled = true;
 		defaultWeapon.canShoot = true;
 		health = startingHealth;
-		//*** this will need an overhaul with more than 2 players
-		if (team == Faction_e.spaceCop) {
-			transform.position = MatchManager.S.CopSpawnPoint.position;
-		} else if (team == Faction_e.spaceCrim) {
-			transform.position = MatchManager.S.CrimSpawnPoint.position;
-		}
+
 	}
 
 
