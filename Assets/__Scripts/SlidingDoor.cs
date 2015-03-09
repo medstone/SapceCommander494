@@ -30,7 +30,7 @@ public class SlidingDoor : MonoBehaviour {
 	}
 	
 	IEnumerator OpenDoor () {
-		collider.enabled = false;
+		GetComponent<Collider>().enabled = false;
 		isClosing = false;
 		
 		while (true) {
@@ -54,7 +54,7 @@ public class SlidingDoor : MonoBehaviour {
 	
 	IEnumerator CloseDoor () {
 		
-		collider.enabled = true;
+		GetComponent<Collider>().enabled = true;
 		isClosing = true;
 		while (isClosing) {
 			

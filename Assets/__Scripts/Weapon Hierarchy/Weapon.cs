@@ -53,7 +53,7 @@ public class Weapon : MonoBehaviour {
 		pro.bearing.Normalize ();
 		pro.damage = damage;
 		
-		Physics.IgnoreCollision (pro.collider, this.collider);
+		Physics.IgnoreCollision (pro.GetComponent<Collider>(), this.GetComponent<Collider>());
 	}
 
 	IEnumerator ShotTimer(){

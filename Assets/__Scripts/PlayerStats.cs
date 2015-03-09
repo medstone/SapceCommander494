@@ -129,18 +129,18 @@ public class PlayerStats : MonoBehaviour {
 		invincible = true;
 		float startTime = Time.time;
 		while (Time.time - startTime < invincibleDur) {
-			renderer.enabled = !renderer.enabled;
+			GetComponent<Renderer>().enabled = !GetComponent<Renderer>().enabled;
 			yield return null;
 		}
-		renderer.enabled = true;
+		GetComponent<Renderer>().enabled = true;
 		invincible = false;
 	}
 
 	IEnumerator Death(){
-		rigidbody.velocity = Vector3.zero;
+		GetComponent<Rigidbody>().velocity = Vector3.zero;
 		control.enabled = false;
-		collider.enabled = false;
-		renderer.enabled = false;
+		GetComponent<Collider>().enabled = false;
+		GetComponent<Renderer>().enabled = false;
 		if (secondaryWeapon != null) {
 			// drop secondary weapon
 			secondaryWeapon.transform.parent = null;
@@ -148,7 +148,7 @@ public class PlayerStats : MonoBehaviour {
 			secondaryWeapon = null;
 			defaultWeapon.enabled = true;
 		}
-		defaultWeapon.renderer.enabled = false;
+		defaultWeapon.GetComponent<Renderer>().enabled = false;
 		yield return new WaitForSeconds(3);
 		Reset ();
 	}
@@ -159,9 +159,9 @@ public class PlayerStats : MonoBehaviour {
 		// turn everything back on
 		if (control.inDevice != null)
 			control.enabled = true;
-		collider.enabled = true;
-		renderer.enabled = true;
-		defaultWeapon.renderer.enabled = true;
+		GetComponent<Collider>().enabled = true;
+		GetComponent<Renderer>().enabled = true;
+		defaultWeapon.GetComponent<Renderer>().enabled = true;
 		health = startingHealth;
 		//*** this will need an overhaul with more than 2 players
 		if (team == Faction_e.spaceCop) {

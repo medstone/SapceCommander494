@@ -39,7 +39,7 @@ public class Control : MonoBehaviour {
 			hacked = true;
 			
 			// change the color to criminal, and reset the x size
-			hackBar.renderer.material = crimColor;
+			hackBar.GetComponent<Renderer>().material = crimColor;
 			hackBar.localScale = barScale;
 		}
 	}
