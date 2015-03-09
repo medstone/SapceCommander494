@@ -28,11 +28,12 @@ public class PlayerStats : MonoBehaviour {
 	public int health;
 
 	int damageTaken = 0; 
-	bool invincible;
-	public float invincibleDur; // how long does the player ignore damage after taking a hit
 
+	public float damageAnimDur;
+	bool damaged;
 
 	bool collidingWithWeapon;
+	public bool repairing;
 
 	void Awake(){
 		control = GetComponent<PlayerControl> ();
@@ -42,13 +43,18 @@ public class PlayerStats : MonoBehaviour {
 	// Use this for initialization
 	void Start () {
 		health = startingHealth;
-		invincible = false;
+		damaged = false;
 		defaultWeapon.canShoot = true;
+		defaultWeapon.allegiance = team;
 		collidingWithWeapon = false;
+		repairing = false;
 	}
 
 
 	void FixedUpdate () {
+		if (repairing) {
+			return; // don't allow shooting if repairing
+		}
 		// maybe this should be handled in PlayerControl
 		if (control.triggerDown) {
 			if (secondaryWeapon != null)
@@ -67,10 +73,29 @@ public class PlayerStats : MonoBehaviour {
 				}
 			}
 		}
+		else if (coll.tag == "Console" && control.aButtonDown) {
+			RoomConsole console = coll.GetComponent<RoomConsole>();
+			if (!repairing && console.IsDamaged){
+				StartCoroutine(RepairStation(console));
+			}
+		}
 	}
 
 	void OnTriggerExit(Collider coll){
-		collidingWithWeapon = false;
+		if (coll.tag == "WeaponPickup")
+			collidingWithWeapon = false;
+		else if (coll.tag == "Console")
+			repairing = false;
+	}
+
+	IEnumerator RepairStation(RoomConsole console){
+		repairing = true;
+		while (repairing && control.aButtonDown) {
+			repairing = console.Repair();		
+			yield return null;
+		}
+		console.Repair (false); // tell console we're stoppin
+		repairing = false;
 	}
 
 	IEnumerator PickUpWeapon(GameObject item){
@@ -86,12 +111,13 @@ public class PlayerStats : MonoBehaviour {
 			pickup.transform.position = defaultWeapon.transform.position;
 			pickup.transform.rotation = defaultWeapon.transform.rotation;
 			pickup.transform.SetParent(transform);
-			pickup.allegiance = Faction_e.neutral;
+			pickup.allegiance = team;
 			pickup.tag = "Weapon";
 			if (secondaryWeapon != null){
 				// already have a secondary weapon
 				secondaryWeapon.transform.parent = null;
 				secondaryWeapon.tag = "WeaponPickup";
+				secondaryWeapon.allegiance = Faction_e.neutral;
 			}
 			else {
 				// turn off primary weapon
@@ -114,10 +140,10 @@ public class PlayerStats : MonoBehaviour {
 	}
 
 	public void TakeHit(int dmg){
-		if (invincible)
-			return;
+
 		damageTaken += dmg;
-		StartCoroutine (Invincibility ());
+		if (!damaged)
+			StartCoroutine (DamageAnimation ());
 	}
 
 	void Die(){
@@ -125,50 +151,75 @@ public class PlayerStats : MonoBehaviour {
 		StartCoroutine (Death ());
 	}
 
-	IEnumerator Invincibility(){
-		invincible = true;
+	IEnumerator DamageAnimation(){
+		damaged = true;
 		float startTime = Time.time;
+<<<<<<< HEAD
 		while (Time.time - startTime < invincibleDur) {
+=======
+		while (Time.time - startTime < damageAnimDur) {
+>>>>>>> 8ae8ad6cfa6a764118648821f0efec15bfc1a3de
 			GetComponent<Renderer>().enabled = !GetComponent<Renderer>().enabled;
 			yield return null;
 		}
 		GetComponent<Renderer>().enabled = true;
+<<<<<<< HEAD
 		invincible = false;
+=======
+		damaged = false;
+>>>>>>> 8ae8ad6cfa6a764118648821f0efec15bfc1a3de
 	}
 
 	IEnumerator Death(){
 		GetComponent<Rigidbody>().velocity = Vector3.zero;
 		control.enabled = false;
+<<<<<<< HEAD
 		GetComponent<Collider>().enabled = false;
+=======
+>>>>>>> 8ae8ad6cfa6a764118648821f0efec15bfc1a3de
 		GetComponent<Renderer>().enabled = false;
 		if (secondaryWeapon != null) {
 			// drop secondary weapon
 			secondaryWeapon.transform.parent = null;
 			secondaryWeapon.tag = "WeaponPickup";
+			secondaryWeapon.allegiance = Faction_e.neutral;
 			secondaryWeapon = null;
 			defaultWeapon.enabled = true;
 		}
+<<<<<<< HEAD
 		defaultWeapon.GetComponent<Renderer>().enabled = false;
+=======
+		defaultWeapon.canShoot = false;
+		defaultWeapon.GetComponent<Renderer>().enabled = false;
+		// rather than turning off the collider, move the dead player to some faraway place
+		Vector3 offScreen = new Vector3 (0f, -500f);
+		transform.position = offScreen;
+>>>>>>> 8ae8ad6cfa6a764118648821f0efec15bfc1a3de
 		yield return new WaitForSeconds(3);
 		Reset ();
 	}
 
 	void Reset(){
 		// move to spawn point
-
+		if (team == Faction_e.spaceCop) {
+			transform.position = MatchManager.S.GetCopSpawnPoint().position;
+		} else if (team == Faction_e.spaceCrim) {
+			transform.position = MatchManager.S.GetCrimSpawnPoint().position;
+		}
 		// turn everything back on
 		if (control.inDevice != null)
 			control.enabled = true;
+<<<<<<< HEAD
 		GetComponent<Collider>().enabled = true;
 		GetComponent<Renderer>().enabled = true;
 		defaultWeapon.GetComponent<Renderer>().enabled = true;
+=======
+		GetComponent<Renderer>().enabled = true;
+		defaultWeapon.GetComponent<Renderer>().enabled = true;
+		defaultWeapon.canShoot = true;
+>>>>>>> 8ae8ad6cfa6a764118648821f0efec15bfc1a3de
 		health = startingHealth;
-		//*** this will need an overhaul with more than 2 players
-		if (team == Faction_e.spaceCop) {
-			transform.position = MatchManager.S.CopSpawnPoint.position;
-		} else if (team == Faction_e.spaceCrim) {
-			transform.position = MatchManager.S.CrimSpawnPoint.position;
-		}
+
 	}
 
 

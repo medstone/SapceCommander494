@@ -14,6 +14,7 @@ public class PlayerControl : MonoBehaviour {
 
 	public bool triggerDown;
 	public bool xButtonDown;
+	public bool aButtonDown; // as in the A button
 	
 	void Awake(){
 
@@ -41,6 +42,7 @@ public class PlayerControl : MonoBehaviour {
 		triggerDown = inDevice.RightBumper;
 
 		xButtonDown = inDevice.Action3;
+		aButtonDown = inDevice.Action1;
 
 		// handle R stick rotation
 		float yIn = inDevice.RightStickY;

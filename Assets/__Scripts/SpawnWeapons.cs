@@ -21,12 +21,14 @@ public class SpawnWeapons : MonoBehaviour {
 	
 	// Update is called once per frame
 	void Update () {
-		if (shotgun != null && shotgun.tag == "Weapon") {
-			shotgun = null;		
-			StartCoroutine(SpawnDelay());
-		}
-		else if (shotgun != null && wepRef.allegiance == Faction_e.spaceCop && roomControl.holds == Faction_e.spaceCrim) {
+		if (shotgun != null && shotgun.tag == "Weapon") { 
+			// when shotgun is picked up, it changes the tag
+			shotgun = null; // so we forget the reference to the shotgun we previously spawned
+			StartCoroutine (SpawnDelay ());
+		} else if (shotgun != null && wepRef.allegiance == Faction_e.spaceCop && roomControl.holds == Faction_e.spaceCrim) {
 			wepRef.allegiance = Faction_e.spaceCrim;
+		} else if (shotgun != null && wepRef.allegiance == Faction_e.spaceCrim && roomControl.holds == Faction_e.spaceCop) {
+			wepRef.allegiance = Faction_e.spaceCop;
 		}
 	}
 
