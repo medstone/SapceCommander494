@@ -33,26 +33,7 @@ public class Control : MonoBehaviour {
 		holds = Faction_e.spaceCop;//starts with space cop
 	}
 	
-<<<<<<< HEAD
-	// Update is called once per frame
-	void Update () {
-		if (beingHacked == true && time_hacked < hack_time) {
-			time_hacked += Time.deltaTime;
-			
-			// adjust x scale to percentage of amount hacked
-			Vector3 scale = barScale;
-			scale.x *= ((hack_time - time_hacked) / hack_time);
-			hackBar.localScale = scale;
-		}
-		if (time_hacked >= hack_time) {
-			holds = Faction_e.spaceCrim;//control to Criminals
-			beingHacked = false;
-			hacked = true;
-			
-			// change the color to criminal, and reset the x size
-			hackBar.GetComponent<Renderer>().material = crimColor;
-			hackBar.localScale = barScale;
-=======
+
 	// figure out if any hacking is going on
 	void FixedUpdate () {
 		// !!! conditions for hacking and unhacking should be mutually exclusive 
@@ -90,7 +71,7 @@ public class Control : MonoBehaviour {
 			else { // nobody is hacking anything otherwise
 				hackState = HackState_e.none;
 			}
->>>>>>> 8ae8ad6cfa6a764118648821f0efec15bfc1a3de
+
 		}
 
 	}

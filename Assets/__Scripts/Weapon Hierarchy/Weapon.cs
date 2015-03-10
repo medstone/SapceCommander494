@@ -56,9 +56,7 @@ public class Weapon : MonoBehaviour {
 		pro.bearing.Normalize ();
 		pro.damage = damage;
 		
-<<<<<<< HEAD
-		Physics.IgnoreCollision (pro.GetComponent<Collider>(), this.GetComponent<Collider>());
-=======
+
 		// shake screen
 		if(cam) {
 			cam.startShaking();
@@ -66,7 +64,7 @@ public class Weapon : MonoBehaviour {
 		
 		// Just don't have a collider...
 		Physics.IgnoreCollision (pro.GetComponent<Collider>(), this.GetComponentInParent<Collider>());
->>>>>>> 8ae8ad6cfa6a764118648821f0efec15bfc1a3de
+
 	}
 
 	IEnumerator ShotTimer(){

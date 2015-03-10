@@ -176,29 +176,23 @@ public class PlayerStats : MonoBehaviour {
 	IEnumerator DamageAnimation(){
 		damaged = true;
 		float startTime = Time.time;
-<<<<<<< HEAD
-		while (Time.time - startTime < invincibleDur) {
-=======
+
 		while (Time.time - startTime < damageAnimDur) {
->>>>>>> 8ae8ad6cfa6a764118648821f0efec15bfc1a3de
+
 			GetComponent<Renderer>().enabled = !GetComponent<Renderer>().enabled;
 			yield return null;
 		}
 		GetComponent<Renderer>().enabled = true;
-<<<<<<< HEAD
-		invincible = false;
-=======
+
 		damaged = false;
->>>>>>> 8ae8ad6cfa6a764118648821f0efec15bfc1a3de
+
 	}
 
 	void Death(){
 		GetComponent<Rigidbody>().velocity = Vector3.zero;
 		control.enabled = false;
-<<<<<<< HEAD
-		GetComponent<Collider>().enabled = false;
-=======
->>>>>>> 8ae8ad6cfa6a764118648821f0efec15bfc1a3de
+
+
 		GetComponent<Renderer>().enabled = false;
 		if (secondaryWeapon != null) {
 			// drop secondary weapon
@@ -208,26 +202,22 @@ public class PlayerStats : MonoBehaviour {
 			secondaryWeapon = null;
 			defaultWeapon.enabled = true;
 		}
-<<<<<<< HEAD
-<<<<<<< HEAD
+
+
 		defaultWeapon.GetComponent<Renderer>().enabled = false;
-=======
-		defaultWeapon.canShoot = false;
-=======
+
 		control.AllButtonsOff ();
->>>>>>> c00a16958fce6d80c2cbc0ce4803b734b18e35fe
+
 		defaultWeapon.GetComponent<Renderer>().enabled = false;
 		// rather than turning off the collider, move the dead player to some faraway place
 		Vector3 offScreen = new Vector3 (0f, -500f);
 		transform.position = offScreen;
-<<<<<<< HEAD
->>>>>>> 8ae8ad6cfa6a764118648821f0efec15bfc1a3de
-=======
+
 		StartCoroutine (DeathDelay ());
 	}
 
 	IEnumerator DeathDelay(){
->>>>>>> c00a16958fce6d80c2cbc0ce4803b734b18e35fe
+
 		yield return new WaitForSeconds(3);
 		Reset ();
 	}
@@ -243,19 +233,16 @@ public class PlayerStats : MonoBehaviour {
 		// turn everything back on
 		if (control.inDevice != null)
 			control.enabled = true;
-<<<<<<< HEAD
+
 		GetComponent<Collider>().enabled = true;
 		GetComponent<Renderer>().enabled = true;
 		defaultWeapon.GetComponent<Renderer>().enabled = true;
-=======
-		GetComponent<Renderer>().enabled = true;
-		defaultWeapon.GetComponent<Renderer>().enabled = true;
-<<<<<<< HEAD
-		defaultWeapon.canShoot = true;
->>>>>>> 8ae8ad6cfa6a764118648821f0efec15bfc1a3de
-=======
+
+
+
+
 		//defaultWeapon.canShoot = true;
->>>>>>> c00a16958fce6d80c2cbc0ce4803b734b18e35fe
+
 		health = startingHealth;
 
 	}
