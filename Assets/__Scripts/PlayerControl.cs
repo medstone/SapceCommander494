@@ -15,6 +15,7 @@ public class PlayerControl : MonoBehaviour {
 	public bool triggerDown;
 	public bool xButtonDown;
 	public bool aButtonDown; // as in the A button
+	public bool yButtonDown; 
 	
 	void Awake(){
 
@@ -44,6 +45,8 @@ public class PlayerControl : MonoBehaviour {
 		xButtonDown = inDevice.Action3;
 		aButtonDown = inDevice.Action1;
 
+		yButtonDown = inDevice.Action4;
+
 		// handle R stick rotation
 		float yIn = inDevice.RightStickY;
 		float xIn = inDevice.RightStickX;
@@ -59,7 +62,12 @@ public class PlayerControl : MonoBehaviour {
 	}
 
 
-
+	public void AllButtonsOff(){
+		triggerDown = false;
+		aButtonDown = false;
+		xButtonDown = false;
+		yButtonDown = false;
+	}
 	
 
 	void OnTriggerEnter(Collider coll){
@@ -70,6 +78,9 @@ public class PlayerControl : MonoBehaviour {
 
 
 	void StopMoving(){
-		GetComponent<Rigidbody>().velocity = Vector3.zero;
+		Vector3 vel = GetComponent<Rigidbody> ().velocity;
+		vel.x = 0f;
+		vel.z = 0f;
+		GetComponent<Rigidbody> ().velocity = vel;
 	}
 }

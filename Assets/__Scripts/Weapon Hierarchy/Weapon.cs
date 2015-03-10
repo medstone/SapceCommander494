@@ -3,7 +3,7 @@ using System.Collections;
 
 public class Weapon : MonoBehaviour {
 
-	public bool canShoot;
+	bool canShoot;
 	public int startingAmmo = 1;
 	protected int ammunition;
 

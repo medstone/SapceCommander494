@@ -35,6 +35,11 @@ public class PlayerStats : MonoBehaviour {
 	bool collidingWithWeapon;
 	public bool repairing;
 
+	bool dead;
+
+	public Material copColor;
+	public Material crimColor;
+
 	void Awake(){
 		control = GetComponent<PlayerControl> ();
 		defaultWeapon = GetComponentInChildren<Weapon> ();
@@ -44,12 +49,32 @@ public class PlayerStats : MonoBehaviour {
 	void Start () {
 		health = startingHealth;
 		damaged = false;
-		defaultWeapon.canShoot = true;
 		defaultWeapon.allegiance = team;
 		collidingWithWeapon = false;
 		repairing = false;
+		dead = false;
+		StartCoroutine (CheckForDebugTeamChange ());
 	}
 
+	IEnumerator CheckForDebugTeamChange(){
+		while (true) {
+			yield return new WaitForSeconds (2f); // so it's not super sensitive
+			if (control.yButtonDown)
+				DebugTeamChange ();
+		}
+	}
+
+	void DebugTeamChange(){
+		if (team == Faction_e.spaceCop) {
+			team = Faction_e.spaceCrim;
+			gameObject.layer = Utils.CrimLayer();
+			GetComponent<Renderer>().material = crimColor;
+		} else {
+			team = Faction_e.spaceCop;
+			gameObject.layer = Utils.CopLayer();
+			GetComponent<Renderer>().material = copColor;
+		}
+	}
 
 	void FixedUpdate () {
 		if (repairing) {
@@ -134,8 +159,9 @@ public class PlayerStats : MonoBehaviour {
 			health -= damageTaken;
 			damageTaken = 0;
 		}
-		if (health <= 0) {
-			Die ();
+		if (health <= 0 && !dead) {
+			dead = true;
+			Death ();
 		}
 	}
 
@@ -146,10 +172,6 @@ public class PlayerStats : MonoBehaviour {
 			StartCoroutine (DamageAnimation ());
 	}
 
-	void Die(){
-		// it would probably be cool to award a kill to whoever did you in.
-		StartCoroutine (Death ());
-	}
 
 	IEnumerator DamageAnimation(){
 		damaged = true;
@@ -170,7 +192,7 @@ public class PlayerStats : MonoBehaviour {
 >>>>>>> 8ae8ad6cfa6a764118648821f0efec15bfc1a3de
 	}
 
-	IEnumerator Death(){
+	void Death(){
 		GetComponent<Rigidbody>().velocity = Vector3.zero;
 		control.enabled = false;
 <<<<<<< HEAD
@@ -187,19 +209,31 @@ public class PlayerStats : MonoBehaviour {
 			defaultWeapon.enabled = true;
 		}
 <<<<<<< HEAD
+<<<<<<< HEAD
 		defaultWeapon.GetComponent<Renderer>().enabled = false;
 =======
 		defaultWeapon.canShoot = false;
+=======
+		control.AllButtonsOff ();
+>>>>>>> c00a16958fce6d80c2cbc0ce4803b734b18e35fe
 		defaultWeapon.GetComponent<Renderer>().enabled = false;
 		// rather than turning off the collider, move the dead player to some faraway place
 		Vector3 offScreen = new Vector3 (0f, -500f);
 		transform.position = offScreen;
+<<<<<<< HEAD
 >>>>>>> 8ae8ad6cfa6a764118648821f0efec15bfc1a3de
+=======
+		StartCoroutine (DeathDelay ());
+	}
+
+	IEnumerator DeathDelay(){
+>>>>>>> c00a16958fce6d80c2cbc0ce4803b734b18e35fe
 		yield return new WaitForSeconds(3);
 		Reset ();
 	}
 
 	void Reset(){
+		dead = false;
 		// move to spawn point
 		if (team == Faction_e.spaceCop) {
 			transform.position = MatchManager.S.GetCopSpawnPoint().position;
@@ -216,8 +250,12 @@ public class PlayerStats : MonoBehaviour {
 =======
 		GetComponent<Renderer>().enabled = true;
 		defaultWeapon.GetComponent<Renderer>().enabled = true;
+<<<<<<< HEAD
 		defaultWeapon.canShoot = true;
 >>>>>>> 8ae8ad6cfa6a764118648821f0efec15bfc1a3de
+=======
+		//defaultWeapon.canShoot = true;
+>>>>>>> c00a16958fce6d80c2cbc0ce4803b734b18e35fe
 		health = startingHealth;
 
 	}

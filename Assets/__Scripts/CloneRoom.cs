@@ -25,11 +25,10 @@ public class CloneRoom : MonoBehaviour {
 	// class design
 	void FixedUpdate () {
 		if (control.holds == Faction_e.spaceCop) {
-			gameObject.layer = Utils.CopLayer ();
+			// DON'T CHANGE THE LAYER OF THE ROOM
 			if (console != null)
 				console.gameObject.layer = Utils.CopLayer ();
 		} else {
-			gameObject.layer = Utils.CrimLayer ();
 			if (console != null)
 				console.gameObject.layer = Utils.CrimLayer();
 		}
