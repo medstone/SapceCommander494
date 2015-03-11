@@ -6,6 +6,7 @@ public class Weapon : MonoBehaviour {
 	bool canShoot;
 	public int startingAmmo = 1;
 	protected int ammunition;
+	public float shakeAmount = 0.05f;
 
 	public GameObject projectilePrefab;
 	protected GameObject projectile;
@@ -14,7 +15,7 @@ public class Weapon : MonoBehaviour {
 	public float rateOfFire;
 	
 	// used for shaking screen on fire
-	FollowObject cam;
+	public FollowObject cam;
 
 	public void Shoot(){
 		if (canShoot && ammunition > 0)
@@ -35,7 +36,13 @@ public class Weapon : MonoBehaviour {
 		ammunition = startingAmmo;
 		damage = 2;
 		
-		cam = GameObject.Find("Camera1").GetComponent<FollowObject>();
+		if(transform.parent) {
+			cam = transform.parent.GetComponent<PlayerStats>().myCam.GetComponent<FollowObject>();
+			if(!cam) {
+				print("WEAPON: failed to find a FollowObject script on parent");
+			}
+		}
+		// cam = GameObject.Find("Camera1").GetComponent<FollowObject>();
 	}
 
 	protected void ShotHelper(float angle){
@@ -59,7 +66,7 @@ public class Weapon : MonoBehaviour {
 
 		// shake screen
 		if(cam) {
-			cam.startShaking();
+			cam.startShaking(shakeAmount);
 		}
 		
 		// Just don't have a collider...

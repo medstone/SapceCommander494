@@ -26,17 +26,18 @@ public class FollowObject : MonoBehaviour {
 	
     
     // CAMERA SHAKE CODE
-	public void startShaking() 
+	public void startShaking(float amount) 
     {
     	// Don't double shake
     	if(shaking) {
+    		shakeAmt = amount;
     		return;
 		}
 		
 		// commence the shakedown
 		shaking = true;
 		// remember old camera position
-		originalCameraPosition = transform.position;
+		// originalCameraPosition = transform.position;
         
         InvokeRepeating("CameraShake", 0, .01f);
         Invoke("StopShaking", 0.1f);
@@ -57,7 +58,7 @@ public class FollowObject : MonoBehaviour {
     void StopShaking()
     {
         CancelInvoke("CameraShake");
-        transform.position = originalCameraPosition;
+        // transform.position = originalCameraPosition;
     	shaking = false;
     }
 	

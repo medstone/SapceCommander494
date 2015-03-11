@@ -39,6 +39,8 @@ public class PlayerStats : MonoBehaviour {
 
 	public Material copColor;
 	public Material crimColor;
+	
+	public GameObject myCam;
 
 	void Awake(){
 		control = GetComponent<PlayerControl> ();
@@ -149,6 +151,9 @@ public class PlayerStats : MonoBehaviour {
 				defaultWeapon.enabled = false;
 			}
 			secondaryWeapon = pickup;
+			
+			pickup.cam = myCam.GetComponent<FollowObject>();
+			
 
 		}
 		collidingWithWeapon = false;
