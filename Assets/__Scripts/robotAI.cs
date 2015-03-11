@@ -1,5 +1,6 @@
 using UnityEngine;
 using System.Collections;
+using System.Collections.Generic;
 
 /*public enum faction{
 	cop,
@@ -12,7 +13,8 @@ public class robotAI : MonoBehaviour {
 	public float speed = 5f;
 	public GameObject project;
 	public float shoot = 1f;
-
+	public robotSpawn spawn;
+	int raylayer;
 
 	// Use this for initialization
 	void Start () {
@@ -70,6 +72,43 @@ public class robotAI : MonoBehaviour {
 		vel.x = direction.x * speed;
 		vel.y = GetComponent<Rigidbody>().velocity.y;
 		vel.z = direction.z * speed;
+		if (this.fact == Faction_e.spaceCop) {
+			raylayer = 9;
+		}
+		if (this.fact == Faction_e.spaceCrim) {
+			raylayer = 10;
+		}
+		List<Vector3> paths = new List<Vector3>();
+		if (Physics.Raycast (this.transform.position, new Vector3(vel.x/10,0f,vel.z/10), out targ, Mathf.Sqrt (vel.x * vel.x + vel.z * vel.z), raylayer)) {
+			if(targ.collider.gameObject.tag == "Wall" && targ.collider.gameObject.GetComponent<Renderer>().enabled == true){
+				if(!Physics.Raycast (this.transform.position, new Vector3(0f,0f,1f), out targ, Mathf.Sqrt (vel.x * vel.x + vel.z * vel.z), raylayer)){
+					paths.Add(new Vector3(0f,0f,1f));
+				}
+				if(!Physics.Raycast (this.transform.position, new Vector3(1f,0f,0f), out targ, Mathf.Sqrt (vel.x * vel.x + vel.z * vel.z), raylayer)){
+					paths.Add(new Vector3(1f,0f,0f));
+				}
+				if(!Physics.Raycast (this.transform.position, new Vector3(0f,0f,-1f), out targ, Mathf.Sqrt (vel.x * vel.x + vel.z * vel.z), raylayer)){
+					paths.Add(new Vector3(0f,0f,-1f));
+				}
+				if(!Physics.Raycast (this.transform.position, new Vector3(-1f,0f,0f), out targ, Mathf.Sqrt (vel.x * vel.x + vel.z * vel.z), raylayer)){
+					paths.Add(new Vector3(-1f,0f,0f));
+				}
+				Random.Range(0, paths.Count);
+				float val = Random.value;
+				for(int i = 1; i < paths.Count; ++i){
+					if(val >= i-1 && val < i){
+						direction = paths[i];
+					}
+				}
+			}
+		}
+		vel.x = direction.x * speed;
+		vel.y = GetComponent<Rigidbody>().velocity.y;
+		vel.z = direction.z * speed;
 		this.GetComponent<Rigidbody>().velocity = vel;
+	}
+
+	void OnDestruction(){
+		spawn.numSpawned--;
 	}
 }
