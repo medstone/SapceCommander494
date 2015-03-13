@@ -79,8 +79,10 @@ public class robotAI : MonoBehaviour {
 			raylayer = 10;
 		}
 		List<Vector3> paths = new List<Vector3>();
-		if (Physics.Raycast (this.transform.position, new Vector3(vel.x/10,0f,vel.z/10), out targ, Mathf.Sqrt (vel.x * vel.x + vel.z * vel.z), raylayer)) {
-			if(targ.collider.gameObject.tag == "Wall" && targ.collider.gameObject.GetComponent<Renderer>().enabled == true){
+		targ = new RaycastHit ();
+		if (Physics.Raycast (this.transform.position, new Vector3(vel.x,0f,vel.z), out targ, Mathf.Sqrt (vel.x * vel.x + vel.z * vel.z)/10, raylayer)) {
+			if(targ.collider.gameObject.tag == "Robot");
+			else if(targ.collider.gameObject.tag == "Wall" && targ.collider.gameObject.GetComponent<Renderer>().enabled == true){
 				if(!Physics.Raycast (this.transform.position, new Vector3(0f,0f,1f), out targ, Mathf.Sqrt (vel.x * vel.x + vel.z * vel.z), raylayer)){
 					paths.Add(new Vector3(0f,0f,1f));
 				}
@@ -93,10 +95,9 @@ public class robotAI : MonoBehaviour {
 				if(!Physics.Raycast (this.transform.position, new Vector3(-1f,0f,0f), out targ, Mathf.Sqrt (vel.x * vel.x + vel.z * vel.z), raylayer)){
 					paths.Add(new Vector3(-1f,0f,0f));
 				}
-				Random.Range(0, paths.Count);
-				float val = Random.value;
-				for(int i = 1; i < paths.Count; ++i){
-					if(val >= i-1 && val < i){
+				float val = Random.value * paths.Count;
+				for(int i = 0; i < paths.Count; ++i){
+					if(val >= i && val < i+1){
 						direction = paths[i];
 					}
 				}
