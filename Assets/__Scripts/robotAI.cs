@@ -109,7 +109,7 @@ public class robotAI : MonoBehaviour {
 		this.GetComponent<Rigidbody>().velocity = vel;
 	}
 
-	void OnDestruction(){
+	void OnDestroy(){
 		spawn.numSpawned--;
 	}
 }
