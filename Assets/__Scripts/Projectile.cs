@@ -29,9 +29,9 @@ public class Projectile : MonoBehaviour {
 
 
 	void RayHit(Collider coll){
-		Debug.Log ("Ray hit");
-		Debug.Log (gameObject.layer);
-		Debug.Log(coll.gameObject.layer);
+//		Debug.Log ("Ray hit");
+//		Debug.Log (gameObject.layer);
+//		Debug.Log(coll.gameObject.layer);
 		if (coll.tag == "Actor") {
 						ActorHit (coll.gameObject);
 						Destroy (this.gameObject);
@@ -51,9 +51,9 @@ public class Projectile : MonoBehaviour {
 
 	// needed because players' colliders are not triggers
 	void OnCollisionStay(Collision coll){
-		Debug.Log ("Collision");
-		Debug.Log (gameObject.layer);
-		Debug.Log(coll.gameObject.layer);
+//		Debug.Log ("Collision");
+//		Debug.Log (gameObject.layer);
+//		Debug.Log(coll.gameObject.layer);
 		if (coll.gameObject.CompareTag ("Actor")) { // "Player" tag is being used by InControl I think
 						ActorHit (coll.gameObject);
 						Destroy (this.gameObject);
