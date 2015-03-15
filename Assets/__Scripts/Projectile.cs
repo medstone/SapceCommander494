@@ -8,6 +8,7 @@ public class Projectile : MonoBehaviour {
 	public Vector3 bearing;
 	public int damage;
 
+	public int layermask = 0;
 
 	// Use this for initialization
 	void Start () {
@@ -19,14 +20,18 @@ public class Projectile : MonoBehaviour {
 		pos.x += dt * speed * bearing.x;
 		pos.z += dt * speed * bearing.z;
 		transform.position = pos;
+
 		RaycastHit hit;
-		if (Physics.Raycast (transform.position, bearing, out hit, 0.25f)) {
+		if (Physics.Raycast (transform.position, bearing, out hit, 1f, layermask)) {
 			RayHit (hit.collider);
 		}
 	}
 
 
 	void RayHit(Collider coll){
+		Debug.Log ("Ray hit");
+		Debug.Log (gameObject.layer);
+		Debug.Log(coll.gameObject.layer);
 		if (coll.tag == "Actor") {
 						ActorHit (coll.gameObject);
 						Destroy (this.gameObject);
@@ -45,7 +50,10 @@ public class Projectile : MonoBehaviour {
 	}
 
 	// needed because players' colliders are not triggers
-	void OnCollisionEnter(Collision coll){
+	void OnCollisionStay(Collision coll){
+		Debug.Log ("Collision");
+		Debug.Log (gameObject.layer);
+		Debug.Log(coll.gameObject.layer);
 		if (coll.gameObject.CompareTag ("Actor")) { // "Player" tag is being used by InControl I think
 						ActorHit (coll.gameObject);
 						Destroy (this.gameObject);

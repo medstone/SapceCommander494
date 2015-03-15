@@ -47,16 +47,22 @@ public class Weapon : MonoBehaviour {
 
 	protected void ShotHelper(float angle){
 		projectile = Instantiate (projectilePrefab) as GameObject;
-		if (allegiance == Faction_e.spaceCop)
-			projectile.layer = Utils.CopLayer ();
-		else if (allegiance == Faction_e.spaceCrim)
-			projectile.layer = Utils.CrimLayer ();
+
 		
 		Projectile pro = projectile.GetComponent<Projectile> (); // needed to adjust projectile's bearing
 		pro.transform.position = transform.position;
 		pro.transform.rotation = transform.rotation;
+
+		if (allegiance == Faction_e.spaceCop) {
+			projectile.layer = Utils.CopProjectileLayer ();
+			pro.layermask = 1 << LayerMask.NameToLayer("CopProjectile");
+		} 
+		else if (allegiance == Faction_e.spaceCrim) {
+			projectile.layer = Utils.CrimProjectileLayer ();
+			pro.layermask = 1 << LayerMask.NameToLayer("CrimProjectile");
+		}
 		
-		Vector3 offset = transform.parent.position;
+		Vector3 offset =  GetComponent<Transform>().parent.position;
 		offset = Quaternion.Euler (0, angle, 0) * offset;
 		
 		pro.bearing = transform.position - offset;

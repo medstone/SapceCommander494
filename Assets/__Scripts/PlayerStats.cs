@@ -71,10 +71,16 @@ public class PlayerStats : MonoBehaviour {
 			team = Faction_e.spaceCrim;
 			gameObject.layer = Utils.CrimLayer();
 			GetComponent<Renderer>().material = crimColor;
+			defaultWeapon.allegiance = Faction_e.spaceCrim;
+			if (secondaryWeapon != null)
+				secondaryWeapon.allegiance = Faction_e.spaceCrim;
 		} else {
 			team = Faction_e.spaceCop;
 			gameObject.layer = Utils.CopLayer();
 			GetComponent<Renderer>().material = copColor;
+			defaultWeapon.allegiance = Faction_e.spaceCop;
+			if (secondaryWeapon != null)
+				secondaryWeapon.allegiance = Faction_e.spaceCop;
 		}
 	}
 
