@@ -9,6 +9,9 @@ public class RoomConsole : MonoBehaviour {
 	public float repairDuration; // time needed to fix this station when broken
 	float amountRepaired; // time that station has been repaired (before it becomes non-broken)
 
+	public Sprite normalSprite;
+	public Sprite brokenSprite;
+
 	bool beingRepaired;
 
 	public bool IsBroken{
@@ -86,10 +89,12 @@ public class RoomConsole : MonoBehaviour {
 	
 	void Broken(){
 		amountRepaired = 0f;
+		GetComponent<SpriteRenderer> ().sprite = brokenSprite;
 	}
 
 	void Repaired(){
 		health = maxHealth / 2;
+		GetComponent<SpriteRenderer> ().sprite = normalSprite;
 	}
 
 }
