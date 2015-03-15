@@ -42,7 +42,6 @@ public class MatchManager : MonoBehaviour {
 		}
 		SortCopSpawnPoints ();
 		SortCrimSpawnPoints ();
-		print (copSpawnPoints.Count); print (" cop points registered");
 	}
 	
 	// Update is called once per frame
@@ -62,13 +61,11 @@ public class MatchManager : MonoBehaviour {
 
 	// reorganizes the spawn point lists to reflect room's capture by newAllegiance
 	public void CapturedSpawnPoint(CloneRoom room){
-		print ("trynna rearrange spawn points");
 		if (room.control.holds == Faction_e.spaceCop) {
 			CloneRoom roomRef = copSpawnPoints.Find(room.Equals);
 			copSpawnPoints.Remove (room);
 			crimSpawnPoints.Add(roomRef);
 			SortCrimSpawnPoints();
-			print ("Added a crim spawn point");
 		} else {
 			CloneRoom roomRef = crimSpawnPoints.Find (room.Equals);
 			crimSpawnPoints.Remove (room);
