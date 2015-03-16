@@ -42,7 +42,6 @@ public class Weapon : MonoBehaviour {
 				print("WEAPON: failed to find a FollowObject script on parent");
 			}
 		}
-		// cam = GameObject.Find("Camera1").GetComponent<FollowObject>();
 	}
 
 	protected void ShotHelper(float angle){
