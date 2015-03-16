@@ -99,6 +99,7 @@ public class MatchManager : MonoBehaviour {
 	}
 
 	void SortCopSpawnPoints(){
+		copSpawnPoints.Sort ((a, b) => a.transform.position.x.CompareTo (b.transform.position.x));
 		// not sure what the best sorting would be for cops, or if their list should just be combed
 		// whenever the cop spawns.
 	}
