@@ -29,6 +29,7 @@ public class BarrierControlRoom : MonoBehaviour {
 			foreach(GameObject go in barriers){
 				Destroy (go.gameObject);
 			}
+			Destroy (gameObject); // destroy the barrier room itself.
 		}
 	}
 }
