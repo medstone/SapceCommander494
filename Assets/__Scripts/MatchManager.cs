@@ -9,6 +9,8 @@ public class MatchManager : MonoBehaviour {
 	public Transform CopDefaultSpawnPoint;
 	public Transform[] CrimDefaultSpawnPoint;
 
+	List <Transform> crimPositions; // used so cop can spawn right of rightmost criminal
+
 	List<CloneRoom> crimSpawnPoints;
 	List<CloneRoom> copSpawnPoints;
 
@@ -25,6 +27,7 @@ public class MatchManager : MonoBehaviour {
 		S = this;
 		copSpawnPoints = new List<CloneRoom> ();
 		crimSpawnPoints = new List<CloneRoom> ();
+		crimPositions = new List<Transform> ();
 	}
 
 	// Use this for initialization
@@ -42,6 +45,11 @@ public class MatchManager : MonoBehaviour {
 		}
 		SortCopSpawnPoints ();
 		SortCrimSpawnPoints ();
+		PlayerStats[] players = GameObject.FindObjectsOfType<PlayerStats> ();
+		foreach (PlayerStats stats in players) {
+			if (stats.team == Faction_e.spaceCrim)
+				crimPositions.Add (stats.GetComponent<Transform>());
+		}
 	}
 	
 	// Update is called once per frame
@@ -75,10 +83,12 @@ public class MatchManager : MonoBehaviour {
 	}
 	
 	public Transform GetCopSpawnPoint(){
+		SortCrimPositions ();
 		if (copSpawnPoints.Count <= 0)
 			return CopDefaultSpawnPoint;
 		foreach (CloneRoom spawnPoint in copSpawnPoints) {
-			if (!spawnPoint.Broken ())
+			// cop will spawn right of rightmost criminal (with a little wiggle room)
+			if (!spawnPoint.Broken () && (spawnPoint.GetComponent<Transform>().position.x + 15f) > crimPositions[0].position.x)
 				return spawnPoint.transform;
 		}
 		return CopDefaultSpawnPoint; // if all are broken
@@ -106,5 +116,9 @@ public class MatchManager : MonoBehaviour {
 		copSpawnPoints.Sort ((a, b) => a.transform.position.x.CompareTo (b.transform.position.x));
 		// not sure what the best sorting would be for cops, or if their list should just be combed
 		// whenever the cop spawns.
+	}
+
+	void SortCrimPositions(){
+		crimPositions.Sort ((a, b) => b.transform.position.x.CompareTo (a.transform.position.x));
 	}
 }

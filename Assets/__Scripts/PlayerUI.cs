@@ -1,11 +1,17 @@
 ﻿using UnityEngine;
+using UnityEngine.UI;
 using System.Collections;
 
 public class PlayerUI : MonoBehaviour {
 	
+	// health bar
 	Transform healthBar;
 	float healthBarMaxWidth;
 	
+	// UI text for beginning message (will turn off after 5 secs)
+	Text startMsg;
+	
+	// stats for health bar
 	PlayerStats stats;
 	
 	// Use this for initialization
@@ -23,6 +29,12 @@ public class PlayerUI : MonoBehaviour {
 		else {
 			healthBarMaxWidth = healthBar.localScale.x;
 		}
+		
+		startMsg = transform.Find("StartMsg").GetComponent<Text>();
+		if(startMsg) {
+			toggleStartMessgeOnOff();
+			Invoke("toggleStartMessgeOnOff", 5);
+		}
 	}
 	
 	void FixedUpdate () {
@@ -31,5 +43,9 @@ public class PlayerUI : MonoBehaviour {
 		Vector3 sz = healthBar.localScale;
 		sz.x = healthBarMaxWidth * percentHealthLeft;
 		healthBar.localScale = sz;
+	}
+	
+	void toggleStartMessgeOnOff() {
+		startMsg.enabled = !startMsg.enabled;
 	}
 }
