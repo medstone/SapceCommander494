@@ -4,6 +4,9 @@ using System.Collections;
 public class BarrierControlRoom : MonoBehaviour {
 	public Control control;
 	public GameObject[] barriers;
+	public GameObject[] dashes; // sprites that lead to the barriers controlled by this room
+	public Sprite blueDash;
+	public Sprite redDash;
 	RoomConsole console;
 	bool active;
 
@@ -27,9 +30,15 @@ public class BarrierControlRoom : MonoBehaviour {
 		if (control.holds != originalTeam && active) {
 			active = false;
 			foreach(GameObject go in barriers){
-				Destroy (go.gameObject);
+				Destroy(go.gameObject); // should it actually destroy it?
 			}
-			Destroy (gameObject); // destroy the barrier room itself.
+			foreach(GameObject go in dashes){
+				if (originalTeam == Faction_e.spaceCop)
+					go.GetComponent<SpriteRenderer>().sprite = redDash;
+				else
+					go.GetComponent<SpriteRenderer>().sprite = blueDash;
+			}
+			gameObject.SetActive(false);
 		}
 	}
 }
