@@ -6,8 +6,8 @@ using System.Collections.Generic;
 public class MatchManager : MonoBehaviour {
 	static public MatchManager S;
 
-	public Transform CopSpawnPoint;
-	public Transform CrimSpawnPoint;
+	public Transform CopDefaultSpawnPoint;
+	public Transform[] CrimDefaultSpawnPoint;
 
 	List<CloneRoom> crimSpawnPoints;
 	List<CloneRoom> copSpawnPoints;
@@ -76,22 +76,26 @@ public class MatchManager : MonoBehaviour {
 	
 	public Transform GetCopSpawnPoint(){
 		if (copSpawnPoints.Count <= 0)
-			return CopSpawnPoint;
+			return CopDefaultSpawnPoint;
 		foreach (CloneRoom spawnPoint in copSpawnPoints) {
 			if (!spawnPoint.Broken ())
 				return spawnPoint.transform;
 		}
-		return CopSpawnPoint; // if all are broken
+		return CopDefaultSpawnPoint; // if all are broken
 	}
 	
 	public Transform GetCrimSpawnPoint(){
-		if (crimSpawnPoints.Count <= 0)
-			return CrimSpawnPoint; // default point
+		if (crimSpawnPoints.Count <= 0) {
+			float randomChoice = Random.Range(0, CrimDefaultSpawnPoint.Length);
+			int randomNum = (int)randomChoice;
+			return CrimDefaultSpawnPoint[randomNum];
+		}
+
 		foreach (CloneRoom spawnPoint in crimSpawnPoints) {
 			if (!spawnPoint.Broken ())
 				return spawnPoint.transform;
 		}
-		return CrimSpawnPoint; 
+		return CrimDefaultSpawnPoint[0]; 
 	}
 
 	void SortCrimSpawnPoints(){
