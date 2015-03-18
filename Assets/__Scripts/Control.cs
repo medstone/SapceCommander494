@@ -40,7 +40,7 @@ public class Control : MonoBehaviour {
 		if (holds == Faction_e.spaceCrim) {
 			if (copsInRoom > 0 && crimsInRoom <= 0){
 				if (hackState == HackState_e.none)
-					StartCoroutine(Hacking ());
+					StartCoroutine(Hacking (Faction_e.spaceCop));
 				else if (hackState == HackState_e.unhack)
 					hackState = HackState_e.none;
 			}
@@ -58,7 +58,7 @@ public class Control : MonoBehaviour {
 			// check for plurality of crims
 			if (crimsInRoom > 0 && copsInRoom <= 0) {
 				if (hackState == HackState_e.none)
-					StartCoroutine (Hacking ());
+					StartCoroutine (Hacking (Faction_e.spaceCrim));
 				else if (hackState == HackState_e.unhack)
 					hackState = HackState_e.none;
 			}
@@ -89,15 +89,35 @@ public class Control : MonoBehaviour {
 		}
 	}
 
-	IEnumerator Hacking(){
+	float Multiplier(int numCapturers){
+		switch (numCapturers) {
+		case 1:
+			return 1.0f;
+			break;
+		case 2:
+			return 1.5f;
+			break;
+		case 3:
+			return 2.0f;
+			break;
+		default:
+			return 1.0f;
+		}
+	}
+
+	IEnumerator Hacking(Faction_e team_hacking){
 		float startTime = Time.time;
 		hackState = HackState_e.hack;
-		while (hackState == HackState_e.hack && Time.time - startTime < hack_time - time_hacked) {
+		float mult = 1.0f;
+		while (hackState == HackState_e.hack && ((Time.time - startTime) * mult) < hack_time - time_hacked) {
 			// adjust x scale to percentage of amount hacked
 			Vector3 scale = barScale;
-			
 			scale.x *= ((hack_time - time_hacked - (Time.time - startTime )) / hack_time);
 			hackBar.localScale = scale;
+			if (team_hacking == Faction_e.spaceCop)
+				mult = Multiplier (copsInRoom);
+			else
+				mult = Multiplier (crimsInRoom);
 			yield return null;
 		}
 		hackState = HackState_e.none;
