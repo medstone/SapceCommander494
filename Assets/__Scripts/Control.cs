@@ -12,6 +12,8 @@ public class Control : MonoBehaviour {
 	public float hack_time;//time it takes for one side to take over the room
 	public HackState_e hackState = HackState_e.none;
 	public float time_hacked = 0.0f; //counter for time of being hacked
+	public bool locked; // if the station is locked, it cannot be captured
+	public bool lockOnCapture; // if true, station will become locked after first capture.
 	
 	Transform hackBar;
 	Vector3 barScale;
@@ -36,6 +38,10 @@ public class Control : MonoBehaviour {
 
 	// figure out if any hacking is going on
 	void FixedUpdate () {
+		if (locked) {
+			hackState = HackState_e.none;
+			return;
+		}
 		// !!! conditions for hacking and unhacking should be mutually exclusive 
 		if (holds == Faction_e.spaceCrim) {
 			if (copsInRoom > 0 && crimsInRoom <= 0){
@@ -136,6 +142,8 @@ public class Control : MonoBehaviour {
 			}
 			hackBar.localScale = barScale;
 			time_hacked = 0f;
+			if (lockOnCapture)
+				locked = true;
 		} 
 		else { // hang onto the amount of hacking time accrued 
 			time_hacked += Time.time - startTime;

@@ -38,7 +38,6 @@ public class BarrierControlRoom : MonoBehaviour {
 				else
 					go.GetComponent<SpriteRenderer>().sprite = blueDash;
 			}
-			gameObject.SetActive(false);
 		}
 	}
 }
