@@ -18,7 +18,7 @@ public class CloneRoom : MonoBehaviour {
 
 	// Use this for initialization
 	void Start () {
-		control.CaptureEvent += ChangeLayer;
+		control.CapturedEvent += ChangeLayer;
 		ChangeLayer (control.holds); // to set up the console with the right layer
 	}
 	
