@@ -7,6 +7,9 @@ public enum HackState_e{
 	unhack
 }
 
+public delegate void CapturedRoomHandler(Faction_e new_team);
+
+
 public class Control : MonoBehaviour {
 	public Faction_e holds;//which faction controls the room
 	public float hack_time;//time it takes for one side to take over the room
@@ -22,6 +25,8 @@ public class Control : MonoBehaviour {
 
 	public int copsInRoom;
 	public int crimsInRoom;
+
+	public event CapturedRoomHandler CapturedEvent;
 	
 	void Awake () { 
 		hackBar = transform.Find("HackBar");
@@ -144,6 +149,9 @@ public class Control : MonoBehaviour {
 			time_hacked = 0f;
 			if (lockOnCapture)
 				locked = true;
+			if (CapturedEvent != null){
+				CapturedEvent(holds);
+			}
 		} 
 		else { // hang onto the amount of hacking time accrued 
 			time_hacked += Time.time - startTime;
