@@ -8,7 +8,7 @@ public enum HackState_e{
 }
 
 public delegate void CapturedRoomHandler(Faction_e new_team);
-
+public delegate void CaptureAmountHandler(float amountCaptured);
 
 public class Control : MonoBehaviour {
 	public Faction_e holds;//which faction controls the room
@@ -27,6 +27,7 @@ public class Control : MonoBehaviour {
 	public int crimsInRoom;
 
 	public event CapturedRoomHandler CapturedEvent;
+	public event CaptureAmountHandler CaptureAmountEvent;
 	
 	void Awake () { 
 		hackBar = transform.Find("HackBar");
@@ -129,6 +130,8 @@ public class Control : MonoBehaviour {
 				mult = Multiplier (copsInRoom);
 			else
 				mult = Multiplier (crimsInRoom);
+			if (CaptureAmountEvent != null)
+				CaptureAmountEvent(((Time.time - startTime) * mult) + time_hacked);
 			yield return null;
 		}
 		hackState = HackState_e.none;
@@ -152,6 +155,9 @@ public class Control : MonoBehaviour {
 			if (CapturedEvent != null){
 				CapturedEvent(holds);
 			}
+			if (CaptureAmountEvent != null){
+				CaptureAmountEvent(0f);
+			}
 		} 
 		else { // hang onto the amount of hacking time accrued 
 			time_hacked += Time.time - startTime;
@@ -167,6 +173,8 @@ public class Control : MonoBehaviour {
 			Vector3 scale = barScale;
 			scale.x *= ((hack_time - time_hacked + (Time.time - startTime )) / hack_time);
 			hackBar.localScale = scale;
+			if (CaptureAmountEvent != null)
+				CaptureAmountEvent(time_hacked - (Time.time - startTime));
 			yield return null;
 		}
 		hackState = HackState_e.none;
