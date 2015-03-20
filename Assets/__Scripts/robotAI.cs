@@ -44,7 +44,7 @@ public class robotAI : MonoBehaviour {
 					GameObject proj = Instantiate(project) as GameObject;
 					proj.layer = gameObject.layer;
 					proj.gameObject.transform.position = new Vector3(this.gameObject.transform.position.x,this.gameObject.transform.position.y+(this.transform.lossyScale.y/2f),this.transform.position.z);
-					proj.GetComponent<Projectile>().bearing = new Vector3((coll.transform.position.x-this.transform.position.x)/3f,(coll.transform.position.y-this.transform.position.y)/3f,(coll.transform.position.z-this.transform.position.z)/3f);
+					proj.GetComponent<Projectile>().SetBearing(new Vector3((coll.transform.position.x-this.transform.position.x)/3f,(coll.transform.position.y-this.transform.position.y)/3f,(coll.transform.position.z-this.transform.position.z)/3f));
 					shoot = 1f;
 					return;
 				}
@@ -61,7 +61,7 @@ public class robotAI : MonoBehaviour {
 					GameObject proj = Instantiate(project) as GameObject;
 					proj.layer = gameObject.layer;
 					proj.gameObject.transform.position = new Vector3(this.gameObject.transform.position.x,this.gameObject.transform.position.y+(this.transform.lossyScale.y/2f),this.transform.position.z);
-					proj.GetComponent<Projectile>().bearing = new Vector3((coll.transform.position.x-this.transform.position.x)/3f,(coll.transform.position.y-this.transform.position.y)/3f,(coll.transform.position.z-this.transform.position.z)/3f);
+					proj.GetComponent<Projectile>().SetBearing(new Vector3((coll.transform.position.x-this.transform.position.x)/3f,(coll.transform.position.y-this.transform.position.y)/3f,(coll.transform.position.z-this.transform.position.z)/3f));
 					proj.GetComponent<Projectile>().damage = 1;
 					shoot = 1f;
 					return;

@@ -6,12 +6,18 @@ public class Projectile : MonoBehaviour {
 
 	public float speed;
 	public Vector3 bearing;
+
 	public int damage;
 
 	public int layermask = 0;
 
 	// Use this for initialization
 	void Start () {
+	}
+
+	public void SetBearing(Vector3 value){
+		bearing = value;
+		bearing.Normalize ();
 	}
 
 	void FixedUpdate(){

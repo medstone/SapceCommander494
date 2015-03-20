@@ -64,8 +64,7 @@ public class Weapon : MonoBehaviour {
 		Vector3 offset =  GetComponent<Transform>().parent.position;
 		offset = Quaternion.Euler (0, angle, 0) * offset;
 		
-		pro.bearing = transform.position - offset;
-		pro.bearing.Normalize ();
+		pro.SetBearing(transform.position - offset);
 		pro.damage = damage;
 		
 
