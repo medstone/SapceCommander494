@@ -1,18 +1,26 @@
 ﻿using UnityEngine;
-using UnityEngine.UI;
 using System.Collections;
 
 public class PlayerUI : MonoBehaviour {
+	
+	const string copStartText = "Criminals are coming from the <b>LEFT</b>, defend the ship!";
+	const string crimStartText = "Make your way <b>RIGHT</b> and take control of the ship!";
 	
 	// health bar
 	Transform healthBar;
 	float healthBarMaxWidth;
 	
 	// UI text for beginning message (will turn off after 5 secs)
-	Text startMsg;
+	// FadeMessage topFadeText; 
+	FadeMessage midFadeText;
 	
 	// stats for health bar
 	PlayerStats stats;
+	
+	void Awake () {
+		// topFadeText = transform.Find("RoomMsg").GetComponent<FadeMessage>();
+		midFadeText = transform.Find("MidMsg").GetComponent<FadeMessage>();
+	}
 	
 	// Use this for initialization
 	void Start () {
@@ -30,10 +38,14 @@ public class PlayerUI : MonoBehaviour {
 			healthBarMaxWidth = healthBar.localScale.x;
 		}
 		
-		startMsg = transform.Find("StartMsg").GetComponent<Text>();
-		if(startMsg) {
-			toggleStartMessgeOnOff();
-			Invoke("toggleStartMessgeOnOff", 5);
+		// display starter text
+		if(midFadeText) {
+			if(stats.team == Faction_e.spaceCop) {
+				midFadeText.displayMessage(copStartText);
+			}
+			else {
+				midFadeText.displayMessage(crimStartText);
+			}
 		}
 	}
 	
@@ -43,9 +55,5 @@ public class PlayerUI : MonoBehaviour {
 		Vector3 sz = healthBar.localScale;
 		sz.x = healthBarMaxWidth * percentHealthLeft;
 		healthBar.localScale = sz;
-	}
-	
-	void toggleStartMessgeOnOff() {
-		startMsg.enabled = !startMsg.enabled;
 	}
 }

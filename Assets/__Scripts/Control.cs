@@ -18,6 +18,8 @@ public class Control : MonoBehaviour {
 	public bool locked; // if the station is locked, it cannot be captured
 	public bool lockOnCapture; // if true, station will become locked after first capture.
 	
+	public string roomName = "Untitled Room";
+	
 	Transform hackBar;
 	Vector3 barScale;
 	public Material copColor;
@@ -98,6 +100,12 @@ public class Control : MonoBehaviour {
 				++copsInRoom;
 			}
 				
+		}
+		
+		RoomListener rm = other.GetComponent<RoomListener>();
+		if(rm) {
+			print("RoomListner Entered " + roomName);
+			rm.Display("Entered " + roomName);
 		}
 	}
 
