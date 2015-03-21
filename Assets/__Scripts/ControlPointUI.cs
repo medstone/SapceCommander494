@@ -6,12 +6,14 @@ public class ControlPointUI : MonoBehaviour {
 	public Color blue = Color.blue;
 	public Color red = Color.red;
 	public Control controlRef;
+	Image lockSymbol;
 	Slider slider;
 
 	float sliderVal;
 
 	void Awake(){
 		slider = GetComponent<Slider> ();
+		lockSymbol = transform.Find ("lock").GetComponent<Image>();
 	}
 	// Use this for initialization
 	void Start () {
@@ -22,6 +24,9 @@ public class ControlPointUI : MonoBehaviour {
 		} 
 		else {
 			slider.GetComponentInChildren<Image>().color = red;
+		}
+		if (!controlRef.locked) {
+			lockSymbol.enabled = false;
 		}
 	}
 
@@ -40,5 +45,7 @@ public class ControlPointUI : MonoBehaviour {
 		else {
 			slider.GetComponentInChildren<Image>().color = red;
 		}
+		if (controlRef.locked)
+			lockSymbol.enabled = true;
 	}
 }
