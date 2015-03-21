@@ -7,6 +7,7 @@ public class Shotgun : Weapon {
 
 	bool delaying = false;
 
+	public float shotAngle;
 
 	protected override void Start(){
 		damage = 4;
@@ -32,8 +33,8 @@ public class Shotgun : Weapon {
 		// make three projectiles
 		// first projectile (straight) is just base class shot
 		base.ShotBehavior ();
-		ShotHelper (-1);
-		ShotHelper (1);
+		ShotHelper (shotAngle);
+		ShotHelper (shotAngle * -1f);
 		--ammunition;
 	}
 }

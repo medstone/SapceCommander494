@@ -54,17 +54,26 @@ public class Weapon : MonoBehaviour {
 
 		if (allegiance == Faction_e.spaceCop) {
 			projectile.layer = Utils.CopProjectileLayer ();
-			pro.layermask = 1 << LayerMask.NameToLayer("CopProjectile");
+			//pro.layermask = 1 << LayerMask.NameToLayer("CopProjectile");
+			//pro.layermask += 1 << LayerMask.NameToLayer("Cops");
+			pro.IgnoreLayer(LayerMask.NameToLayer("CopProjectile"));
+			pro.IgnoreLayer(LayerMask.NameToLayer("Cops"));
+
 		} 
 		else if (allegiance == Faction_e.spaceCrim) {
 			projectile.layer = Utils.CrimProjectileLayer ();
-			pro.layermask = 1 << LayerMask.NameToLayer("CrimProjectile");
+			//pro.layermask = 1 << LayerMask.NameToLayer("CrimProjectile");
+			pro.IgnoreLayer(LayerMask.NameToLayer("CrimProjectile"));
+			//pro.layermask += 1 << LayerMask.NameToLayer("Crims");
+			pro.IgnoreLayer(LayerMask.NameToLayer("Crims"));
 		}
+		//pro.layermask = ~pro.layermask;
 		
-		Vector3 offset =  GetComponent<Transform>().parent.position;
+		Vector3 offset =  transform.position - GetComponent<Transform>().parent.position;
 		offset = Quaternion.Euler (0, angle, 0) * offset;
-		
-		pro.SetBearing(transform.position - offset);
+
+		pro.SetBearing (offset);
+		//pro.SetBearing(transform.position - offset);
 		pro.damage = damage;
 		
 
@@ -72,9 +81,6 @@ public class Weapon : MonoBehaviour {
 		if(cam) {
 			cam.startShaking(shakeAmount);
 		}
-		
-		// Just don't have a collider...
-		Physics.IgnoreCollision (pro.GetComponent<Collider>(), this.GetComponentInParent<Collider>());
 
 	}
 

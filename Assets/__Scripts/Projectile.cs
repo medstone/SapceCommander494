@@ -9,10 +9,18 @@ public class Projectile : MonoBehaviour {
 
 	public int damage;
 
-	public int layermask = 0;
+	int layermask = ~0;
 
 	// Use this for initialization
 	void Start () {
+	}
+
+	public void IgnoreLayer(int layer){
+		layermask -= (1 << layer);
+	}
+
+	public Vector3 GetBearing(){
+		return bearing;
 	}
 
 	public void SetBearing(Vector3 value){
@@ -21,16 +29,19 @@ public class Projectile : MonoBehaviour {
 	}
 
 	void FixedUpdate(){
+
+//		RaycastHit hit;
+//		if (Physics.Raycast (transform.position, bearing, out hit, 0.5f, layermask)) {
+//			RayHit (hit.collider);
+//		}
+
 		float dt = Time.fixedDeltaTime;
 		Vector3 pos = transform.position;
 		pos.x += dt * speed * bearing.x;
 		pos.z += dt * speed * bearing.z;
 		transform.position = pos;
 
-		RaycastHit hit;
-		if (Physics.Raycast (transform.position, bearing, out hit, 1f, layermask)) {
-			RayHit (hit.collider);
-		}
+	
 	}
 
 
@@ -39,13 +50,14 @@ public class Projectile : MonoBehaviour {
 //		Debug.Log (gameObject.layer);
 //		Debug.Log(coll.gameObject.layer);
 		if (coll.tag == "Actor") {
-						ActorHit (coll.gameObject);
-						Destroy (this.gameObject);
-				} else if (coll.tag == "Robot") {
-						RobotHit (coll.gameObject);
-						Destroy (this.gameObject);
-				} 
-
+			ActorHit (coll.gameObject);
+			Destroy (this.gameObject);
+		} else if (coll.tag == "Robot") {
+			RobotHit (coll.gameObject);
+			Destroy (this.gameObject);
+		} else if (coll.tag == "Wall") {
+			Destroy(this.gameObject);
+		}
 	}
 
 	void OnTriggerStay(Collider coll){
