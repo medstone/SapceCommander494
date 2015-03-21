@@ -14,9 +14,8 @@ public class MatchManager : MonoBehaviour {
 	List<CloneRoom> crimSpawnPoints;
 	List<CloneRoom> copSpawnPoints;
 
-
-
-	public GameObject[] rooms;
+	public Control[] keyRooms; // key strategic rooms that are locked / unlocked.
+	int currentContestedPoint = 0;
 	
 	Control steeringControl; 	// steering to see if criminals hacked it
 	ProgressBar progress;  		// progress bar to see if time is up, and arrived at prison planet
@@ -120,5 +119,12 @@ public class MatchManager : MonoBehaviour {
 
 	void SortCrimPositions(){
 		crimPositions.Sort ((a, b) => b.transform.position.x.CompareTo (a.transform.position.x));
+	}
+
+	// unlocks next room if possible
+	public void KeyRoomCaptured(){
+		++currentContestedPoint;
+		if (currentContestedPoint < keyRooms.Length)
+			keyRooms [currentContestedPoint].locked = false;
 	}
 }

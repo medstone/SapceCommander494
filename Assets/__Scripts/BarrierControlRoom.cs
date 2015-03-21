@@ -34,5 +34,6 @@ public class BarrierControlRoom : MonoBehaviour {
 			else
 				go.GetComponent<SpriteRenderer>().sprite = blueDash;
 		}
+		MatchManager.S.KeyRoomCaptured (); // notify match manager that this key room was captured.
 	}
 }
