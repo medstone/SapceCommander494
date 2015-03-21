@@ -1,4 +1,5 @@
 ﻿using UnityEngine;
+using UnityEngine.UI;
 using System.Collections;
 
 public class PlayerUI : MonoBehaviour {
@@ -10,6 +11,9 @@ public class PlayerUI : MonoBehaviour {
 	Transform healthBar;
 	float healthBarMaxWidth;
 	
+	// health indicator
+	Text healthText;
+	
 	// UI text for beginning message (will turn off after 5 secs)
 	// FadeMessage topFadeText; 
 	FadeMessage midFadeText;
@@ -19,26 +23,21 @@ public class PlayerUI : MonoBehaviour {
 	
 	void Awake () {
 		// topFadeText = transform.Find("RoomMsg").GetComponent<FadeMessage>();
+		healthText =  transform.Find("HealthIndicator/Value").GetComponent<Text>();
+		
+		// grab the stats 
+		stats = GetComponentInParent<FollowObject>().target.GetComponent<PlayerStats>();
+		
+		// display starter text
 		midFadeText = transform.Find("MidMsg").GetComponent<FadeMessage>();
+		
 	}
 	
 	// Use this for initialization
 	void Start () {
-		// grab the stats 
-		stats = GetComponentInParent<FollowObject>().target.GetComponent<PlayerStats>();
 		if(!stats) {
 			print("PlayerUI: Unable to get player stats");
 		}
-		
-		healthBar = transform.Find("HealthBar");
-		if(!stats) {
-			print("PlayerUI: Unable to healthbar child");
-		}
-		else {
-			healthBarMaxWidth = healthBar.localScale.x;
-		}
-		
-		// display starter text
 		if(midFadeText) {
 			if(stats.team == Faction_e.spaceCop) {
 				midFadeText.displayMessage(copStartText);
@@ -50,10 +49,14 @@ public class PlayerUI : MonoBehaviour {
 	}
 	
 	void FixedUpdate () {
-		// update health bar
-		float percentHealthLeft = (float) stats.health / stats.startingHealth;
-		Vector3 sz = healthBar.localScale;
-		sz.x = healthBarMaxWidth * percentHealthLeft;
-		healthBar.localScale = sz;
+		// // update health bar - Replaced with health indicator
+		// float percentHealthLeft = (float) stats.health / stats.startingHealth;
+		// Vector3 sz = healthBar.localScale;
+		// sz.x = healthBarMaxWidth * percentHealthLeft;
+		// healthBar.localScale = sz;
+		
+		// update health indicator
+		healthText.text = stats.health.ToString();
+		
 	}
 }
