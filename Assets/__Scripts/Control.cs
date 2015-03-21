@@ -104,8 +104,7 @@ public class Control : MonoBehaviour {
 		
 		RoomListener rm = other.GetComponent<RoomListener>();
 		if(rm) {
-			print("RoomListner Entered " + roomName);
-			rm.Display("Entered " + roomName);
+			rm.Display(roomName);
 		}
 	}
 
