@@ -7,12 +7,13 @@ public class PlayerUI : MonoBehaviour {
 	const string copStartText = "Criminals are coming from the <b>LEFT</b>, defend the ship!";
 	const string crimStartText = "Make your way <b>RIGHT</b> and take control of the ship!";
 	
-	// health bar
-	Transform healthBar;
-	float healthBarMaxWidth;
 	
 	// health indicator
 	Text healthText;
+	
+	// Weapon indicators
+	Text weaponName;
+	Text weaponAmmo;
 	
 	// UI text for beginning message (will turn off after 5 secs)
 	// FadeMessage topFadeText; 
@@ -24,6 +25,9 @@ public class PlayerUI : MonoBehaviour {
 	void Awake () {
 		// topFadeText = transform.Find("RoomMsg").GetComponent<FadeMessage>();
 		healthText =  transform.Find("HealthIndicator/Value").GetComponent<Text>();
+		weaponName = transform.Find("WeaponIndicator/Name").GetComponent<Text>();
+		weaponAmmo = transform.Find("WeaponIndicator/Ammo").GetComponent<Text>();
+		
 		
 		// grab the stats 
 		stats = GetComponentInParent<FollowObject>().target.GetComponent<PlayerStats>();
@@ -49,14 +53,18 @@ public class PlayerUI : MonoBehaviour {
 	}
 	
 	void FixedUpdate () {
-		// // update health bar - Replaced with health indicator
-		// float percentHealthLeft = (float) stats.health / stats.startingHealth;
-		// Vector3 sz = healthBar.localScale;
-		// sz.x = healthBarMaxWidth * percentHealthLeft;
-		// healthBar.localScale = sz;
 		
 		// update health indicator
 		healthText.text = stats.health.ToString();
+		
+		if(stats.secondaryWeapon) {
+			weaponName.text = stats.secondaryWeapon.weapName;
+			weaponAmmo.text = stats.secondaryWeapon.ammunition.ToString();
+		}
+		else {
+			weaponName.text = stats.defaultWeapon.weapName;
+			weaponAmmo.text = "Infinity";
+		}
 		
 	}
 }

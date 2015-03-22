@@ -2,10 +2,12 @@
 using System.Collections;
 
 public class Weapon : MonoBehaviour {
-
+	
+	public string weapName = "Pistol";
+	
 	bool canShoot;
 	public int startingAmmo = 1;
-	protected int ammunition;
+	public int ammunition;
 	public float shakeAmount = 0.05f;
 
 	public GameObject projectilePrefab;
