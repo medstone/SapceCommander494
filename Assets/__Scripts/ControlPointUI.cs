@@ -32,6 +32,7 @@ public class ControlPointUI : MonoBehaviour {
 
 	void Update(){
 		slider.value = 1f - (sliderVal / controlRef.hack_time);
+		lockSymbol.enabled = controlRef.locked;
 	}
 
 	void OnTimeUpdate(float value){
