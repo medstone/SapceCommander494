@@ -96,4 +96,28 @@ public class Weapon : MonoBehaviour {
 		}
 		canShoot = true;
 	}
+	
+	void OnTriggerEnter(Collider coll) {
+		
+		// pickupable
+		if(transform.tag != "WeaponPickup") {
+			return;
+		}
+		
+		// coll is a player of same faction
+		PlayerStats ps = coll.GetComponent<PlayerStats>();
+		if(ps && (allegiance == Faction_e.neutral || allegiance == ps.team))
+		{
+			// don't bother if player already has a secondary
+			if(ps.secondaryWeapon) {
+				return;
+			}
+			
+			// check if player cares about context
+			ContextListener cl = coll.GetComponent<ContextListener>();
+			if(cl) {
+				cl.Display("Hold \"X\" to pickup " + weapName);
+			}
+		}
+	}
 }
