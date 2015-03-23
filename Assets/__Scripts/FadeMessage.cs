@@ -17,9 +17,12 @@ public class FadeMessage : MonoBehaviour {
 	float startTime;
 	Text textField;
 	
+	void Awake() {
+		textField = GetComponent<Text>();
+	}
+	
 	// Use this for initialization
 	void Start () {
-		textField = GetComponent<Text>();
 		if(!textField) 	print("No Text Component brah");
 		else 			print("This thing has a component");
 		textField.enabled = false;
