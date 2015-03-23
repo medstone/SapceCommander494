@@ -55,7 +55,12 @@ public class PlayerUI : MonoBehaviour {
 	void FixedUpdate () {
 		
 		// update health indicator
-		healthText.text = stats.health.ToString();
+		if(stats.health < 0) {
+			healthText.text = "0";
+		}
+		else {
+			healthText.text = stats.health.ToString();
+		}
 		
 		if(stats.secondaryWeapon) {
 			weaponName.text = stats.secondaryWeapon.weapName;
