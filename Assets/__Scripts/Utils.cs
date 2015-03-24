@@ -59,11 +59,11 @@ public class Utils : MonoBehaviour {
 		public static Bounds CombineBoundsOfChildren(GameObject go){
 			// create an empty bounds
 			Bounds b = new Bounds (Vector3.zero, Vector3.zero);
-			if (go.renderer != null) {
-				b = BoundsUnion (b, go.renderer.bounds);		
+			if (go.GetComponent<Renderer>() != null) {
+				b = BoundsUnion (b, go.GetComponent<Renderer>().bounds);		
 			}
-			if (go.collider != null) {
-				b = BoundsUnion (b, go.collider.bounds);		
+			if (go.GetComponent<Collider>() != null) {
+				b = BoundsUnion (b, go.GetComponent<Collider>().bounds);		
 			}
 			// recursively iterate through each child of this gameObject.transform
 			foreach (Transform t in go.transform) {
