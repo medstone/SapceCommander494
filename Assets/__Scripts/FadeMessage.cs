@@ -23,8 +23,6 @@ public class FadeMessage : MonoBehaviour {
 	
 	// Use this for initialization
 	void Start () {
-		if(!textField) 	print("No Text Component brah");
-		else 			print("This thing has a component");
 		textField.enabled = false;
 		state = FadeState_e.none;
 	}

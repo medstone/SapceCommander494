@@ -39,7 +39,6 @@ public class MinimapController : MonoBehaviour {
 	void Start () {
 		
 		actualRadius = GetComponent<RectTransform>().rect.width / 2;
-		print("Actual Radious: " + actualRadius);
 		
 		// create a blip for every player
 		GameObject[] gos = GameObject.FindGameObjectsWithTag("Actor");
@@ -65,11 +64,8 @@ public class MinimapController : MonoBehaviour {
 			else {
 				// hold onto this for reference later on
 				myPlayer = go.transform;
-				print("Found my blip");
 			}
 		}
-		print(blips.Count);
-		
 	}
 	
 	void FixedUpdate () {
@@ -77,27 +73,27 @@ public class MinimapController : MonoBehaviour {
 			
 			// get vector from myPlayer to other player
 			Vector3 toOther = tuple.playerTransform.position - myPlayer.position;
-			print("raw: " + toOther);
 			
 			// magnitude = distance
 			// limit between 0 and mapViewRadius
 			float magnitude = Mathf.Clamp(toOther.magnitude, 0f, Mathf.Abs(mapViewRadius));
 			// print("raw magnitude" + magnitude);
 			
-			// determine minimap adjusted magnitude
+			// percentage of radius to use
 			magnitude /= mapViewRadius;
+			
+			// radius used
 			magnitude *=  actualRadius;
-			// print("Normalized magnitude: " + magnitude);
+			
+			// normalize to get just direction
 			toOther.Normalize();
-			// print("normalized dir: " + toOther);
 			
 			// apply minimap-adjusted magnitude
 			toOther *= magnitude;
 			
-			// print("Minimap adjusted:" + toOther);
-			
 			// adjust from x-z to x-y
 			Vector3 newPos = new Vector3(toOther.x, toOther.z, 0f);
+			
 			// set position
 			tuple.blipObj.GetComponent<RectTransform>().anchoredPosition = newPos;
 		}
