@@ -18,11 +18,14 @@ public class robotAI : MonoBehaviour {
 
 	// Use this for initialization
 	void Start () {
-		if (fact == Faction_e.spaceCop)
+		if (fact == Faction_e.spaceCop) {
 			gameObject.layer = Utils.CopLayer ();
-		else if (fact == Faction_e.spaceCrim)
+		} else if (fact == Faction_e.spaceCrim) {
 			gameObject.layer = Utils.CrimLayer ();
+		}
+		raylayer = 1 << LayerMask.NameToLayer ("Wall");
 	}
+
 	
 	// Update is called once per frame
 	void Update () {
@@ -72,12 +75,6 @@ public class robotAI : MonoBehaviour {
 		vel.x = direction.x * speed;
 		vel.y = GetComponent<Rigidbody>().velocity.y;
 		vel.z = direction.z * speed;
-		if (this.fact == Faction_e.spaceCop) {
-			raylayer = 9;
-		}
-		if (this.fact == Faction_e.spaceCrim) {
-			raylayer = 10;
-		}
 		List<Vector3> paths = new List<Vector3>();
 		targ = new RaycastHit ();
 		if (Physics.Raycast (this.transform.position, new Vector3(vel.x,0f,vel.z), out targ, Mathf.Sqrt (vel.x * vel.x + vel.z * vel.z)/10, raylayer)) {
