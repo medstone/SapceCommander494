@@ -54,13 +54,8 @@ public class PlayerUI : MonoBehaviour {
 	
 	void FixedUpdate () {
 		
-		// update health indicator
-		if(stats.health < 0) {
-			healthText.text = "0";
-		}
-		else {
-			healthText.text = stats.health.ToString();
-		}
+		// update the health to a value between 0 and startingHealth
+		healthText.text = Mathf.Clamp(stats.health, 0, stats.startingHealth).ToString();
 		
 		if(stats.secondaryWeapon) {
 			weaponName.text = stats.secondaryWeapon.weapName;

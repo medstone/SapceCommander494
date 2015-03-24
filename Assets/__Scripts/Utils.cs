@@ -151,7 +151,6 @@ public class Utils : MonoBehaviour {
 					off.z = pos.z - bigB.min.z;
 				}
 				return off;
-				break;
 				
 				// The onScreen test determines what off would have to be applied
 				// to keep all of lilB nside bigB
@@ -178,7 +177,6 @@ public class Utils : MonoBehaviour {
 					off.z = lilB.min.z - bigB.min.z;
 				}
 				return off;
-				break;
 				
 				// the offScreen test determines what off would need to be applied to move any tiny part
 				// of lilB inside of bigB
@@ -207,7 +205,6 @@ public class Utils : MonoBehaviour {
 					off.z = lilB.max.z - bigB.min.z;
 				}
 				return off;
-				break;
 			}
 			return Vector3.zero;
 		}

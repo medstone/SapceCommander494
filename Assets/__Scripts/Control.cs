@@ -112,13 +112,10 @@ public class Control : MonoBehaviour {
 		switch (numCapturers) {
 		case 1:
 			return 1.0f;
-			break;
 		case 2:
 			return 1.5f;
-			break;
 		case 3:
 			return 2.0f;
-			break;
 		default:
 			return 1.0f;
 		}

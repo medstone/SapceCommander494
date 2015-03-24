@@ -42,13 +42,13 @@ public class PlayerStats : MonoBehaviour {
 	
 	public GameObject myCam;
 	
-	FadeMessage contextNotify;
+	// FadeMessage contextNotify;
 
 	void Awake(){
 		control = GetComponent<PlayerControl> ();
 		defaultWeapon = GetComponentInChildren<Weapon> ();
 		secondaryWeapon = null;
-		contextNotify = transform.parent.Find("Camera/PlayerUI/MidMsg").GetComponent<FadeMessage>();
+		// contextNotify = transform.parent.Find("Camera/PlayerUI/MidMsg").GetComponent<FadeMessage>();
 	}
 	// Use this for initialization
 	void Start () {
