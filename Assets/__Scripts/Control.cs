@@ -7,11 +7,18 @@ public enum HackState_e{
 	unhack
 }
 
+public delegate void CapturedRoomHandler(Faction_e new_team);
+public delegate void CaptureAmountHandler(float amountCaptured);
+
 public class Control : MonoBehaviour {
 	public Faction_e holds;//which faction controls the room
 	public float hack_time;//time it takes for one side to take over the room
 	public HackState_e hackState = HackState_e.none;
 	public float time_hacked = 0.0f; //counter for time of being hacked
+	public bool locked; // if the station is locked, it cannot be captured
+	public bool lockOnCapture; // if true, station will become locked after first capture.
+	
+	public string roomName = "Untitled Room";
 	
 	Transform hackBar;
 	Vector3 barScale;
@@ -20,6 +27,9 @@ public class Control : MonoBehaviour {
 
 	public int copsInRoom;
 	public int crimsInRoom;
+
+	public event CapturedRoomHandler CapturedEvent;
+	public event CaptureAmountHandler CaptureAmountEvent;
 	
 	void Awake () { 
 		hackBar = transform.Find("HackBar");
@@ -36,6 +46,10 @@ public class Control : MonoBehaviour {
 
 	// figure out if any hacking is going on
 	void FixedUpdate () {
+		if (locked) {
+			hackState = HackState_e.none;
+			return;
+		}
 		// !!! conditions for hacking and unhacking should be mutually exclusive 
 		if (holds == Faction_e.spaceCrim) {
 			if (copsInRoom > 0 && crimsInRoom <= 0){
@@ -87,19 +101,21 @@ public class Control : MonoBehaviour {
 			}
 				
 		}
+		
+		RoomListener rm = other.GetComponent<RoomListener>();
+		if(rm) {
+			rm.Display(roomName);
+		}
 	}
 
 	float Multiplier(int numCapturers){
 		switch (numCapturers) {
 		case 1:
 			return 1.0f;
-			break;
 		case 2:
 			return 1.5f;
-			break;
 		case 3:
 			return 2.0f;
-			break;
 		default:
 			return 1.0f;
 		}
@@ -118,6 +134,8 @@ public class Control : MonoBehaviour {
 				mult = Multiplier (copsInRoom);
 			else
 				mult = Multiplier (crimsInRoom);
+			if (CaptureAmountEvent != null)
+				CaptureAmountEvent(((Time.time - startTime) * mult) + time_hacked);
 			yield return null;
 		}
 		hackState = HackState_e.none;
@@ -136,6 +154,14 @@ public class Control : MonoBehaviour {
 			}
 			hackBar.localScale = barScale;
 			time_hacked = 0f;
+			if (lockOnCapture)
+				locked = true;
+			if (CapturedEvent != null){
+				CapturedEvent(holds);
+			}
+			if (CaptureAmountEvent != null){
+				CaptureAmountEvent(0f);
+			}
 		} 
 		else { // hang onto the amount of hacking time accrued 
 			time_hacked += Time.time - startTime;
@@ -151,6 +177,8 @@ public class Control : MonoBehaviour {
 			Vector3 scale = barScale;
 			scale.x *= ((hack_time - time_hacked + (Time.time - startTime )) / hack_time);
 			hackBar.localScale = scale;
+			if (CaptureAmountEvent != null)
+				CaptureAmountEvent(time_hacked - (Time.time - startTime));
 			yield return null;
 		}
 		hackState = HackState_e.none;

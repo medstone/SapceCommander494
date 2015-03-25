@@ -12,9 +12,10 @@ public class robotSpawn : MonoBehaviour {
 
 	// Use this for initialization
 	void Start () {
-		setFact = GameObject.Find ("RobotRoom").GetComponent<Control> ().holds;
+		setFact = GetComponent<Control> ().holds;
 		InvokeRepeating ("MakeRobots", 1f, 2f);
-		copdir = spawnDirection;
+		GetComponent<Control> ().CapturedEvent += TeamSwap; // gets called when room changes hands
+		//copdir = spawnDirection;
 	}
 	
 	// Update is called once per frame
@@ -26,20 +27,21 @@ public class robotSpawn : MonoBehaviour {
 		if (numSpawned == maxSpawned) {
 			return;
 		}
-		if (setFact != GameObject.Find ("RobotRoom").GetComponent<Control> ().holds) {
-			setFact = GameObject.Find ("RobotRoom").GetComponent<Control> ().holds;
-			if(setFact == Faction_e.spaceCrim){
-				spawnDirection = crimdir;
-			}
-			if(setFact == Faction_e.spaceCop){
-				spawnDirection = copdir;
-			}
-		}
 		numSpawned++;
 		GameObject robot = Instantiate (robotPrefab) as GameObject;
 		robot.transform.position = this.transform.position;
 		robot.GetComponent<robotAI> ().direction = spawnDirection;
 		robot.GetComponent<robotAI> ().fact = setFact;
 		robot.GetComponent<robotAI> ().spawn = this;
+	}
+
+	void TeamSwap(Faction_e new_team){
+		setFact = new_team;
+		if(setFact == Faction_e.spaceCrim){
+			spawnDirection = crimdir;
+		}
+		if(setFact == Faction_e.spaceCop){
+			spawnDirection = copdir;
+		}
 	}
 }

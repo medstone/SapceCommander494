@@ -8,9 +8,6 @@ public class BarrierControlRoom : MonoBehaviour {
 	public Sprite blueDash;
 	public Sprite redDash;
 	RoomConsole console;
-	bool active;
-
-	Faction_e originalTeam;
 
 	public bool Broken(){
 		if (console == null)
@@ -21,24 +18,22 @@ public class BarrierControlRoom : MonoBehaviour {
 	void Awake(){
 		control = GetComponent<Control> ();
 		console = GetComponentInChildren<RoomConsole> ();
-		originalTeam = control.holds;
-		active = true;
 	}
 
-	// Update is called once per frame
-	void FixedUpdate () {
-		if (control.holds != originalTeam && active) {
-			active = false;
-			foreach(GameObject go in barriers){
-				Destroy(go.gameObject); // should it actually destroy it?
-			}
-			foreach(GameObject go in dashes){
-				if (originalTeam == Faction_e.spaceCop)
-					go.GetComponent<SpriteRenderer>().sprite = redDash;
-				else
-					go.GetComponent<SpriteRenderer>().sprite = blueDash;
-			}
-			gameObject.SetActive(false);
+	void Start(){
+		control.CapturedEvent += OnCapture;
+	}
+
+	void OnCapture(Faction_e new_team){
+		foreach(GameObject go in barriers){
+			Destroy(go.gameObject); // should it actually destroy it?
 		}
+		foreach(GameObject go in dashes){
+			if (new_team == Faction_e.spaceCrim)
+				go.GetComponent<SpriteRenderer>().sprite = redDash;
+			else
+				go.GetComponent<SpriteRenderer>().sprite = blueDash;
+		}
+		MatchManager.S.KeyRoomCaptured (); // notify match manager that this key room was captured.
 	}
 }

@@ -2,10 +2,12 @@
 using System.Collections;
 
 public class Weapon : MonoBehaviour {
-
+	
+	public string weapName = "Pistol";
+	
 	bool canShoot;
 	public int startingAmmo = 1;
-	protected int ammunition;
+	public int ammunition;
 	public float shakeAmount = 0.05f;
 
 	public GameObject projectilePrefab;
@@ -54,18 +56,26 @@ public class Weapon : MonoBehaviour {
 
 		if (allegiance == Faction_e.spaceCop) {
 			projectile.layer = Utils.CopProjectileLayer ();
-			pro.layermask = 1 << LayerMask.NameToLayer("CopProjectile");
+			//pro.layermask = 1 << LayerMask.NameToLayer("CopProjectile");
+			//pro.layermask += 1 << LayerMask.NameToLayer("Cops");
+			pro.IgnoreLayer(LayerMask.NameToLayer("CopProjectile"));
+			pro.IgnoreLayer(LayerMask.NameToLayer("Cops"));
+
 		} 
 		else if (allegiance == Faction_e.spaceCrim) {
 			projectile.layer = Utils.CrimProjectileLayer ();
-			pro.layermask = 1 << LayerMask.NameToLayer("CrimProjectile");
+			//pro.layermask = 1 << LayerMask.NameToLayer("CrimProjectile");
+			pro.IgnoreLayer(LayerMask.NameToLayer("CrimProjectile"));
+			//pro.layermask += 1 << LayerMask.NameToLayer("Crims");
+			pro.IgnoreLayer(LayerMask.NameToLayer("Crims"));
 		}
+		//pro.layermask = ~pro.layermask;
 		
-		Vector3 offset =  GetComponent<Transform>().parent.position;
+		Vector3 offset =  transform.position - GetComponent<Transform>().parent.position;
 		offset = Quaternion.Euler (0, angle, 0) * offset;
-		
-		pro.bearing = transform.position - offset;
-		pro.bearing.Normalize ();
+
+		pro.SetBearing (offset);
+		//pro.SetBearing(transform.position - offset);
 		pro.damage = damage;
 		
 
@@ -73,9 +83,6 @@ public class Weapon : MonoBehaviour {
 		if(cam) {
 			cam.startShaking(shakeAmount);
 		}
-		
-		// Just don't have a collider...
-		Physics.IgnoreCollision (pro.GetComponent<Collider>(), this.GetComponentInParent<Collider>());
 
 	}
 
@@ -88,5 +95,29 @@ public class Weapon : MonoBehaviour {
 			yield return null;
 		}
 		canShoot = true;
+	}
+	
+	void OnTriggerEnter(Collider coll) {
+		
+		// pickupable
+		if(transform.tag != "WeaponPickup") {
+			return;
+		}
+		
+		// coll is a player of same faction
+		PlayerStats ps = coll.GetComponent<PlayerStats>();
+		if(ps && (allegiance == Faction_e.neutral || allegiance == ps.team))
+		{
+			// don't bother if player already has a secondary
+			if(ps.secondaryWeapon) {
+				return;
+			}
+			
+			// check if player cares about context
+			ContextListener cl = coll.GetComponent<ContextListener>();
+			if(cl) {
+				cl.Display("Hold \"X\" to pickup " + weapName);
+			}
+		}
 	}
 }

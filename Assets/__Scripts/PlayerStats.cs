@@ -41,11 +41,14 @@ public class PlayerStats : MonoBehaviour {
 	public Material crimColor;
 	
 	public GameObject myCam;
+	
+	// FadeMessage contextNotify;
 
 	void Awake(){
 		control = GetComponent<PlayerControl> ();
 		defaultWeapon = GetComponentInChildren<Weapon> ();
 		secondaryWeapon = null;
+		// contextNotify = transform.parent.Find("Camera/PlayerUI/MidMsg").GetComponent<FadeMessage>();
 	}
 	// Use this for initialization
 	void Start () {
@@ -96,7 +99,14 @@ public class PlayerStats : MonoBehaviour {
 				defaultWeapon.Shoot ();
 		}
 	}
-
+	
+	void OnTriggerEnter(Collider coll) {
+		Weapon w = coll.GetComponent<Weapon>();
+		if(w) {
+			print("player collided with " + w.weapName);
+		}
+	}
+	
 	void OnTriggerStay(Collider coll){
 		if (coll.tag == "WeaponPickup" && control.xButtonDown){
 			Weapon wepRef = coll.GetComponent<Weapon>();
