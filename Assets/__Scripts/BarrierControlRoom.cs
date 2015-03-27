@@ -4,9 +4,7 @@ using System.Collections;
 public class BarrierControlRoom : MonoBehaviour {
 	public Control control;
 	public GameObject[] barriers;
-	public GameObject[] dashes; // sprites that lead to the barriers controlled by this room
-	public Sprite blueDash;
-	public Sprite redDash;
+	public LineRenderer[] lines; // sprites that lead to the barriers controlled by this room
 	RoomConsole console;
 
 	public bool Broken(){
@@ -20,19 +18,27 @@ public class BarrierControlRoom : MonoBehaviour {
 		console = GetComponentInChildren<RoomConsole> ();
 	}
 
+
 	void Start(){
 		control.CapturedEvent += OnCapture;
+		foreach (LineRenderer line in lines) {
+			if (control.holds == Faction_e.spaceCop)
+				line.material = control.copColor;
+			else
+				line.material = control.crimColor;
+		}
 	}
+	
 
 	void OnCapture(Faction_e new_team){
 		foreach(GameObject go in barriers){
 			Destroy(go.gameObject); // should it actually destroy it?
 		}
-		foreach(GameObject go in dashes){
+		foreach(LineRenderer line in lines){
 			if (new_team == Faction_e.spaceCrim)
-				go.GetComponent<SpriteRenderer>().sprite = redDash;
+				line.material = control.crimColor;
 			else
-				go.GetComponent<SpriteRenderer>().sprite = blueDash;
+				line.material = control.copColor;
 		}
 		MatchManager.S.KeyRoomCaptured (); // notify match manager that this key room was captured.
 	}
