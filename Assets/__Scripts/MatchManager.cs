@@ -126,5 +126,10 @@ public class MatchManager : MonoBehaviour {
 		++currentContestedPoint;
 		if (currentContestedPoint < keyRooms.Length)
 			keyRooms [currentContestedPoint].locked = false;
+		// notify all players that this just went down
+		ContextListener[] playerListeners = GameObject.FindObjectsOfType<ContextListener> ();
+		foreach (ContextListener listener in playerListeners) {
+			listener.Display ("Barrier Shut Down!");
+		}
 	}
 }
