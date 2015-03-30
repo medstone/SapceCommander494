@@ -61,7 +61,7 @@ public class turret_fire : MonoBehaviour {
 				direction.x = (players[closest].transform.position.x - this.transform.position.x)/3f;
 				direction.y = (players[closest].transform.position.y - this.transform.position.y)/3f;
 				direction.z = (players[closest].transform.position.z - this.transform.position.z)/3f;
-					print (direction);
+					//print (direction);
 					cur_bull.SetBearing(direction);
 					timer = 0.0f;
 				} else {
