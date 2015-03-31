@@ -61,7 +61,8 @@ public class Cylon : MonoBehaviour {
 			if ((targ.gameObject.tag == "Actor" && faction != targ.GetComponent<PlayerStats>().team) || 
 			(targ.gameObject.tag == "Robot" && faction != targ.GetComponent<Cylon>().faction)){
 				if (!IsTargHittable(targ)) continue;
-				StartCoroutine(ShotTimer (targ));
+				if (canShoot)
+					StartCoroutine(ShotTimer (targ));
 				break;
 			}
 			else
