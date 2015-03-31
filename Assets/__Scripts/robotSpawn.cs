@@ -30,9 +30,9 @@ public class robotSpawn : MonoBehaviour {
 		numSpawned++;
 		GameObject robot = Instantiate (robotPrefab) as GameObject;
 		robot.transform.position = this.transform.position;
-		robot.GetComponent<robotAI> ().direction = spawnDirection;
-		robot.GetComponent<robotAI> ().fact = setFact;
-		robot.GetComponent<robotAI> ().spawn = this;
+		robot.GetComponent<Cylon> ().direction = spawnDirection;
+		robot.GetComponent<Cylon> ().faction = setFact;
+		robot.GetComponent<Cylon> ().spawnerRef = this;
 	}
 
 	void TeamSwap(Faction_e new_team){
