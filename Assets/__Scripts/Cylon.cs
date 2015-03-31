@@ -86,11 +86,15 @@ public class Cylon : MonoBehaviour {
 		canShoot = false;
 		stopped = true;
 		Shoot (targ);
+		while (Time.time - startTime < stopDuration) {
+			yield return null;
+			// this presumes that stopduration is less than shotdelay
+		}
+		stopped = false;
 		while (Time.time - startTime < shotDelay) {
 			yield return null;
 		}
 		canShoot = true;
-		stopped = false;
 	}
 
 	// actually deals with the projectile, should only be called by ShotTimer
