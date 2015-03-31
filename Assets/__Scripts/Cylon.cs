@@ -11,6 +11,7 @@ public class Cylon : MonoBehaviour {
 	public float range = 10f; // how far can the robot shoot?
 	public GameObject projectilePrefab;
 	public float shotDelay = 1f; // rate of fire
+	float stopDuration = 0.25f; // how long a robot will pause after shooting
 	public robotSpawn spawnerRef; // needed to inform spawner of death.
 	int raylayer;
 	bool canShoot;
