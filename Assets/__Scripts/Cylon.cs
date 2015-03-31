@@ -32,10 +32,10 @@ public class Cylon : MonoBehaviour {
 
 		shotCheckRaylayer = raylayer;
 		if (faction == Faction_e.spaceCop) {
-			shotCheckRaylayer += 1 << LayerMask.NameToLayer ("Cops");
+			shotCheckRaylayer += 1 << LayerMask.NameToLayer ("Crims");
 			shotCheckRaylayer += 1 << LayerMask.NameToLayer("CopBarrier"); // all barriers block shots
 		} else {
-			shotCheckRaylayer += 1 << LayerMask.NameToLayer ("Crims");
+			shotCheckRaylayer += 1 << LayerMask.NameToLayer ("Cops");
 			shotCheckRaylayer += 1 << LayerMask.NameToLayer("CrimBarrier");
 		}
 	}
@@ -72,11 +72,11 @@ public class Cylon : MonoBehaviour {
 	bool IsTargHittable(Collider targ){
 		RaycastHit rayHit;
 		if (Physics.Raycast (transform.position, targ.transform.position - transform.position, out rayHit, range, shotCheckRaylayer)) {
-			if (rayHit.collider.gameObject.tag == "Actor" || rayHit.collider.gameObject.tag == "Robot")
+			if (rayHit.collider.gameObject.tag == targ.gameObject.tag)
 				return true;
 			return false; // hit a wall or a barrier or something instead
-		} else 
-			return false; // somehow didn't hit anything
+		}
+		return false; // somehow didn't hit anything
 	}
 
 	// timing mechanism for robot's shooting. also sets a toggle that stops the robot while it is shooting
