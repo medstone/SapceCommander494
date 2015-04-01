@@ -11,6 +11,7 @@ public class Cylon : MonoBehaviour {
 	public float range = 10f; // how far can the robot shoot?
 	public GameObject projectilePrefab;
 	public float shotDelay = 1f; // rate of fire
+	float stopDuration = 0.25f; // how long a robot will pause after shooting
 	public robotSpawn spawnerRef; // needed to inform spawner of death.
 	int raylayer;
 	bool canShoot;
@@ -61,7 +62,8 @@ public class Cylon : MonoBehaviour {
 			if ((targ.gameObject.tag == "Actor" && faction != targ.GetComponent<PlayerStats>().team) || 
 			(targ.gameObject.tag == "Robot" && faction != targ.GetComponent<Cylon>().faction)){
 				if (!IsTargHittable(targ)) continue;
-				StartCoroutine(ShotTimer (targ));
+				if (canShoot)
+					StartCoroutine(ShotTimer (targ));
 				break;
 			}
 			else
@@ -85,11 +87,15 @@ public class Cylon : MonoBehaviour {
 		canShoot = false;
 		stopped = true;
 		Shoot (targ);
+		while (Time.time - startTime < stopDuration) {
+			yield return null;
+			// this presumes that stopduration is less than shotdelay
+		}
+		stopped = false;
 		while (Time.time - startTime < shotDelay) {
 			yield return null;
 		}
 		canShoot = true;
-		stopped = false;
 	}
 
 	// actually deals with the projectile, should only be called by ShotTimer
