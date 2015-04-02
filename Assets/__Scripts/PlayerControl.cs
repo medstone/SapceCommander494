@@ -2,6 +2,7 @@
 using System.Collections;
 using InControl;
 
+
 public class PlayerControl : MonoBehaviour {
 
 	public InputDevice inDevice; 
@@ -52,7 +53,8 @@ public class PlayerControl : MonoBehaviour {
 		float xIn = inDevice.RightStickX;
 		if (xIn != 0f || yIn != 0f) {
 			float angle = Mathf.Atan2 (yIn, xIn) * Mathf.Rad2Deg;
-			transform.rotation = Quaternion.Slerp (transform.rotation, Quaternion.AngleAxis (90.0f - angle, Vector3.up), Time.deltaTime * rotationAmount);
+			transform.rotation = Quaternion.Euler (0f, 90f - angle, 0f);
+				//Quaternion.Slerp (transform.rotation, Quaternion.AngleAxis (90.0f - angle, Vector3.up), Time.deltaTime * rotationAmount);
 		}
 
 	}
