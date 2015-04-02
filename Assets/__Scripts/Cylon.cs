@@ -17,7 +17,16 @@ public class Cylon : MonoBehaviour {
 	bool canShoot;
 	bool stopped;
 
+	public Material copColor;
+	public Material crimColor;
+
+	MeshRenderer childMesh;
+
 	int shotCheckRaylayer; // used to raycast to check if a wall is blocking a shot
+
+	void Awake(){
+		childMesh = transform.FindChild ("TeamAffil").GetComponent<MeshRenderer> ();
+	}
 
 	// Use this for initialization
 	void Start () {
@@ -25,9 +34,11 @@ public class Cylon : MonoBehaviour {
 		if (faction == Faction_e.spaceCop) {
 			gameObject.layer = Utils.CopLayer ();
 			raylayer = 1 << LayerMask.NameToLayer("CrimBarrier");
+			childMesh.material = copColor;
 		} else if (faction == Faction_e.spaceCrim) {
 			gameObject.layer = Utils.CrimLayer ();
 			raylayer = 1 << LayerMask.NameToLayer("CopBarrier");
+			childMesh.material = crimColor;
 		}
 		raylayer += 1 << LayerMask.NameToLayer ("Wall");
 
