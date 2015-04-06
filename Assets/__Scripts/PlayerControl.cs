@@ -41,7 +41,7 @@ public class PlayerControl : MonoBehaviour {
 
 
 		// trigger input
-		triggerDown = inDevice.RightBumper;
+		triggerDown = (inDevice.RightBumper || inDevice.RightTrigger);
 
 		xButtonDown = inDevice.Action3;
 		aButtonDown = inDevice.Action1;
