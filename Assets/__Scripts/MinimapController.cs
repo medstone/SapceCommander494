@@ -4,9 +4,9 @@ using System.Collections;
 using System.Collections.Generic;
 
 public class BlipTuple {	
-	public BlipTuple(Transform _playerTransform, GameObject _blipObj)
+	public BlipTuple(Transform _targetTransform, GameObject _blipObj)
 	{
-		this.playerTransform = _playerTransform;
+		this.playerTransform = _targetTransform;
 		this.blipObj = _blipObj;
 	}
 	
@@ -19,13 +19,13 @@ public class MinimapController : MonoBehaviour {
 	// need some list of other players
 	PlayerStats myStats;
 	Transform myPlayer;
-	LinkedList<Transform> otherTrans;
-	LinkedList<Transform> other;
 	
+	public List<Transform> controlPoints;
 	public List<BlipTuple> blips;
 	
 	public GameObject copBlipPrefab;
 	public GameObject crimBlipPrefab;
+	public GameObject controlBlip;
 	
 	SpriteRenderer sprite;
 	float actualRadius;
@@ -65,6 +65,25 @@ public class MinimapController : MonoBehaviour {
 				// hold onto this for reference later on
 				myPlayer = go.transform;
 			}
+		}
+		
+		// Create blips for control points
+		// NOTE: EXPECTS ITEMS WERE PLACED IN LIST IN INSPECTOR IN ORDER A->B->STEERING
+		char pointChar = 'A';
+		foreach(Transform trans in controlPoints) {
+			// create the blip
+			GameObject cblip = Instantiate(controlBlip) as GameObject;
+			cblip.transform.SetParent(transform, false);
+			
+			// set it's text to be A B or C
+			Text blipText = cblip.GetComponent<Text>();
+			if(!blipText) continue; // safety
+			blipText.text = "" + pointChar;
+			++pointChar;
+			
+			blips.Add(new BlipTuple(trans, cblip));
+			
+			
 		}
 	}
 	
