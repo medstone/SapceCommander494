@@ -9,6 +9,7 @@ public class ProgressBar : MonoBehaviour {
 	public float matchTime = 25f;
 	float currentTime;
 	public bool ended = false;
+	public bool timeRanOut = false;
 
 	Transform startPos;
 	Transform endPos;
@@ -43,8 +44,9 @@ public class ProgressBar : MonoBehaviour {
 			// Update the time
 			currentTime += Time.deltaTime;
 			float timeLeft = matchTime - currentTime;
-			string mins = Mathf.Floor(timeLeft / 60).ToString();
- 			string secs = Mathf.Floor(timeLeft % 60).ToString();
+			if(timeLeft < 0) timeLeft = 0;
+			string mins = Mathf.Floor(timeLeft / 60).ToString("0");
+ 			string secs = Mathf.Floor(timeLeft % 60).ToString("00");
  			durationText.text = mins + ":" + secs;
 		
 			// determine new position for the rocket
@@ -53,7 +55,9 @@ public class ProgressBar : MonoBehaviour {
 			
 			if(rocket.position.x >= endPos.position.x) {
 				// alertTimeUp(); - Not implemented yet
+				MatchManager.S.TimeRanOut();
 				isRunning = false;
+				timeRanOut = true;
 				ended = true;
 			}
 		}
