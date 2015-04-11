@@ -43,6 +43,8 @@ public class PlayerStats : MonoBehaviour {
 	public Material damageMat;
 	
 	public GameObject myCam;
+	int defaultOrthoSize = 10;
+	int zoomedOutOrthoSize = 20;
 	
 	// FadeMessage contextNotify;
 
@@ -238,8 +240,19 @@ public class PlayerStats : MonoBehaviour {
 
 		defaultWeapon.GetComponent<Renderer>().enabled = false;
 		// rather than turning off the collider, move the dead player to some faraway place
-		Vector3 offScreen = new Vector3 (0f, -500f);
-		transform.position = offScreen;
+		Vector3 roomPos = new Vector3 (0f, -500f);
+		// have camera look at currently contested keyRoom
+		foreach (Control keyRoom in MatchManager.S.keyRooms) {
+			if (!keyRoom.locked){
+				roomPos.x = keyRoom.transform.position.x;
+				roomPos.z = keyRoom.transform.position.z;
+				break;
+			}		
+		}
+		// also have camera 'zoomed out' a bit
+		Camera camRef = myCam.GetComponentInChildren<Camera> ();
+		camRef.orthographicSize = zoomedOutOrthoSize;
+		transform.position = roomPos;
 
 		StartCoroutine (DeathDelay ());
 	}
@@ -258,6 +271,8 @@ public class PlayerStats : MonoBehaviour {
 		} else if (team == Faction_e.spaceCrim) {
 			transform.position = MatchManager.S.GetCrimSpawnPoint().position;
 		}
+		// revert camera back to original size
+		myCam.GetComponentInChildren<Camera> ().orthographicSize = defaultOrthoSize;
 		// turn everything back on
 		if (control.inDevice != null)
 			control.enabled = true;
