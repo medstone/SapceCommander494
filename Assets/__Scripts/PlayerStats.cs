@@ -40,6 +40,7 @@ public class PlayerStats : MonoBehaviour {
 
 	public Material copColor;
 	public Material crimColor;
+	public Material damageMat;
 	
 	public GameObject myCam;
 	
@@ -201,14 +202,16 @@ public class PlayerStats : MonoBehaviour {
 	IEnumerator DamageAnimation(){
 		damaged = true;
 		float startTime = Time.time;
-
+		Renderer renderRef = GetComponent<Renderer> ();
+		Material defaultMat = renderRef.material;
 		while (Time.time - startTime < damageAnimDur) {
-
-			GetComponent<Renderer>().enabled = !GetComponent<Renderer>().enabled;
-			yield return null;
+			if (renderRef.material == defaultMat)
+				renderRef.material = damageMat;
+			else
+				renderRef.material = defaultMat;
+			yield return new WaitForSeconds(0.05f);
 		}
-		GetComponent<Renderer>().enabled = true;
-
+		renderRef.material = defaultMat;
 		damaged = false;
 
 	}
