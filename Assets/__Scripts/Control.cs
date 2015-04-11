@@ -113,34 +113,35 @@ public class Control : MonoBehaviour {
 		case 1:
 			return 1.0f;
 		case 2:
-			return 1.5f;
+			return 2f;
 		case 3:
-			return 2.0f;
+			return 3.0f;
 		default:
 			return 1.0f;
 		}
 	}
 
 	IEnumerator Hacking(Faction_e team_hacking){
-		float startTime = Time.time;
 		hackState = HackState_e.hack;
+		float counter = 0.0f;
 		float mult = 1.0f;
-		while (hackState == HackState_e.hack && ((Time.time - startTime) * mult) < hack_time - time_hacked) {
+		while (hackState == HackState_e.hack && counter < hack_time - time_hacked) {
 			// adjust x scale to percentage of amount hacked
+			counter += Time.deltaTime * mult;
 			Vector3 scale = barScale;
-			scale.x *= ((hack_time - time_hacked - (Time.time - startTime )) / hack_time);
+			scale.x *= ((hack_time - time_hacked - (counter)) / hack_time);
 			hackBar.localScale = scale;
 			if (team_hacking == Faction_e.spaceCop)
-				mult = Multiplier (copsInRoom);
+				mult = Multiplier (copsInRoom); // maybe they should have SOME bonus
 			else
 				mult = Multiplier (crimsInRoom);
 			if (CaptureAmountEvent != null)
-				CaptureAmountEvent(((Time.time - startTime) * mult) + time_hacked);
+				CaptureAmountEvent(counter + time_hacked);
 			yield return null;
 		}
 		hackState = HackState_e.none;
 		// only do the following if the hacking went all the way!
-		if (Time.time - startTime >= hack_time - time_hacked) {
+		if (counter >= hack_time - time_hacked) {
 			CloneRoom cloneRef = GetComponent<CloneRoom>();
 			if (cloneRef != null)
 				MatchManager.S.CapturedSpawnPoint (cloneRef);
@@ -164,7 +165,7 @@ public class Control : MonoBehaviour {
 			}
 		} 
 		else { // hang onto the amount of hacking time accrued 
-			time_hacked += Time.time - startTime;
+			time_hacked = counter;
 		}
 	}
 
