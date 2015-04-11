@@ -33,6 +33,7 @@ public class PlayerStats : MonoBehaviour {
 	bool damaged;
 
 	bool collidingWithWeapon;
+	bool pickingUpWep;
 	public bool repairing;
 
 	bool dead;
@@ -58,6 +59,7 @@ public class PlayerStats : MonoBehaviour {
 		collidingWithWeapon = false;
 		repairing = false;
 		dead = false;
+		pickingUpWep = false;
 		StartCoroutine (CheckForDebugTeamChange ());
 	}
 
@@ -110,7 +112,7 @@ public class PlayerStats : MonoBehaviour {
 	void OnTriggerStay(Collider coll){
 		if (coll.tag == "WeaponPickup" && control.xButtonDown){
 			Weapon wepRef = coll.GetComponent<Weapon>();
-			if (!collidingWithWeapon){// so we don't start the coroutine a bunch of times
+			if (!collidingWithWeapon && !pickingUpWep){// so we don't start the coroutine a bunch of times
 				if (wepRef.allegiance == team || wepRef.allegiance == Faction_e.neutral){ 
 					StartCoroutine(PickUpWeapon(coll.gameObject));
 				}
@@ -143,8 +145,9 @@ public class PlayerStats : MonoBehaviour {
 
 	IEnumerator PickUpWeapon(GameObject item){
 		collidingWithWeapon = true;
+		pickingUpWep = true;
 		float startTime = Time.time;
-		while (Time.time - startTime < 0.25f && collidingWithWeapon && control.xButtonDown) {
+		while (Time.time - startTime < 0.1f && collidingWithWeapon && control.xButtonDown) {
 			yield return null;
 		}
 		if (item != null && collidingWithWeapon && control.xButtonDown) {
@@ -173,6 +176,7 @@ public class PlayerStats : MonoBehaviour {
 
 		}
 		collidingWithWeapon = false;
+		pickingUpWep = false;
 	}
 
 	void LateUpdate(){
