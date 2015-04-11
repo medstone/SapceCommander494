@@ -66,7 +66,7 @@ public class PlayerStats : MonoBehaviour {
 	IEnumerator CheckForDebugTeamChange(){
 		while (true) {
 			yield return new WaitForSeconds (2f); // so it's not super sensitive
-			if (control.yButtonDown)
+			if (control.yButtonDown && control.aButtonDown && control.dpadUp)
 				DebugTeamChange ();
 		}
 	}
