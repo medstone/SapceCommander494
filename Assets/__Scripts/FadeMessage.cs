@@ -6,6 +6,7 @@ public enum FadeState_e {
 	fadeIn,
 	stay,
 	fadeOut,
+	popStay,
 	none
 }
 
@@ -13,6 +14,7 @@ public class FadeMessage : MonoBehaviour {
 
 	public float fadeTime = 2f;
 	public float stayTime = 2f;
+	public float popTime = .3f;
 	FadeState_e state;
 	float startTime;
 	Text textField;
@@ -35,6 +37,9 @@ public class FadeMessage : MonoBehaviour {
 		case FadeState_e.stay:
 			Stay();
 			break;
+		case FadeState_e.popStay:
+			PopStay();
+			break;
 		case FadeState_e.fadeOut:
 			FadeOut();
 			break;
@@ -45,13 +50,14 @@ public class FadeMessage : MonoBehaviour {
 	// Pass function a string and it will immediately fade it in
 	// then fade out after a few seconds
 	public void displayMessage(string msg) {
-		textField.enabled = true;
 		textField.text = msg;
+		textField.enabled = true;
 		state = FadeState_e.fadeIn;
 		Color c = Color.white;
 		c.a = 0f;
 		textField.color = c;
 	}
+	
 	
 	void FadeIn() {
 		Color c = textField.color;
@@ -73,6 +79,7 @@ public class FadeMessage : MonoBehaviour {
 		}
 	}
 	
+	
 	void FadeOut() {
 		Color c = textField.color;
 		c.a -= Time.deltaTime / fadeTime;
@@ -85,5 +92,29 @@ public class FadeMessage : MonoBehaviour {
 		}
 		
 		textField.color = c;
+	}
+	
+	public void popMessage(string msg) {
+		// turn on and enable text
+		textField.text = msg;
+		textField.enabled = true;
+		startTime = Time.time;
+		
+		// set back to opaque
+		Color c = Color.white;
+		c.a = 1f;
+		textField.color = c;
+		
+		// set state
+		state = FadeState_e.popStay;
+		print("pop message");
+	}
+	
+	void PopStay() {
+		print("pop stay");
+		if(Time.time > startTime + popTime) {
+			state = FadeState_e.none;
+			textField.enabled = false;
+		}
 	}
 }

@@ -116,7 +116,8 @@ public class Weapon : MonoBehaviour {
 			// check if player cares about context
 			ContextListener cl = coll.GetComponent<ContextListener>();
 			if(cl) {
-				cl.Display("Hold \"X\" to pickup " + weapName);
+				print("Trying to pop from weapon");
+				cl.PopDisplay("Hold \"X\" to pickup " + weapName);
 			}
 		}
 	}

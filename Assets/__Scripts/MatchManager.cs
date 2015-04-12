@@ -21,19 +21,23 @@ public class MatchManager : MonoBehaviour {
 	ProgressBar progress;  		// progress bar to see if time is up, and arrived at prison planet
 	
 	Text winnerText;
+	public bool gameEnded = false;
 
 	void Awake(){
 		S = this;
 		copSpawnPoints = new List<CloneRoom> ();
 		crimSpawnPoints = new List<CloneRoom> ();
 		crimPositions = new List<Transform> ();
+		steeringControl = GameObject.Find("Steering").GetComponent<Control>();
+		progress = GameObject.Find("ProgressBar").GetComponent<ProgressBar>();
+		winnerText = GameObject.Find("WinnerText").GetComponent<Text>();
 	}
 
 	// Use this for initialization
 	void Start () {
-		steeringControl = GameObject.Find("Steering").GetComponent<Control>();
-		progress = GameObject.Find("ProgressBar").GetComponent<ProgressBar>();
-		winnerText = GameObject.Find("WinnerText").GetComponent<Text>();
+		winnerText.text = "";
+		// register with Steering Room
+		steeringControl.CapturedEvent += SteeringCaptured;
 
 		CloneRoom[] rooms = GameObject.FindObjectsOfType<CloneRoom> ();
 		foreach (CloneRoom room in rooms) {
@@ -53,17 +57,22 @@ public class MatchManager : MonoBehaviour {
 	
 	// Update is called once per frame
 	void Update () {
+		if(gameEnded && Input.GetKeyDown(KeyCode.Space)) {
+			Application.LoadLevel(0);
+		}
+	}
+	
+	public void SteeringCaptured(Faction_e f) {
+		if(winnerText.text != "") return;
+		progress.isRunning = false;
+		winnerText.text = "Criminals Win!\nPress SPACEBAR to play again!";
+		gameEnded = true;
 		
-		// check if criminals hacked the steering
-		if(steeringControl.holds == Faction_e.spaceCrim) {
-			// Criminals WIN!!
-			winnerText.text = "Criminals Win!!";
-		}
-		// check if they arrived at the prison planet
-		else if(progress.ended) {
-			// Cops WIN!!
-			winnerText.text = "Cops Win!!";
-		}
+	}
+	
+	public void TimeRanOut() {
+		winnerText.text = "Cops Win!!\nPress SPACEBAR to play again!";
+		gameEnded = true;
 	}
 
 	// reorganizes the spawn point lists to reflect room's capture by newAllegiance

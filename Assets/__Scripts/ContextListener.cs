@@ -15,4 +15,10 @@ public class ContextListener : MonoBehaviour {
 			fm.displayMessage(msg);
 		}
 	}
+	
+	public void PopDisplay(string msg) {
+		if(!fm) return;
+		print("Fade message exists");
+		fm.popMessage(msg);
+	}
 }

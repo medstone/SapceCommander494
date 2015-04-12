@@ -2,6 +2,7 @@
 using System.Collections;
 using InControl;
 
+
 public class PlayerControl : MonoBehaviour {
 
 	public InputDevice inDevice; 
@@ -16,6 +17,7 @@ public class PlayerControl : MonoBehaviour {
 	public bool xButtonDown;
 	public bool aButtonDown; // as in the A button
 	public bool yButtonDown; 
+	public bool dpadUp;
 	
 	void Awake(){
 
@@ -40,19 +42,23 @@ public class PlayerControl : MonoBehaviour {
 
 
 		// trigger input
-		triggerDown = inDevice.RightBumper;
+		triggerDown = (inDevice.RightBumper || inDevice.RightTrigger);
 
 		xButtonDown = inDevice.Action3;
 		aButtonDown = inDevice.Action1;
 
 		yButtonDown = inDevice.Action4;
 
+		dpadUp = inDevice.DPadUp;
+
+
 		// handle R stick rotation
 		float yIn = inDevice.RightStickY;
 		float xIn = inDevice.RightStickX;
 		if (xIn != 0f || yIn != 0f) {
 			float angle = Mathf.Atan2 (yIn, xIn) * Mathf.Rad2Deg;
-			transform.rotation = Quaternion.Slerp (transform.rotation, Quaternion.AngleAxis (90.0f - angle, Vector3.up), Time.deltaTime * rotationAmount);
+			transform.rotation = Quaternion.Euler (0f, 90f - angle, 0f);
+				//Quaternion.Slerp (transform.rotation, Quaternion.AngleAxis (90.0f - angle, Vector3.up), Time.deltaTime * rotationAmount);
 		}
 
 	}
