@@ -20,8 +20,8 @@ public class Control : MonoBehaviour {
 	
 	public string roomName = "Untitled Room";
 	
-	Transform hackBar;
-	Vector3 barScale;
+	// Transform hackBar;
+	// Vector3 barScale;
 	public Material copColor;
 	public Material crimColor;
 
@@ -32,8 +32,8 @@ public class Control : MonoBehaviour {
 	public event CaptureAmountHandler CaptureAmountEvent;
 	
 	void Awake () { 
-		hackBar = transform.Find("HackBar");
-		barScale = hackBar.localScale;
+		// hackBar = transform.Find("HackBar");
+		// barScale = hackBar.localScale;
 	}
 	
 	// Use this for initialization
@@ -127,10 +127,10 @@ public class Control : MonoBehaviour {
 		float mult = 1.0f;
 		while (hackState == HackState_e.hack && counter < hack_time - time_hacked) {
 			// adjust x scale to percentage of amount hacked
+			// Vector3 scale = barScale;
+			// scale.x *= ((hack_time - time_hacked - (counter)) / hack_time);
+			// hackBar.localScale = scale;
 			counter += Time.deltaTime * mult;
-			Vector3 scale = barScale;
-			scale.x *= ((hack_time - time_hacked - (counter)) / hack_time);
-			hackBar.localScale = scale;
 			if (team_hacking == Faction_e.spaceCop)
 				mult = Multiplier (copsInRoom); // maybe they should have SOME bonus
 			else
@@ -147,13 +147,13 @@ public class Control : MonoBehaviour {
 				MatchManager.S.CapturedSpawnPoint (cloneRef);
 			if (holds == Faction_e.spaceCop) {
 				holds = Faction_e.spaceCrim;//control to Criminals
-				hackBar.GetComponent<Renderer> ().material = crimColor;
+				// hackBar.GetComponent<Renderer> ().material = crimColor;
 
 			} else {
 				holds = Faction_e.spaceCop;
-				hackBar.GetComponent<Renderer> ().material = copColor;
+				// hackBar.GetComponent<Renderer> ().material = copColor;
 			}
-			hackBar.localScale = barScale;
+			// hackBar.localScale = barScale;
 			time_hacked = 0f;
 			if (lockOnCapture)
 				locked = true;
@@ -175,9 +175,9 @@ public class Control : MonoBehaviour {
 		hackState = HackState_e.unhack;
 		while (hackState == HackState_e.unhack && Time.time - startTime < time_hacked) { // up to the time that has already been messed with
 			// adjust x scale to percentage of amount unhacked
-			Vector3 scale = barScale;
-			scale.x *= ((hack_time - time_hacked + (Time.time - startTime )) / hack_time);
-			hackBar.localScale = scale;
+			// Vector3 scale = barScale;
+			// scale.x *= ((hack_time - time_hacked + (Time.time - startTime )) / hack_time);
+			// hackBar.localScale = scale;
 			if (CaptureAmountEvent != null)
 				CaptureAmountEvent(time_hacked - (Time.time - startTime));
 			yield return null;
