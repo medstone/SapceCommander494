@@ -75,6 +75,8 @@ public class turret_fire : MonoBehaviour {
 		health -= dmg;
 		if (health <= 0) {
 			Destroy(this.gameObject);
+			TurretRespawn room = Turret_room.GetComponent("TurretRespawn") as TurretRespawn;
+			room.turret_spawned = false;
 		}
 
 	}
