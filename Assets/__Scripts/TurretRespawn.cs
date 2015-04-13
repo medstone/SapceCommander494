@@ -28,6 +28,7 @@ public class TurretRespawn : MonoBehaviour {
 			turret_fire turr = curr_turret.GetComponent ("turret_fire") as turret_fire;
 			turr.Turret_room = this.gameObject;
 			turret_spawned = true;
+			timer = 0.0f;
 		} else if (turret_spawned == false) {
 			timer += Time.deltaTime;
 		}
