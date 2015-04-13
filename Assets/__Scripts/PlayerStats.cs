@@ -44,7 +44,7 @@ public class PlayerStats : MonoBehaviour {
 	
 	public GameObject myCam;
 	int defaultOrthoSize = 10;
-	int zoomedOutOrthoSize = 20;
+	int zoomedOutOrthoSize = 30;
 	
 	// FadeMessage contextNotify;
 
@@ -240,6 +240,14 @@ public class PlayerStats : MonoBehaviour {
 
 		defaultWeapon.GetComponent<Renderer>().enabled = false;
 		// rather than turning off the collider, move the dead player to some faraway place
+		Vector3 offscreen = new Vector3 (transform.position.x, -500f, transform.position.z);
+		transform.position = offscreen;
+		StartCoroutine (DeathDelay (offscreen));
+	}
+
+	IEnumerator DeathDelay(Vector3 deadPos){
+		// so that they can see that they died
+		yield return new WaitForSeconds (1);
 		Vector3 roomPos = new Vector3 (0f, -500f);
 		// have camera look at currently contested keyRoom
 		foreach (Control keyRoom in MatchManager.S.keyRooms) {
@@ -249,17 +257,19 @@ public class PlayerStats : MonoBehaviour {
 				break;
 			}		
 		}
-		// also have camera 'zoomed out' a bit
+		// lerp both cam position and zoomage to the key location
 		Camera camRef = myCam.GetComponentInChildren<Camera> ();
 		camRef.orthographicSize = zoomedOutOrthoSize;
 		transform.position = roomPos;
-
-		StartCoroutine (DeathDelay ());
-	}
-
-	IEnumerator DeathDelay(){
-
-		yield return new WaitForSeconds(3);
+		float startTime = Time.time;
+		while (Time.time - startTime < 2f) {
+			float frac = (Time.time - startTime) / 2f;
+			transform.position = Vector3.Lerp(deadPos, roomPos, frac);
+			camRef.orthographicSize = Mathf.Lerp(defaultOrthoSize, zoomedOutOrthoSize, frac);
+			yield return null;
+		}
+		// hang out at the location of interest
+		yield return new WaitForSeconds(2);
 		Reset ();
 	}
 

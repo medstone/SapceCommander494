@@ -7,9 +7,14 @@ public class SpawnWeapons : MonoBehaviour {
 	GameObject shotgun;
 	Weapon wepRef;
 	Control roomControl;
+	GameObject barrier; // force field surrounding the weapon
+
+	public Material crimBarrierMat;
+	public Material copBarrierMat;
 
 	void Awake(){
 		roomControl = GetComponent<Control> ();
+		barrier = transform.Find ("WeaponBarrier").gameObject;
 	}
 
 	// Use this for initialization
@@ -17,6 +22,8 @@ public class SpawnWeapons : MonoBehaviour {
 		shotgun = Instantiate (shotgunPrefab, this.transform.position,Quaternion.identity) as GameObject;
 		wepRef = shotgun.GetComponent<Weapon> ();
 		wepRef.allegiance = roomControl.holds;
+		SetBarrierAllegiance (roomControl.holds);
+		roomControl.CapturedEvent += OnCapture;
 	}
 	
 	// Update is called once per frame
@@ -36,5 +43,22 @@ public class SpawnWeapons : MonoBehaviour {
 		yield return new WaitForSeconds(10f);
 		shotgun = Instantiate (shotgunPrefab, this.transform.position,Quaternion.identity) as GameObject;
 		wepRef = shotgun.GetComponent<Weapon> ();
+	}
+
+	void OnCapture(Faction_e newTeam){
+		SetBarrierAllegiance (newTeam);
+	}
+
+	void SetBarrierAllegiance(Faction_e team){
+		foreach (Transform child in barrier.transform) {
+			if (team == Faction_e.spaceCop){
+				child.gameObject.layer = Utils.CopBarrierLayer();
+				child.GetComponent<MeshRenderer>().material = copBarrierMat;
+			}
+			else {
+				child.gameObject.layer = Utils.CrimBarrierLayer();
+				child.GetComponent<MeshRenderer>().material = crimBarrierMat;
+			}
+		}
 	}
 }
