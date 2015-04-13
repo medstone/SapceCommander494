@@ -165,7 +165,7 @@ public class Control : MonoBehaviour {
 			}
 		} 
 		else { // hang onto the amount of hacking time accrued 
-			time_hacked = counter;
+			time_hacked += counter;
 		}
 	}
 
