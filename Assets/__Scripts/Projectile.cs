@@ -50,14 +50,17 @@ public class Projectile : MonoBehaviour {
 //		Debug.Log (gameObject.layer);
 //		Debug.Log(coll.gameObject.layer);
 		if (coll.tag == "Actor") {
-			ActorHit (coll.gameObject);
-			Destroy (this.gameObject);
-		} else if (coll.tag == "Robot") {
-			RobotHit (coll.gameObject);
-			Destroy (this.gameObject);
-		} else if (coll.tag == "Wall") {
-			Destroy(this.gameObject);
-		}
+						ActorHit (coll.gameObject);
+						Destroy (this.gameObject);
+				} else if (coll.tag == "Robot") {
+						RobotHit (coll.gameObject);
+						Destroy (this.gameObject);
+				} else if (coll.tag == "Wall") {
+						Destroy (this.gameObject);
+				} else if (coll.tag == "Turret") {
+						TurretHit(coll.gameObject);
+						Destroy(this.gameObject);
+				}
 	}
 
 	void OnTriggerStay(Collider coll){
@@ -78,10 +81,12 @@ public class Projectile : MonoBehaviour {
 				} else if (coll.gameObject.tag == "Robot") {
 						RobotHit (coll.gameObject);
 						Destroy (this.gameObject);
-				} 
-				else if (coll.gameObject.CompareTag ("Wall")) {
-				Destroy (this.gameObject);
-			}
+				} else if (coll.gameObject.CompareTag ("Wall")) {
+						Destroy (this.gameObject);
+				} else if (coll.gameObject.CompareTag ("Turret")) {
+						TurretHit(coll.gameObject);
+						Destroy (this.gameObject);
+				}
 	}
 
 	void ActorHit(GameObject player){
@@ -98,5 +103,10 @@ public class Projectile : MonoBehaviour {
 	void ConsoleHit(GameObject console){
 		RoomConsole roomCon = console.GetComponent<RoomConsole> ();
 		roomCon.TakeHit (damage);
+	}
+
+	void TurretHit(GameObject turret){
+		turret_fire turrStats = turret.GetComponent<turret_fire> ();
+		turrStats.TakeHit (damage);
 	}
 }
