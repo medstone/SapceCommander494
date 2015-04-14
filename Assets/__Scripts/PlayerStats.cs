@@ -97,12 +97,11 @@ public class PlayerStats : MonoBehaviour {
 			return; // don't allow shooting if repairing
 		}
 		// maybe this should be handled in PlayerControl
-		if (control.triggerDown) {
-			if (secondaryWeapon != null)
-				secondaryWeapon.Shoot ();
-			else
-				defaultWeapon.Shoot ();
-		}
+
+		if (secondaryWeapon != null)
+			secondaryWeapon.Shoot (control.triggerDown, control.triggerPressed);
+		else
+			defaultWeapon.Shoot (control.triggerDown, control.triggerPressed);
 	}
 	
 	void OnTriggerEnter(Collider coll) {

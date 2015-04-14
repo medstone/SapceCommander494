@@ -10,6 +10,9 @@ public class Shotgun : Weapon {
 	public float shotAngle;
 
 	protected override void Start(){
+		canSpam = false;
+		fireBasedOnTriggerPress = true;
+		infiniteAmmo = false;
 		damage = 4;
 		ammunition = startingAmmo;
 		clip = clip_size;
