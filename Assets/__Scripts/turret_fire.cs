@@ -10,7 +10,7 @@ public class turret_fire : MonoBehaviour {
 	public float rate_of_fire = 0.5f;
 	public float timer = 0.0f;
 	public bool destroyed = false;
-	public int health = 100;
+	public int health = 20;
 
 	// Use this for initialization
 	void Start () {
@@ -67,6 +67,16 @@ public class turret_fire : MonoBehaviour {
 				} else {
 					timer += Time.deltaTime;
 				}
+		}
+
+	}
+
+	public void TakeHit(int dmg){
+		health -= dmg;
+		if (health <= 0) {
+			Destroy(this.gameObject);
+			TurretRespawn room = Turret_room.GetComponent("TurretRespawn") as TurretRespawn;
+			room.turret_spawned = false;
 		}
 
 	}

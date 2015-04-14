@@ -38,7 +38,7 @@ public class Weapon : MonoBehaviour {
 
 	protected virtual void Start(){
 		ammunition = startingAmmo;
-		damage = 2;
+		damage = 1;
 		
 		if(transform.parent) {
 			cam = transform.parent.GetComponent<PlayerStats>().myCam.GetComponent<FollowObject>();

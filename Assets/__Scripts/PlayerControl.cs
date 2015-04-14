@@ -22,7 +22,7 @@ public class PlayerControl : MonoBehaviour {
 	void Awake(){
 
 	}
-	
+	 
 	// Use this for initialization
 	void Start () {
 		inDevice = Controller_distributor.S.GetController();
@@ -31,6 +31,8 @@ public class PlayerControl : MonoBehaviour {
 			this.enabled = false;
 		}
 		triggerDown = false;
+		inDevice.LeftStickX.LowerDeadZone = .5f;
+		inDevice.LeftStickY.LowerDeadZone = .5f;
 	}
 	
 	// Update is called once per frame
