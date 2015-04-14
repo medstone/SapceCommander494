@@ -6,7 +6,7 @@ public class TurretRespawn : MonoBehaviour {
 	public float respawn_time = 5.0f;
 	public float timer = 0.0f;
 	public bool turret_spawned = false;
-	public GameObject curr_turret;
+	GameObject curr_turret;
 	public GameObject turret;
 	public GameObject turr_spawn_point;
 
