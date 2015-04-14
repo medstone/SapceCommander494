@@ -3,19 +3,25 @@ using System.Collections;
 
 public class robotSpawn : MonoBehaviour {
 	public Faction_e setFact;
-	public Vector3 spawnDirection;
+	Vector3 spawnDirection;
 	public GameObject robotPrefab;
 	public Vector3 crimdir;
 	public Vector3 copdir;
 	public int numSpawned = 0;
 	public int maxSpawned = 4;
 
+	void Awake(){
+		setFact = GetComponent<Control> ().holds;
+		GetComponent<Control> ().CapturedEvent += TeamSwap; // gets called when room changes hands
+	}
+
 	// Use this for initialization
 	void Start () {
-		setFact = GetComponent<Control> ().holds;
+		if (setFact == Faction_e.spaceCop) {
+			spawnDirection = copdir;
+		} else
+			spawnDirection = crimdir;
 		StartCoroutine (MakeRobots ());
-		GetComponent<Control> ().CapturedEvent += TeamSwap; // gets called when room changes hands
-		//copdir = spawnDirection;
 	}
 	
 
@@ -39,6 +45,7 @@ public class robotSpawn : MonoBehaviour {
 	}
 
 	void TeamSwap(Faction_e new_team){
+		print ("robot room got team change msg");
 		setFact = new_team;
 		if(setFact == Faction_e.spaceCrim){
 			spawnDirection = crimdir;
