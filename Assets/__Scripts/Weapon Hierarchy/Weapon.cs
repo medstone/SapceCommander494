@@ -15,7 +15,8 @@ public class Weapon : MonoBehaviour {
 	public Faction_e allegiance;
 	protected int damage;	
 	public float rateOfFire;
-	
+
+	public AudioSource aud;
 	// used for shaking screen on fire
 	public FollowObject cam;
 
@@ -32,6 +33,7 @@ public class Weapon : MonoBehaviour {
 
 	void Awake () {
 		canShoot = true;
+		aud = this.gameObject.GetComponent<AudioSource> ();
 	}
 
 	protected virtual void Start(){
@@ -83,7 +85,7 @@ public class Weapon : MonoBehaviour {
 		if(cam) {
 			cam.startShaking(shakeAmount);
 		}
-
+		aud.Play ();
 	}
 
 	IEnumerator ShotTimer(){
