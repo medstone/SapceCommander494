@@ -40,7 +40,6 @@ public class Control : MonoBehaviour {
 	void Start () {
 		copsInRoom = 0;
 		crimsInRoom = 0;
-		holds = Faction_e.spaceCop;//starts with space cop
 	}
 	
 

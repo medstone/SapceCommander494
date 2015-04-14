@@ -58,11 +58,17 @@ public class HackBar : MonoBehaviour {
 	
 	void setColor() {
 		
-		if(currFaction == Faction_e.spaceCop) {
-			teamGlowBar.color = copColor;
-		}
-		else {
-			teamGlowBar.color = crimColor;
+		switch(currFaction)
+		{
+			case Faction_e.spaceCop:
+				teamGlowBar.color = copColor;
+				break;
+			case Faction_e.spaceCrim:
+				teamGlowBar.color = crimColor;
+				break;
+			case Faction_e.neutral:
+				teamGlowBar.color = noColor;
+				break;
 		}
 	}
 }

@@ -2,6 +2,7 @@
 using System.Collections;
 
 public class Weapon : MonoBehaviour {
+
 	
 	public string weapName = "Pistol";
 	
@@ -16,18 +17,43 @@ public class Weapon : MonoBehaviour {
 	protected int damage;	
 	public float rateOfFire;
 
+<<<<<<< HEAD
 	public AudioSource aud;
+=======
+	public int clip_size = 10;
+	public int clip;
+	public float reload_time = 1.0f;
+
+	public bool reloading = false;
+
+	protected bool fireBasedOnTriggerPress = true; // requires unique trigger pull to fire (can't hold it down)
+	protected bool infiniteAmmo = true;
+	protected bool canSpam = true; // only relevant if fireBasedOnTriggerPress is true
+	
+>>>>>>> f61f6e9a532a3110d68a825786de7ea442291f6b
 	// used for shaking screen on fire
 	public FollowObject cam;
 
-	public void Shoot(){
-		if (canShoot && ammunition > 0)
-			StartCoroutine (ShotTimer ());
+	public void Shoot(bool triggerDown, bool triggerPressed){
+		if (ammunition <= 0 || clip <= 0 || !canShoot)
+						return;
+
+		if (fireBasedOnTriggerPress) {
+			if (triggerPressed)
+				StartCoroutine (ShotTimer ());	
+		} 			
+		else {
+			if (triggerDown)
+				StartCoroutine(ShotTimer ());
+		}
+		
 	}
 
 	// default behavior
 	protected virtual void ShotBehavior(){
 		ShotHelper (0f); // straight shot
+		--clip;
+
 	}
 
 
@@ -39,6 +65,7 @@ public class Weapon : MonoBehaviour {
 	protected virtual void Start(){
 		ammunition = startingAmmo;
 		damage = 1;
+		clip = clip_size;
 		
 		if(transform.parent) {
 			cam = transform.parent.GetComponent<PlayerStats>().myCam.GetComponent<FollowObject>();
@@ -47,6 +74,8 @@ public class Weapon : MonoBehaviour {
 			}
 		}
 	}
+
+
 
 	protected void ShotHelper(float angle){
 		projectile = Instantiate (projectilePrefab) as GameObject;
@@ -92,10 +121,41 @@ public class Weapon : MonoBehaviour {
 		float startTime = Time.time;
 		canShoot = false;
 		ShotBehavior ();
+		float timer;
+
+		if (clip <= 0) {
+			timer = reload_time;
+			reloading = true;
+		} else {
+			timer = rateOfFire;
+		}
 		
-		while (Time.time - startTime < rateOfFire) {
+		while (Time.time - startTime < timer) {
+			yield return null;
+			if(reloading){
+				print("reloading");
+
+			}
+			else if (fireBasedOnTriggerPress && canSpam) // doesn't apply if reloading
+				break; 
+		}
+		canShoot = true;
+		if (reloading) {
+			reloading = false;
+			if (ammunition >= clip_size || infiniteAmmo)
+				clip = clip_size;
+			else
+				clip = ammunition;
+		}
+	}
+
+	IEnumerator ClipTimer(){
+		float startTime = Time.time;
+		canShoot = false;
+		while (Time.time - startTime < reload_time) {
 			yield return null;
 		}
+		clip = clip_size;
 		canShoot = true;
 	}
 	
@@ -119,7 +179,7 @@ public class Weapon : MonoBehaviour {
 			ContextListener cl = coll.GetComponent<ContextListener>();
 			if(cl) {
 				print("Trying to pop from weapon");
-				cl.PopDisplay("Hold \"X\" to pickup " + weapName);
+				cl.PopDisplay("Hold \"X\" to pick up " + weapName);
 			}
 		}
 	}

@@ -14,6 +14,7 @@ public class PlayerControl : MonoBehaviour {
 
 
 	public bool triggerDown;
+	public bool triggerPressed; //differentiate between the two
 	public bool xButtonDown;
 	public bool aButtonDown; // as in the A button
 	public bool yButtonDown; 
@@ -45,6 +46,7 @@ public class PlayerControl : MonoBehaviour {
 
 		// trigger input
 		triggerDown = (inDevice.RightBumper || inDevice.RightTrigger);
+		triggerPressed = (inDevice.RightBumper.WasPressed || inDevice.RightTrigger.WasPressed);
 
 		xButtonDown = inDevice.Action3;
 		aButtonDown = inDevice.Action1;

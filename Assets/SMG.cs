@@ -1,24 +1,22 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-
-// there will probably end up being a secondary weapon base class
-public class Shotgun : Weapon {
+public class SMG : Weapon {
 
 	bool delaying = false;
 
-	public float shotAngle;
-
-	protected override void Start(){
-		canSpam = false;
-		fireBasedOnTriggerPress = true;
+	// Use this for initialization
+	protected override void Start () {
+		fireBasedOnTriggerPress = false;
 		infiniteAmmo = false;
-		damage = 4;
+		damage = 1;
 		ammunition = startingAmmo;
 		clip = clip_size;
+	
 	}
-
-	void FixedUpdate(){
+	
+	// Update is called once per frame
+	void FixedUpdate () {
 		if (ammunition <= 0 && !delaying) {
 			StartCoroutine(DestroyWeaponDelay());
 		}
@@ -37,8 +35,7 @@ public class Shotgun : Weapon {
 		// make three projectiles
 		// first projectile (straight) is just base class shot
 		base.ShotBehavior ();
-		ShotHelper (shotAngle);
-		ShotHelper (shotAngle * -1f);
+
 		--ammunition;
 	}
 }
