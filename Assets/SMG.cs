@@ -9,6 +9,7 @@ public class SMG : Weapon {
 	protected override void Start () {
 		damage = 1;
 		ammunition = startingAmmo;
+		clip = clip_size;
 	
 	}
 	

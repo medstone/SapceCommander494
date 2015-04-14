@@ -12,6 +12,7 @@ public class Shotgun : Weapon {
 	protected override void Start(){
 		damage = 4;
 		ammunition = startingAmmo;
+		clip = clip_size;
 	}
 
 	void FixedUpdate(){

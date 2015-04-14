@@ -24,11 +24,9 @@ public class Weapon : MonoBehaviour {
 	public FollowObject cam;
 
 	public void Shoot(){
-		if (canShoot && ammunition > 0 && clip > 0) {
+		if (canShoot && ammunition > 0 && clip > 0) 
 			StartCoroutine (ShotTimer ());
-		} else if (clip <= 0) {
-			StartCoroutine (ClipTimer());
-		}
+		
 	}
 
 	// default behavior
@@ -100,21 +98,38 @@ public class Weapon : MonoBehaviour {
 
 	IEnumerator ShotTimer(){
 		float startTime = Time.time;
+		bool reloading = false;
 		canShoot = false;
 		ShotBehavior ();
+		float timer;
+
+		if (clip <= 0) {
+			timer = reload_time;
+			reloading = true;
+		} else {
+			timer = rateOfFire;
+		}
 		
-		while (Time.time - startTime < rateOfFire) {
+		while (Time.time - startTime < timer) {
 			yield return null;
+			if(reloading == true){
+				print("reloading");
+
+			}
 		}
 		canShoot = true;
+		if (clip <= 0)
+			clip = clip_size;
 	}
 
 	IEnumerator ClipTimer(){
 		float startTime = Time.time;
+		canShoot = false;
 		while (Time.time - startTime < reload_time) {
 			yield return null;
 		}
 		clip = clip_size;
+		canShoot = true;
 	}
 	
 	void OnTriggerEnter(Collider coll) {
