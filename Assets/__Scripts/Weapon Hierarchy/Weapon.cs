@@ -15,18 +15,27 @@ public class Weapon : MonoBehaviour {
 	public Faction_e allegiance;
 	protected int damage;	
 	public float rateOfFire;
+
+	public int clip_size = 10;
+	public int clip;
+	public float reload_time = 1.0f;
 	
 	// used for shaking screen on fire
 	public FollowObject cam;
 
 	public void Shoot(){
-		if (canShoot && ammunition > 0)
+		if (canShoot && ammunition > 0 && clip > 0) {
 			StartCoroutine (ShotTimer ());
+		} else if (clip <= 0) {
+			StartCoroutine (ClipTimer());
+		}
 	}
 
 	// default behavior
 	protected virtual void ShotBehavior(){
 		ShotHelper (0f); // straight shot
+		--clip;
+
 	}
 
 
@@ -37,6 +46,7 @@ public class Weapon : MonoBehaviour {
 	protected virtual void Start(){
 		ammunition = startingAmmo;
 		damage = 1;
+		clip = clip_size;
 		
 		if(transform.parent) {
 			cam = transform.parent.GetComponent<PlayerStats>().myCam.GetComponent<FollowObject>();
@@ -45,6 +55,8 @@ public class Weapon : MonoBehaviour {
 			}
 		}
 	}
+
+
 
 	protected void ShotHelper(float angle){
 		projectile = Instantiate (projectilePrefab) as GameObject;
@@ -95,6 +107,14 @@ public class Weapon : MonoBehaviour {
 			yield return null;
 		}
 		canShoot = true;
+	}
+
+	IEnumerator ClipTimer(){
+		float startTime = Time.time;
+		while (Time.time - startTime < reload_time) {
+			yield return null;
+		}
+		clip = clip_size;
 	}
 	
 	void OnTriggerEnter(Collider coll) {
