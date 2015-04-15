@@ -2,6 +2,7 @@
 using System.Collections;
 
 public class Weapon : MonoBehaviour {
+
 	
 	public string weapName = "Pistol";
 	
@@ -16,16 +17,34 @@ public class Weapon : MonoBehaviour {
 	protected int damage;	
 	public float rateOfFire;
 
+
+	public AudioSource aud;
+
 	public int clip_size = 10;
 	public int clip;
 	public float reload_time = 1.0f;
-	
+
+	public bool reloading = false;
+
+	protected bool fireBasedOnTriggerPress = true; // requires unique trigger pull to fire (can't hold it down)
+	protected bool infiniteAmmo = true;
+	protected bool canSpam = true; // only relevant if fireBasedOnTriggerPress is true
+
 	// used for shaking screen on fire
 	public FollowObject cam;
 
-	public void Shoot(){
-		if (canShoot && ammunition > 0 && clip > 0) 
-			StartCoroutine (ShotTimer ());
+	public void Shoot(bool triggerDown, bool triggerPressed){
+		if (ammunition <= 0 || clip <= 0 || !canShoot)
+						return;
+
+		if (fireBasedOnTriggerPress) {
+			if (triggerPressed)
+				StartCoroutine (ShotTimer ());	
+		} 			
+		else {
+			if (triggerDown)
+				StartCoroutine(ShotTimer ());
+		}
 		
 	}
 
@@ -39,6 +58,7 @@ public class Weapon : MonoBehaviour {
 
 	void Awake () {
 		canShoot = true;
+		aud = this.gameObject.GetComponent<AudioSource> ();
 	}
 
 	protected virtual void Start(){
@@ -93,12 +113,11 @@ public class Weapon : MonoBehaviour {
 		if(cam) {
 			cam.startShaking(shakeAmount);
 		}
-
+		aud.Play ();
 	}
 
 	IEnumerator ShotTimer(){
 		float startTime = Time.time;
-		bool reloading = false;
 		canShoot = false;
 		ShotBehavior ();
 		float timer;
@@ -112,14 +131,21 @@ public class Weapon : MonoBehaviour {
 		
 		while (Time.time - startTime < timer) {
 			yield return null;
-			if(reloading == true){
+			if(reloading){
 				print("reloading");
 
 			}
+			else if (fireBasedOnTriggerPress && canSpam) // doesn't apply if reloading
+				break; 
 		}
 		canShoot = true;
-		if (clip <= 0)
-			clip = clip_size;
+		if (reloading) {
+			reloading = false;
+			if (ammunition >= clip_size || infiniteAmmo)
+				clip = clip_size;
+			else
+				clip = ammunition;
+		}
 	}
 
 	IEnumerator ClipTimer(){
@@ -152,7 +178,7 @@ public class Weapon : MonoBehaviour {
 			ContextListener cl = coll.GetComponent<ContextListener>();
 			if(cl) {
 				print("Trying to pop from weapon");
-				cl.PopDisplay("Hold \"X\" to pickup " + weapName);
+				cl.PopDisplay("Hold \"X\" to pick up " + weapName);
 			}
 		}
 	}

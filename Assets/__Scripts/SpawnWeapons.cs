@@ -3,11 +3,13 @@ using System.Collections;
 
 public class SpawnWeapons : MonoBehaviour {
 
-	public GameObject shotgunPrefab;
-	GameObject shotgun;
+	public GameObject weaponPrefab;
+	GameObject weapon;
 	Weapon wepRef;
 	Control roomControl;
 	GameObject barrier; // force field surrounding the weapon
+
+	public float spawnDelay = 10f;
 
 	public Material crimBarrierMat;
 	public Material copBarrierMat;
@@ -19,8 +21,8 @@ public class SpawnWeapons : MonoBehaviour {
 
 	// Use this for initialization
 	void Start () {
-		shotgun = Instantiate (shotgunPrefab, this.transform.position,Quaternion.identity) as GameObject;
-		wepRef = shotgun.GetComponent<Weapon> ();
+		weapon = Instantiate (weaponPrefab, this.transform.position,Quaternion.identity) as GameObject;
+		wepRef = weapon.GetComponent<Weapon> ();
 		wepRef.allegiance = roomControl.holds;
 		SetBarrierAllegiance (roomControl.holds);
 		roomControl.CapturedEvent += OnCapture;
@@ -28,21 +30,21 @@ public class SpawnWeapons : MonoBehaviour {
 	
 	// Update is called once per frame
 	void Update () {
-		if (shotgun != null && shotgun.tag == "Weapon") { 
+		if (weapon != null && weapon.tag == "Weapon") { 
 			// when shotgun is picked up, it changes the tag
-			shotgun = null; // so we forget the reference to the shotgun we previously spawned
+			weapon = null; // so we forget the reference to the shotgun we previously spawned
 			StartCoroutine (SpawnDelay ());
-		} else if (shotgun != null && wepRef.allegiance == Faction_e.spaceCop && roomControl.holds == Faction_e.spaceCrim) {
+		} else if (weapon != null && wepRef.allegiance == Faction_e.spaceCop && roomControl.holds == Faction_e.spaceCrim) {
 			wepRef.allegiance = Faction_e.spaceCrim;
-		} else if (shotgun != null && wepRef.allegiance == Faction_e.spaceCrim && roomControl.holds == Faction_e.spaceCop) {
+		} else if (weapon != null && wepRef.allegiance == Faction_e.spaceCrim && roomControl.holds == Faction_e.spaceCop) {
 			wepRef.allegiance = Faction_e.spaceCop;
 		}
 	}
 
 	IEnumerator SpawnDelay(){
-		yield return new WaitForSeconds(10f);
-		shotgun = Instantiate (shotgunPrefab, this.transform.position,Quaternion.identity) as GameObject;
-		wepRef = shotgun.GetComponent<Weapon> ();
+		yield return new WaitForSeconds(spawnDelay);
+		weapon = Instantiate (weaponPrefab, this.transform.position,Quaternion.identity) as GameObject;
+		wepRef = weapon.GetComponent<Weapon> ();
 	}
 
 	void OnCapture(Faction_e newTeam){

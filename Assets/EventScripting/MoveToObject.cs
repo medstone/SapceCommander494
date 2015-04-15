@@ -14,14 +14,14 @@ public class MoveToObject : CommandObject {
 	}
 	
 	public override bool doingWork () {
-		print("DOIN WORK");
+		// print("DOIN WORK");
         target.position = Vector3.MoveTowards(target.position, transform.position, speed * Time.deltaTime);
         if(Vector3.Distance(target.position, transform.position) > stopMargin) {
-        	print("Still Working");
+        	// print("Still Working");
         	return true;
         }
         
-        print("I'm done with my command");
+        // print("I'm done with my command");
         return false;
 	}
 	

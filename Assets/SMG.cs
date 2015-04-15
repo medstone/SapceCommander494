@@ -7,6 +7,8 @@ public class SMG : Weapon {
 
 	// Use this for initialization
 	protected override void Start () {
+		fireBasedOnTriggerPress = false;
+		infiniteAmmo = false;
 		damage = 1;
 		ammunition = startingAmmo;
 		clip = clip_size;

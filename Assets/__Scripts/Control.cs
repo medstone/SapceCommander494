@@ -19,6 +19,8 @@ public class Control : MonoBehaviour {
 	public bool lockOnCapture; // if true, station will become locked after first capture.
 	
 	public string roomName = "Untitled Room";
+
+	AudioSource aud;
 	
 	// Transform hackBar;
 	// Vector3 barScale;
@@ -40,6 +42,7 @@ public class Control : MonoBehaviour {
 	void Start () {
 		copsInRoom = 0;
 		crimsInRoom = 0;
+		aud = this.gameObject.GetComponent<AudioSource> ();
 	}
 	
 
@@ -47,7 +50,13 @@ public class Control : MonoBehaviour {
 	void FixedUpdate () {
 		if (locked) {
 			hackState = HackState_e.none;
+			aud.Stop();
 			return;
+		}
+		if (hackState != HackState_e.hack && aud.isPlaying) {
+			aud.Stop ();
+		} else if(!aud.isPlaying && hackState == HackState_e.hack) {
+			aud.Play();
 		}
 		// !!! conditions for hacking and unhacking should be mutually exclusive 
 		if (holds == Faction_e.spaceCrim) {
@@ -136,9 +145,11 @@ public class Control : MonoBehaviour {
 				mult = Multiplier (crimsInRoom);
 			if (CaptureAmountEvent != null)
 				CaptureAmountEvent(counter + time_hacked);
+			//aud.Play();
 			yield return null;
 		}
 		hackState = HackState_e.none;
+		//aud.Stop ();
 		// only do the following if the hacking went all the way!
 		if (counter >= hack_time - time_hacked) {
 			CloneRoom cloneRef = GetComponent<CloneRoom>();
@@ -179,6 +190,7 @@ public class Control : MonoBehaviour {
 			// hackBar.localScale = scale;
 			if (CaptureAmountEvent != null)
 				CaptureAmountEvent(time_hacked - (Time.time - startTime));
+			//aud.Play();
 			yield return null;
 		}
 		hackState = HackState_e.none;

@@ -13,9 +13,12 @@ public class Cylon : MonoBehaviour {
 	public float shotDelay = 1f; // rate of fire
 	float stopDuration = 0.25f; // how long a robot will pause after shooting
 	public robotSpawn spawnerRef; // needed to inform spawner of death.
+
+	public int damage = 1;
 	int raylayer;
 	bool canShoot;
 	bool stopped;
+	AudioSource aud;
 
 	public Material copColor;
 	public Material crimColor;
@@ -31,6 +34,7 @@ public class Cylon : MonoBehaviour {
 	// Use this for initialization
 	void Start () {
 		canShoot = true;
+		aud = this.gameObject.GetComponent<AudioSource> ();
 		if (faction == Faction_e.spaceCop) {
 			gameObject.layer = Utils.CopLayer ();
 			raylayer = 1 << LayerMask.NameToLayer("CrimBarrier");
@@ -114,9 +118,10 @@ public class Cylon : MonoBehaviour {
 		GameObject proj = Instantiate(projectilePrefab) as GameObject;
 		proj.layer = gameObject.layer;
 		proj.gameObject.transform.position = transform.position;
-		proj.GetComponent<Projectile> ().damage = 1;
+		proj.GetComponent<Projectile> ().damage = damage;
 		proj.GetComponent<Projectile>().SetBearing(new Vector3((
 			targ.transform.position.x - transform.position.x)/3f,(targ.transform.position.y - transform.position.y)/3f,(targ.transform.position.z - transform.position.z)/3f));
+		aud.Play ();
 	}
 
 	// figure out if the robot needs to alter it's course
