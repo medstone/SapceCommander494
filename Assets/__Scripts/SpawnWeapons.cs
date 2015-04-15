@@ -21,7 +21,7 @@ public class SpawnWeapons : MonoBehaviour {
 
 	// Use this for initialization
 	void Start () {
-		weapon = Instantiate (weaponPrefab, this.transform.position,Quaternion.identity) as GameObject;
+		weapon = Instantiate (weaponPrefab,new Vector3(this.transform.position.x,1f,this.transform.position.z),Quaternion.identity) as GameObject;
 		wepRef = weapon.GetComponent<Weapon> ();
 		wepRef.allegiance = roomControl.holds;
 		SetBarrierAllegiance (roomControl.holds);
