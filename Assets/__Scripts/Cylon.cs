@@ -16,6 +16,7 @@ public class Cylon : MonoBehaviour {
 	int raylayer;
 	bool canShoot;
 	bool stopped;
+	AudioSource aud;
 
 	public Material copColor;
 	public Material crimColor;
@@ -31,6 +32,7 @@ public class Cylon : MonoBehaviour {
 	// Use this for initialization
 	void Start () {
 		canShoot = true;
+		aud = this.gameObject.GetComponent<AudioSource> ();
 		if (faction == Faction_e.spaceCop) {
 			gameObject.layer = Utils.CopLayer ();
 			raylayer = 1 << LayerMask.NameToLayer("CrimBarrier");
@@ -117,6 +119,7 @@ public class Cylon : MonoBehaviour {
 		proj.GetComponent<Projectile> ().damage = 1;
 		proj.GetComponent<Projectile>().SetBearing(new Vector3((
 			targ.transform.position.x - transform.position.x)/3f,(targ.transform.position.y - transform.position.y)/3f,(targ.transform.position.z - transform.position.z)/3f));
+		aud.Play ();
 	}
 
 	// figure out if the robot needs to alter it's course

@@ -17,9 +17,9 @@ public class Weapon : MonoBehaviour {
 	protected int damage;	
 	public float rateOfFire;
 
-<<<<<<< HEAD
+
 	public AudioSource aud;
-=======
+
 	public int clip_size = 10;
 	public int clip;
 	public float reload_time = 1.0f;
@@ -29,8 +29,7 @@ public class Weapon : MonoBehaviour {
 	protected bool fireBasedOnTriggerPress = true; // requires unique trigger pull to fire (can't hold it down)
 	protected bool infiniteAmmo = true;
 	protected bool canSpam = true; // only relevant if fireBasedOnTriggerPress is true
-	
->>>>>>> f61f6e9a532a3110d68a825786de7ea442291f6b
+
 	// used for shaking screen on fire
 	public FollowObject cam;
 
