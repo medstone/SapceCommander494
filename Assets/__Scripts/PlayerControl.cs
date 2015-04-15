@@ -30,10 +30,12 @@ public class PlayerControl : MonoBehaviour {
 		if (inDevice == null) {
 			Debug.Log ("Couldn't connect to a controller!");
 			this.enabled = false;
+		} else {
+			inDevice.LeftStickX.LowerDeadZone = .5f;
+			inDevice.LeftStickY.LowerDeadZone = .5f;
+			inDevice.RightStickX.LowerDeadZone = .8f;
+			inDevice.RightStickY.LowerDeadZone = .8f;
 		}
-		triggerDown = false;
-		inDevice.LeftStickX.LowerDeadZone = .5f;
-		inDevice.LeftStickY.LowerDeadZone = .5f;
 	}
 	
 	// Update is called once per frame
