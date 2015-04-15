@@ -50,7 +50,13 @@ public class Control : MonoBehaviour {
 	void FixedUpdate () {
 		if (locked) {
 			hackState = HackState_e.none;
+			//aud.Stop();
 			return;
+		}
+		if (hackState != HackState_e.hack && aud.isPlaying) {
+			aud.Stop ();
+		} else if(!aud.isPlaying && hackState == HackState_e.hack) {
+			aud.Play();
 		}
 		// !!! conditions for hacking and unhacking should be mutually exclusive 
 		if (holds == Faction_e.spaceCrim) {
@@ -139,11 +145,11 @@ public class Control : MonoBehaviour {
 				mult = Multiplier (crimsInRoom);
 			if (CaptureAmountEvent != null)
 				CaptureAmountEvent(counter + time_hacked);
-			aud.Play();
+			//aud.Play();
 			yield return null;
 		}
 		hackState = HackState_e.none;
-		aud.Stop ();
+		//aud.Stop ();
 		// only do the following if the hacking went all the way!
 		if (counter >= hack_time - time_hacked) {
 			CloneRoom cloneRef = GetComponent<CloneRoom>();
@@ -184,7 +190,7 @@ public class Control : MonoBehaviour {
 			// hackBar.localScale = scale;
 			if (CaptureAmountEvent != null)
 				CaptureAmountEvent(time_hacked - (Time.time - startTime));
-			aud.Play();
+			//aud.Play();
 			yield return null;
 		}
 		hackState = HackState_e.none;
