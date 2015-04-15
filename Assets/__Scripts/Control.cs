@@ -50,7 +50,7 @@ public class Control : MonoBehaviour {
 	void FixedUpdate () {
 		if (locked) {
 			hackState = HackState_e.none;
-			//aud.Stop();
+			aud.Stop();
 			return;
 		}
 		if (hackState != HackState_e.hack && aud.isPlaying) {
