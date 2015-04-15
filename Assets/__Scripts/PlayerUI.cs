@@ -78,11 +78,9 @@ public class PlayerUI : MonoBehaviour {
 	void reloadBit(bool isReloading) {
 		if(!reloadText) return;
 		if(isReloading){
-			print("UI started flashing " );
 			reloadText.startFlashing();
 		}
 		else {
-			print("UI stopping " );
 			reloadText.stopFlashing();
 		}
 	}

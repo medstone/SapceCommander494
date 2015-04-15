@@ -14,10 +14,8 @@ public class CommandWait : CommandObject {
 		
 		// doing work until waitTime has passed since start time
 		if(Time.time < startTime + waitTime) {
-			print("Timing");
 			return true;
 		}
-		print("Done Timing");
 		return false;
 	}
 }
