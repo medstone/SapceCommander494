@@ -18,6 +18,7 @@ public class PlayerUI : MonoBehaviour {
 	// UI text for beginning message (will turn off after 5 secs)
 	// FadeMessage topFadeText; 
 	FadeMessage midFadeText;
+	FlashText reloadText;
 	
 	// stats for health bar
 	PlayerStats stats;
@@ -27,6 +28,7 @@ public class PlayerUI : MonoBehaviour {
 		healthText =  transform.Find("HealthIndicator/Value").GetComponent<Text>();
 		weaponName = transform.Find("WeaponIndicator/Name").GetComponent<Text>();
 		weaponAmmo = transform.Find("WeaponIndicator/Ammo").GetComponent<Text>();
+		reloadText = GetComponentInChildren<FlashText>();
 		
 		
 		// grab the stats 
@@ -59,12 +61,30 @@ public class PlayerUI : MonoBehaviour {
 		
 		if(stats.secondaryWeapon) {
 			weaponName.text = stats.secondaryWeapon.weapName;
-			weaponAmmo.text = stats.secondaryWeapon.ammunition.ToString();
+			weaponAmmo.text = stats.secondaryWeapon.clip.ToString() + " | " +
+								(stats.secondaryWeapon.ammunition - stats.secondaryWeapon.clip).ToString() ;
+			
+			reloadBit(stats.secondaryWeapon.reloading);
 		}
 		else {
 			weaponName.text = stats.defaultWeapon.weapName;
-			weaponAmmo.text = "Infinity";
+			weaponAmmo.text = stats.defaultWeapon.clip.ToString() + " | " + "Unlimited";
+			
+			reloadBit(stats.defaultWeapon.reloading);
 		}
 		
 	}
+	
+	void reloadBit(bool isReloading) {
+		if(!reloadText) return;
+		if(isReloading){
+			print("UI started flashing " );
+			reloadText.startFlashing();
+		}
+		else {
+			print("UI stopping " );
+			reloadText.stopFlashing();
+		}
+	}
+	
 }
