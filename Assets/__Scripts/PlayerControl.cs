@@ -17,6 +17,7 @@ public class PlayerControl : MonoBehaviour {
 	public bool triggerPressed; //differentiate between the two
 	public bool xButtonDown;
 	public bool aButtonDown; // as in the A button
+	public bool bButtonDown;
 	public bool yButtonDown; 
 	public bool dpadUp;
 	
@@ -52,7 +53,7 @@ public class PlayerControl : MonoBehaviour {
 
 		xButtonDown = inDevice.Action3;
 		aButtonDown = inDevice.Action1;
-
+		bButtonDown = inDevice.Action2;
 		yButtonDown = inDevice.Action4;
 
 		dpadUp = inDevice.DPadUp;

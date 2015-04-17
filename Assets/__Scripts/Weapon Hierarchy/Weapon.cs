@@ -28,7 +28,6 @@ public class Weapon : MonoBehaviour {
 
 	protected bool fireBasedOnTriggerPress = true; // requires unique trigger pull to fire (can't hold it down)
 	protected bool infiniteAmmo = true;
-	protected bool canSpam = true; // only relevant if fireBasedOnTriggerPress is true
 
 	// used for shaking screen on fire
 	public FollowObject cam;
@@ -53,6 +52,31 @@ public class Weapon : MonoBehaviour {
 		ShotHelper (0f); // straight shot
 		--clip;
 
+	}
+
+	// player making request to reload
+	public void Reload(){
+		if (reloading || !canShoot) return; // coroutine guard
+		if (clip == clip_size) return; // full clip - cant reload
+		if (clip == ammunition && !infiniteAmmo)return; // all remaining ammo is in clip
+		StartCoroutine (ReloadRoutine ());
+	}
+
+	IEnumerator ReloadRoutine(){
+		float startTime = Time.time;
+		canShoot = false;
+		reloading = true;
+		while (Time.time - startTime < reload_time) {
+			yield return null;
+		}
+		if (ammunition >= clip_size || infiniteAmmo) {
+			clip = clip_size;
+		} 
+		else {
+			clip = ammunition;
+		}
+		canShoot = true;
+		reloading = false;
 	}
 
 
@@ -120,43 +144,16 @@ public class Weapon : MonoBehaviour {
 		float startTime = Time.time;
 		canShoot = false;
 		ShotBehavior ();
-		float timer;
-
-		if (clip <= 0) {
-			timer = reload_time;
-			reloading = true;
-		} else {
-			timer = rateOfFire;
-		}
 		
-		while (Time.time - startTime < timer) {
+		while (Time.time - startTime < rateOfFire) {
 			yield return null;
-			if(reloading){
-				print("reloading");
-
-			}
-			else if (fireBasedOnTriggerPress && canSpam) // doesn't apply if reloading
-				break; 
 		}
 		canShoot = true;
-		if (reloading) {
-			reloading = false;
-			if (ammunition >= clip_size || infiniteAmmo)
-				clip = clip_size;
-			else
-				clip = ammunition;
+		if (clip <= 0) {
+			Reload();
 		}
 	}
 
-	IEnumerator ClipTimer(){
-		float startTime = Time.time;
-		canShoot = false;
-		while (Time.time - startTime < reload_time) {
-			yield return null;
-		}
-		clip = clip_size;
-		canShoot = true;
-	}
 	
 	void OnTriggerEnter(Collider coll) {
 		
