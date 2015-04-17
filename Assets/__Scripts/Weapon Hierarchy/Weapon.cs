@@ -178,7 +178,7 @@ public class Weapon : MonoBehaviour {
 			ContextListener cl = coll.GetComponent<ContextListener>();
 			if(cl) {
 				print("Trying to pop from weapon");
-				cl.PopDisplay("Hold \"X\" to pick up " + weapName);
+				cl.PopDisplay("Tap \"X\" to pick up " + weapName);
 			}
 		}
 	}

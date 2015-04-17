@@ -149,7 +149,7 @@ public class PlayerStats : MonoBehaviour {
 		collidingWithWeapon = true;
 		pickingUpWep = true;
 		float startTime = Time.time;
-		while (Time.time - startTime < 0.1f && collidingWithWeapon && control.xButtonDown) {
+		while (Time.time - startTime < 0.002f && collidingWithWeapon && control.xButtonDown) {
 			yield return null;
 		}
 		if (item != null && collidingWithWeapon && control.xButtonDown) {
