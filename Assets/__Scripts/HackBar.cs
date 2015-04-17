@@ -2,11 +2,22 @@
 using UnityEngine.UI;
 using System.Collections;
 
+public enum BlinkState_e {
+	fin, 
+	fout, 
+	none
+}
+
 public class HackBar : MonoBehaviour {
+	
 	
 	Color copColor;
 	Color crimColor;
 	Color noColor;
+	
+	private float blinkSpeed = 5f;
+	private bool isBlinking = false;
+	private BlinkState_e bstate = BlinkState_e.none;
 	
 	RawImage teamGlowBar;
 	public Control controlRef;
@@ -25,6 +36,30 @@ public class HackBar : MonoBehaviour {
 		slider = transform.Find("BarMask/CopBar");
 		controlRef = GetComponentInParent<Control>();
 	} 
+	
+	void Update() {
+		if(controlRef.hackState != HackState_e.none) {	
+			if(!isBlinking) {
+				isBlinking = true;
+				bstate = BlinkState_e.fout;
+			}
+			switch(bstate) {
+				case BlinkState_e.fin:
+					FadeIn();
+					break;
+				case BlinkState_e.fout:
+					FadeOut();
+					break;
+				default:
+					break;
+				}
+		}
+		else {
+			setColor();
+			isBlinking = false;
+			bstate = BlinkState_e.none;
+		}
+	}
 	
 	// Use this for initialization
 	void Start () {
@@ -69,6 +104,28 @@ public class HackBar : MonoBehaviour {
 			case Faction_e.neutral:
 				teamGlowBar.color = noColor;
 				break;
+		}
+	}
+	
+	void FadeOut () {
+		teamGlowBar.color = Color.Lerp(teamGlowBar.color, Color.clear, Time.deltaTime * blinkSpeed);
+		if(teamGlowBar.color.a <= 0.05f){
+			bstate = BlinkState_e.fin;
+		}
+		print("fading out");
+	}
+	
+	void FadeIn () {
+		print("fading in");
+		Color toColor = copColor;
+		if(currFaction == Faction_e.spaceCrim){
+			toColor = crimColor;
+		}
+		
+		
+		teamGlowBar.color = Color.Lerp(teamGlowBar.color, toColor, Time.deltaTime * blinkSpeed);
+		if(teamGlowBar.color.a >= 0.95f){
+			bstate = BlinkState_e.fout;
 		}
 	}
 }
