@@ -295,7 +295,7 @@ public class PlayerStats : MonoBehaviour {
 		GetComponent<Collider>().enabled = true;
 		GetComponent<Renderer>().enabled = true;
 		defaultWeapon.GetComponent<Renderer>().enabled = true;
-
+		defaultWeapon.clip = defaultWeapon.clip_size;
 
 
 
