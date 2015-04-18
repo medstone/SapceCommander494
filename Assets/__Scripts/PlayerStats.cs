@@ -93,15 +93,21 @@ public class PlayerStats : MonoBehaviour {
 	}
 
 	void FixedUpdate () {
-		if (repairing) {
-			return; // don't allow shooting if repairing
-		}
+//		if (repairing) {
+//			return; // don't allow shooting if repairing
+//		}
 		// maybe this should be handled in PlayerControl
 
 		if (secondaryWeapon != null)
 			secondaryWeapon.Shoot (control.triggerDown, control.triggerPressed);
 		else
 			defaultWeapon.Shoot (control.triggerDown, control.triggerPressed);
+		if (control.bButtonDown) {
+			if (secondaryWeapon != null)
+				secondaryWeapon.Reload();
+			else
+				defaultWeapon.Reload();
+		}
 	}
 	
 	void OnTriggerEnter(Collider coll) {
@@ -149,7 +155,7 @@ public class PlayerStats : MonoBehaviour {
 		collidingWithWeapon = true;
 		pickingUpWep = true;
 		float startTime = Time.time;
-		while (Time.time - startTime < 0.1f && collidingWithWeapon && control.xButtonDown) {
+		while (Time.time - startTime < 0.002f && collidingWithWeapon && control.xButtonDown) {
 			yield return null;
 		}
 		if (item != null && collidingWithWeapon && control.xButtonDown) {
@@ -289,7 +295,7 @@ public class PlayerStats : MonoBehaviour {
 		GetComponent<Collider>().enabled = true;
 		GetComponent<Renderer>().enabled = true;
 		defaultWeapon.GetComponent<Renderer>().enabled = true;
-
+		defaultWeapon.clip = defaultWeapon.clip_size;
 
 
 

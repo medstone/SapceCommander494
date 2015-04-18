@@ -36,7 +36,13 @@ public class Utils : MonoBehaviour {
 		return 14;
 	}
 	
+	public static int CopWepBarrierLayer(){
+		return 17;
+	}
 
+	public static int CrimWepBarrierLayer(){
+		return 18;
+	}
 
 	
 		

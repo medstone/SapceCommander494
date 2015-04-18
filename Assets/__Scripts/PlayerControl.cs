@@ -17,12 +17,13 @@ public class PlayerControl : MonoBehaviour {
 	public bool triggerPressed; //differentiate between the two
 	public bool xButtonDown;
 	public bool aButtonDown; // as in the A button
+	public bool bButtonDown;
 	public bool yButtonDown; 
 	public bool dpadUp;
-	
-	void Awake(){
 
-	}
+
+	int wallLayerMask; 
+
 	 
 	// Use this for initialization
 	void Start () {
@@ -36,6 +37,7 @@ public class PlayerControl : MonoBehaviour {
 			inDevice.RightStickX.LowerDeadZone = .8f;
 			inDevice.RightStickY.LowerDeadZone = .8f;
 		}
+		wallLayerMask = 1 << LayerMask.NameToLayer("Wall");
 	}
 	
 	// Update is called once per frame
@@ -52,7 +54,7 @@ public class PlayerControl : MonoBehaviour {
 
 		xButtonDown = inDevice.Action3;
 		aButtonDown = inDevice.Action1;
-
+		bButtonDown = inDevice.Action2;
 		yButtonDown = inDevice.Action4;
 
 		dpadUp = inDevice.DPadUp;
@@ -70,7 +72,29 @@ public class PlayerControl : MonoBehaviour {
 	}
 
 	void FixedUpdate(){
-		GetComponent<Rigidbody>().velocity = (bearing /*- transform.position*/).normalized * moveSpeed;
+		Vector3 curBearing = bearing;
+		RaycastHit hit;
+		if (Physics.Raycast (transform.position, curBearing, out hit, 1.25f, wallLayerMask)) {
+			//Vector3 temp = (Vector3.Cross(Vector3.Cross(hit.normal, curBearing.normalized), hit.normal)).normalized;
+			//temp.Scale(bearing);
+			//curBearing = temp;
+			if (hit.normal == Vector3.right || hit.normal == Vector3.left){
+				if (curBearing.z > 0){
+					curBearing = new Vector3(0, 0, 1);
+				}
+				else {
+					curBearing = new Vector3(0, 0, -1);
+				}
+			}
+			else if (hit.normal == Vector3.forward || hit.normal == Vector3.back) { // normal is on z axis
+				if (curBearing.x > 0){
+					curBearing = new Vector3(1, 0, 0);
+				}
+				else
+					curBearing = new Vector3(-1, 0, 0);
+			}
+		}
+		GetComponent<Rigidbody>().velocity = (curBearing /*- transform.position*/).normalized * moveSpeed;
 	}
 
 

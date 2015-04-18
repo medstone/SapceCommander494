@@ -14,7 +14,7 @@ public class FadeMessage : MonoBehaviour {
 
 	public float fadeTime = 2f;
 	public float stayTime = 2f;
-	public float popTime = .3f;
+	private float popTime = .6f;
 	FadeState_e state;
 	float startTime;
 	Text textField;

@@ -21,7 +21,7 @@ public class SpawnWeapons : MonoBehaviour {
 
 	// Use this for initialization
 	void Start () {
-		weapon = Instantiate (weaponPrefab, this.transform.position,Quaternion.identity) as GameObject;
+		weapon = Instantiate (weaponPrefab,new Vector3(this.transform.position.x,1f,this.transform.position.z),Quaternion.identity) as GameObject;
 		wepRef = weapon.GetComponent<Weapon> ();
 		wepRef.allegiance = roomControl.holds;
 		SetBarrierAllegiance (roomControl.holds);
@@ -54,11 +54,11 @@ public class SpawnWeapons : MonoBehaviour {
 	void SetBarrierAllegiance(Faction_e team){
 		foreach (Transform child in barrier.transform) {
 			if (team == Faction_e.spaceCop){
-				child.gameObject.layer = Utils.CopBarrierLayer();
+				child.gameObject.layer = Utils.CopWepBarrierLayer();
 				child.GetComponent<MeshRenderer>().material = copBarrierMat;
 			}
 			else {
-				child.gameObject.layer = Utils.CrimBarrierLayer();
+				child.gameObject.layer = Utils.CrimWepBarrierLayer();
 				child.GetComponent<MeshRenderer>().material = crimBarrierMat;
 			}
 		}
