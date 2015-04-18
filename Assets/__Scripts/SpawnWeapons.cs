@@ -54,11 +54,11 @@ public class SpawnWeapons : MonoBehaviour {
 	void SetBarrierAllegiance(Faction_e team){
 		foreach (Transform child in barrier.transform) {
 			if (team == Faction_e.spaceCop){
-				child.gameObject.layer = Utils.CopBarrierLayer();
+				child.gameObject.layer = Utils.CopWepBarrierLayer();
 				child.GetComponent<MeshRenderer>().material = copBarrierMat;
 			}
 			else {
-				child.gameObject.layer = Utils.CrimBarrierLayer();
+				child.gameObject.layer = Utils.CrimWepBarrierLayer();
 				child.GetComponent<MeshRenderer>().material = crimBarrierMat;
 			}
 		}

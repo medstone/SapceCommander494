@@ -123,7 +123,6 @@ public class Weapon : MonoBehaviour {
 			//pro.layermask += 1 << LayerMask.NameToLayer("Crims");
 			pro.IgnoreLayer(LayerMask.NameToLayer("Crims"));
 		}
-		//pro.layermask = ~pro.layermask;
 		
 		Vector3 offset =  transform.position - GetComponent<Transform>().parent.position;
 		offset = Quaternion.Euler (0, angle, 0) * offset;
