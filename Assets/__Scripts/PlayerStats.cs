@@ -118,11 +118,11 @@ public class PlayerStats : MonoBehaviour {
 	}
 	
 	void OnTriggerStay(Collider coll){
-		if (coll.tag == "WeaponPickup" && control.xButtonDown){
+		if (coll.tag == "WeaponPickup" && control.xButtonPressed){
 			Weapon wepRef = coll.GetComponent<Weapon>();
 			if (!collidingWithWeapon && !pickingUpWep){// so we don't start the coroutine a bunch of times
 				if (wepRef.allegiance == team || wepRef.allegiance == Faction_e.neutral){ 
-					StartCoroutine(PickUpWeapon(coll.gameObject));
+					PickUpWeapon(coll.gameObject);
 				}
 			}
 		}
@@ -151,14 +151,11 @@ public class PlayerStats : MonoBehaviour {
 		repairing = false;
 	}
 
-	IEnumerator PickUpWeapon(GameObject item){
+	void PickUpWeapon(GameObject item){
 		collidingWithWeapon = true;
 		pickingUpWep = true;
-		float startTime = Time.time;
-		while (Time.time - startTime < 0.002f && collidingWithWeapon && control.xButtonDown) {
-			yield return null;
-		}
-		if (item != null && collidingWithWeapon && control.xButtonDown) {
+	
+		if (item != null && collidingWithWeapon) {
 			// picking up the weapon
 			Weapon pickup = item.GetComponent<Weapon>();
 			// set to location and rotation of current weapon
