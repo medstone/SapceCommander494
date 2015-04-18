@@ -92,7 +92,7 @@ public class PlayerStats : MonoBehaviour {
 		}
 	}
 
-	void FixedUpdate () {
+	void Update () {
 //		if (repairing) {
 //			return; // don't allow shooting if repairing
 //		}
