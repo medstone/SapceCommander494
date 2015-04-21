@@ -6,6 +6,7 @@ public class TurretRespawn : MonoBehaviour {
 	public float respawn_time = 5.0f;
 	public float timer = 0.0f;
 	public bool turret_spawned = false;
+	public float radius;
 	GameObject curr_turret;
 	public GameObject turret;
 	public GameObject turr_spawn_point;
@@ -16,6 +17,7 @@ public class TurretRespawn : MonoBehaviour {
 		curr_turret = Instantiate (turret, pos, this.transform.rotation) as GameObject;
 		turret_fire turr = curr_turret.GetComponent ("turret_fire") as turret_fire;
 		turr.Turret_room = this.gameObject;
+		turr.radius = radius;
 		turret_spawned = true;
 	}
 	
@@ -27,6 +29,7 @@ public class TurretRespawn : MonoBehaviour {
 			curr_turret = Instantiate (turret, pos, this.transform.rotation) as GameObject;
 			turret_fire turr = curr_turret.GetComponent ("turret_fire") as turret_fire;
 			turr.Turret_room = this.gameObject;
+			turr.radius = radius;
 			turret_spawned = true;
 			timer = 0.0f;
 		} else if (turret_spawned == false) {
