@@ -112,11 +112,9 @@ public class HackBar : MonoBehaviour {
 		if(teamGlowBar.color.a <= 0.05f){
 			bstate = BlinkState_e.fin;
 		}
-		print("fading out");
 	}
 	
 	void FadeIn () {
-		print("fading in");
 		Color toColor = copColor;
 		if(currFaction == Faction_e.spaceCrim){
 			toColor = crimColor;

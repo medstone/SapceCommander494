@@ -107,11 +107,9 @@ public class FadeMessage : MonoBehaviour {
 		
 		// set state
 		state = FadeState_e.popStay;
-		print("pop message");
 	}
 	
 	void PopStay() {
-		print("pop stay");
 		if(Time.time > startTime + popTime) {
 			state = FadeState_e.none;
 			textField.enabled = false;
