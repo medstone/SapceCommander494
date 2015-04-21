@@ -24,7 +24,7 @@ public class laser_sights : MonoBehaviour {
 		Ray ray = new Ray (transform.position, transform.forward);
 		if (Physics.Raycast (ray, out hit, 1000f)) {
 			line.SetPosition(0,this.transform.position);
-			line.SetPosition(1, hit.point + hit.normal);
+			line.SetPosition(1, hit.point);
 
 		}
 	
