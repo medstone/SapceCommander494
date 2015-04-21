@@ -30,10 +30,10 @@ public class Projectile : MonoBehaviour {
 
 	void FixedUpdate(){
 
-//		RaycastHit hit;
-//		if (Physics.Raycast (transform.position, bearing, out hit, 0.5f, layermask)) {
-//			RayHit (hit.collider);
-//		}
+		RaycastHit hit;
+		if (Physics.Raycast (transform.position, bearing, out hit, 1.25f, ~layermask)) {
+			RayHit (hit.collider);
+		}
 
 		float dt = Time.fixedDeltaTime;
 		Vector3 pos = transform.position;

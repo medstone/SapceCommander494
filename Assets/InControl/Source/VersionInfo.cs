@@ -34,13 +34,9 @@ namespace InControl
 
 
 
-<<<<<<< HEAD
 
-				Build = 4363
-
-=======
 				Build = 4437
->>>>>>> 0193f8a226f7365cdb6fc71a58b327c69b5a5681
+
 
 
 
