@@ -299,6 +299,7 @@ public class PlayerStats : MonoBehaviour {
 
 		
 		GetComponent<laser_sights> ().enabled = true;
+		laserSightRef.enabled = true;
 		GetComponent<Collider>().enabled = true;
 		GetComponent<Renderer>().enabled = true;
 		defaultWeapon.GetComponent<Renderer>().enabled = true;

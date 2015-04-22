@@ -116,7 +116,17 @@ public class Cylon : MonoBehaviour {
 	// actually deals with the projectile, should only be called by ShotTimer
 	void Shoot(Collider targ){
 		GameObject proj = Instantiate(projectilePrefab) as GameObject;
-		proj.layer = gameObject.layer;
+		Projectile pro = proj.GetComponent<Projectile>();
+		if (faction == Faction_e.spaceCop) {
+			proj.layer = Utils.CopProjectileLayer ();
+			pro.IgnoreLayer(LayerMask.NameToLayer("CopProjectile"));
+			pro.IgnoreLayer(LayerMask.NameToLayer("Cops"));
+		} 
+		else if (faction == Faction_e.spaceCrim) {
+			proj.layer = Utils.CrimProjectileLayer ();
+			pro.IgnoreLayer(LayerMask.NameToLayer("CrimProjectile"));
+			pro.IgnoreLayer(LayerMask.NameToLayer("Crims"));
+		}
 		proj.gameObject.transform.position = transform.position;
 		proj.GetComponent<Projectile> ().damage = damage;
 		proj.GetComponent<Projectile>().SetBearing(new Vector3((
