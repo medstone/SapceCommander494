@@ -23,6 +23,7 @@ public class laser_sights : MonoBehaviour {
 		IgnoreLayer (LayerMask.NameToLayer ("CopProjectile"));
 		IgnoreLayer (LayerMask.NameToLayer ("CrimWepBarrier"));
 		IgnoreLayer (LayerMask.NameToLayer ("CopWepBarrier"));
+		IgnoreLayer (LayerMask.NameToLayer ("Ignore Raycast")); // yes, there is a space
 		if (GetComponent<PlayerStats> ().team == Faction_e.spaceCop) {
 			IgnoreLayer (LayerMask.NameToLayer ("Cops"));
 		} else {
