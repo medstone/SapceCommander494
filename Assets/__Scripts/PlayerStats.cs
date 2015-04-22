@@ -45,6 +45,8 @@ public class PlayerStats : MonoBehaviour {
 	public GameObject myCam;
 	int defaultOrthoSize = 10;
 	int zoomedOutOrthoSize = 30;
+
+	LineRenderer laserSightRef;
 	
 	// FadeMessage contextNotify;
 
@@ -52,6 +54,7 @@ public class PlayerStats : MonoBehaviour {
 		control = GetComponent<PlayerControl> ();
 		defaultWeapon = GetComponentInChildren<Weapon> ();
 		secondaryWeapon = null;
+		laserSightRef = GetComponent<LineRenderer> ();
 		// contextNotify = transform.parent.Find("Camera/PlayerUI/MidMsg").GetComponent<FadeMessage>();
 	}
 	// Use this for initialization
@@ -107,6 +110,9 @@ public class PlayerStats : MonoBehaviour {
 				secondaryWeapon.Reload();
 			else
 				defaultWeapon.Reload();
+		}
+		if (control.LtriggerPressed) { // toggle laser sight
+			laserSightRef.enabled = !laserSightRef.enabled;
 		}
 	}
 	
@@ -224,6 +230,8 @@ public class PlayerStats : MonoBehaviour {
 		GetComponent<Rigidbody>().velocity = Vector3.zero;
 		control.enabled = false;
 
+		GetComponent<laser_sights> ().enabled = false; // code from laser_sights.cs could probably just be here
+		laserSightRef.enabled = false;
 
 		GetComponent<Renderer>().enabled = false;
 		if (secondaryWeapon != null) {
@@ -289,6 +297,8 @@ public class PlayerStats : MonoBehaviour {
 		if (control.inDevice != null)
 			control.enabled = true;
 
+		
+		GetComponent<laser_sights> ().enabled = true;
 		GetComponent<Collider>().enabled = true;
 		GetComponent<Renderer>().enabled = true;
 		defaultWeapon.GetComponent<Renderer>().enabled = true;
