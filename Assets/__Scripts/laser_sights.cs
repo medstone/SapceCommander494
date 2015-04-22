@@ -21,6 +21,8 @@ public class laser_sights : MonoBehaviour {
 		// ignore all projectiles
 		IgnoreLayer (LayerMask.NameToLayer ("CrimProjectile"));
 		IgnoreLayer (LayerMask.NameToLayer ("CopProjectile"));
+		IgnoreLayer (LayerMask.NameToLayer ("CrimWepBarrier"));
+		IgnoreLayer (LayerMask.NameToLayer ("CopWepBarrier"));
 		if (GetComponent<PlayerStats> ().team == Faction_e.spaceCop) {
 			IgnoreLayer (LayerMask.NameToLayer ("Cops"));
 		} else {
