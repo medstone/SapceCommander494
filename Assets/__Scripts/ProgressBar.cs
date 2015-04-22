@@ -62,7 +62,7 @@ public class ProgressBar : MonoBehaviour {
 			float completed = currentTime / matchTime;
 			// rocket.position = startPos.position + travelVec * completed;
 			
-			if(rocket.position.x >= endPos.position.x) {
+			if(timeLeft == 0f) {
 				// alertTimeUp(); - Not implemented yet
 				MatchManager.S.TimeRanOut();
 				isRunning = false;
