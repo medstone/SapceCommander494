@@ -15,7 +15,9 @@ public class laser_sights : MonoBehaviour {
 		line.SetVertexCount (2);
 		//line.renderer.material = line_mat;
 		line.SetWidth (0.1f, 0.1f);
+		line.material = line_mat;
 		line.SetColors (Color.red, Color.red);
+
 		line.enabled = true;
 
 		// ignore all projectiles
