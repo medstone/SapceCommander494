@@ -8,7 +8,7 @@ public class ProgressBar : MonoBehaviour {
 	
 	public bool isRunning = true;
 	public float matchTime = 25f;
-	float currentTime;
+	public float currentTime;
 	public bool ended = false;
 	public bool timeRanOut = false;
 
