@@ -107,20 +107,16 @@ public class Weapon : MonoBehaviour {
 		Projectile pro = projectile.GetComponent<Projectile> (); // needed to adjust projectile's bearing
 		pro.transform.position = transform.position;
 		pro.transform.rotation = transform.rotation;
-
+		pro.IgnoreLayer(LayerMask.NameToLayer("CopWepBarrier"));
+		pro.IgnoreLayer(LayerMask.NameToLayer("CrimWepBarrier"));
 		if (allegiance == Faction_e.spaceCop) {
 			projectile.layer = Utils.CopProjectileLayer ();
-			//pro.layermask = 1 << LayerMask.NameToLayer("CopProjectile");
-			//pro.layermask += 1 << LayerMask.NameToLayer("Cops");
 			pro.IgnoreLayer(LayerMask.NameToLayer("CopProjectile"));
 			pro.IgnoreLayer(LayerMask.NameToLayer("Cops"));
-
 		} 
 		else if (allegiance == Faction_e.spaceCrim) {
 			projectile.layer = Utils.CrimProjectileLayer ();
-			//pro.layermask = 1 << LayerMask.NameToLayer("CrimProjectile");
 			pro.IgnoreLayer(LayerMask.NameToLayer("CrimProjectile"));
-			//pro.layermask += 1 << LayerMask.NameToLayer("Crims");
 			pro.IgnoreLayer(LayerMask.NameToLayer("Crims"));
 		}
 		
@@ -128,7 +124,6 @@ public class Weapon : MonoBehaviour {
 		offset = Quaternion.Euler (0, angle, 0) * offset;
 
 		pro.SetBearing (offset);
-		//pro.SetBearing(transform.position - offset);
 		pro.damage = damage;
 		
 

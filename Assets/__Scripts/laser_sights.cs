@@ -24,12 +24,15 @@ public class laser_sights : MonoBehaviour {
 		IgnoreLayer (LayerMask.NameToLayer ("CrimWepBarrier"));
 		IgnoreLayer (LayerMask.NameToLayer ("CopWepBarrier"));
 		IgnoreLayer (LayerMask.NameToLayer ("Ignore Raycast")); // yes, there is a space
-		if (GetComponent<PlayerStats> ().team == Faction_e.spaceCop) {
+
+		PlayerStats playerRef = GetComponent<PlayerStats> ();
+		if (playerRef != null){ 
+			if (playerRef.team == Faction_e.spaceCop) {
 			IgnoreLayer (LayerMask.NameToLayer ("Cops"));
 		} else {
 			IgnoreLayer(LayerMask.NameToLayer("Crims"));
+			}
 		}
-	
 	}
 
 	void IgnoreLayer(int layer){
@@ -42,7 +45,6 @@ public class laser_sights : MonoBehaviour {
 		if (Physics.Raycast (ray, out hit, 1000f, layermask)) {
 			line.SetPosition(0,this.transform.position);
 			line.SetPosition(1, hit.point);
-
 		}
 	
 	}
