@@ -31,7 +31,7 @@ public class Projectile : MonoBehaviour {
 	void FixedUpdate(){
 
 		RaycastHit hit;
-		if (Physics.Raycast (transform.position, bearing, out hit, 1.25f, layermask)) {
+		if (Physics.Raycast (transform.position, bearing, out hit, 0.75f, layermask)) {
 			RayHit (hit.collider);
 		}
 
