@@ -35,8 +35,8 @@ public class PlayerControl : MonoBehaviour {
 		} else {
 			inDevice.LeftStickX.LowerDeadZone = .5f;
 			inDevice.LeftStickY.LowerDeadZone = .5f;
-			inDevice.RightStickX.LowerDeadZone = .8f;
-			inDevice.RightStickY.LowerDeadZone = .8f;
+			inDevice.RightStickX.LowerDeadZone = .5f;
+			inDevice.RightStickY.LowerDeadZone = .5f;
 		}
 		wallLayerMask = 1 << LayerMask.NameToLayer("Wall");
 	}
